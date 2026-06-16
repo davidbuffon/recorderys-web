@@ -686,8 +686,7 @@ textarea {
   min-width: 0;
   overflow: hidden;
   padding: 22px;
-  position: sticky;
-  top: 24px;
+  position: static;
 }
 
 .draft-preview {
@@ -1278,13 +1277,28 @@ textarea {
   }
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1320px) {
   .item-form__grid {
     grid-template-columns: 1fr;
   }
+}
 
-  .analysis-card {
-    position: static;
+@media (max-width: 1100px) {
+  .upload-grid,
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .upload-card__trigger {
+    align-items: start;
+    display: grid;
+    gap: 8px;
+    justify-content: start;
+  }
+
+  .upload-card__filename {
+    white-space: normal;
+    word-break: break-word;
   }
 }
 
