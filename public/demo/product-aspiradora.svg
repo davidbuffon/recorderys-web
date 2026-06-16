@@ -1,0 +1,10 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="900" rx="60" fill="#08566F"/>
+  <rect x="80" y="80" width="1040" height="740" rx="40" fill="#27A9CF"/>
+  <path d="M478 266L698 486" stroke="#10202A" stroke-width="34" stroke-linecap="round"/>
+  <rect x="412" y="210" width="120" height="74" rx="28" fill="#10202A"/>
+  <rect x="656" y="454" width="94" height="226" rx="40" fill="#10202A"/>
+  <rect x="740" y="620" width="130" height="42" rx="20" transform="rotate(-18 740 620)" fill="#FFD31A"/>
+  <circle cx="702" cy="727" r="34" fill="#10202A"/>
+  <text x="120" y="760" fill="white" font-family="Arial, sans-serif" font-size="74" font-weight="700">ASPIRADORA DYSON</text>
+</svg>

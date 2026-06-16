@@ -1,0 +1,10 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="900" rx="60" fill="#08566F"/>
+  <rect x="80" y="80" width="1040" height="740" rx="40" fill="#27A9CF"/>
+  <path d="M276 506C390.5 466.5 463.5 378 519 287C544 246 597 230 637 258L795 369C816 384 828 409 828 436V508H276Z" fill="#F4F6F7"/>
+  <path d="M790 508H922C948.5 508 970 529.5 970 556V570H240V540C240 522.327 254.327 508 272 508H790Z" fill="#FFD31A"/>
+  <circle cx="440" cy="561" r="18" fill="#10202A"/>
+  <circle cx="632" cy="561" r="18" fill="#10202A"/>
+  <circle cx="824" cy="561" r="18" fill="#10202A"/>
+  <text x="120" y="760" fill="white" font-family="Arial, sans-serif" font-size="74" font-weight="700">ZAPATILLAS NORDIKAS</text>
+</svg>

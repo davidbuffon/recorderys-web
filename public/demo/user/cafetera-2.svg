@@ -1,0 +1,10 @@
+<svg width="640" height="480" viewBox="0 0 640 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="480" fill="#E5ECE8"/>
+  <rect x="58" y="52" width="524" height="376" rx="30" fill="#F8FBFC"/>
+  <rect x="84" y="76" width="472" height="326" rx="24" fill="#EBF3F6"/>
+  <rect x="228" y="120" width="168" height="176" rx="24" fill="#202930"/>
+  <rect x="254" y="148" width="58" height="12" rx="6" fill="#FFD31A"/>
+  <circle cx="340" cy="230" r="40" fill="#0E161C"/>
+  <path d="M398 170C426 170 444 190 444 217V240C444 264 424 284 401 284H390V252H397C407 252 414 245 414 235V223C414 211 405 202 393 202H388V170H398Z" fill="#202930"/>
+  <text x="320" y="382" text-anchor="middle" fill="#5C6D78" font-family="Arial, Helvetica, sans-serif" font-size="26">Foto del cliente · Encimera</text>
+</svg>

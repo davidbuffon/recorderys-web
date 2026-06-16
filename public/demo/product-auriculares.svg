@@ -1,0 +1,10 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="900" rx="60" fill="#0D6F90"/>
+  <rect x="80" y="80" width="1040" height="740" rx="40" fill="#27A9CF"/>
+  <path d="M382 432C382 309.423 481.423 210 604 210C726.577 210 826 309.423 826 432V531H736V432C736 359.099 676.901 300 604 300C531.099 300 472 359.099 472 432V531H382V432Z" fill="#10202A"/>
+  <rect x="342" y="495" width="150" height="180" rx="54" fill="#10202A"/>
+  <rect x="716" y="495" width="150" height="180" rx="54" fill="#10202A"/>
+  <rect x="387" y="540" width="60" height="90" rx="20" fill="#FFD31A"/>
+  <rect x="761" y="540" width="60" height="90" rx="20" fill="#FFD31A"/>
+  <text x="120" y="760" fill="white" font-family="Arial, sans-serif" font-size="74" font-weight="700">AURICULARES SONY</text>
+</svg>

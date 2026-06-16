@@ -1,0 +1,14 @@
+<svg width="900" height="1400" viewBox="0 0 900 1400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="1400" rx="42" fill="#FFFDF5"/>
+  <text x="80" y="120" fill="#10202A" font-family="Courier New, monospace" font-size="42" font-weight="700">EL CORTE INGLES</text>
+  <text x="80" y="190" fill="#10202A" font-family="Courier New, monospace" font-size="28">Ticket A-10492</text>
+  <text x="80" y="230" fill="#10202A" font-family="Courier New, monospace" font-size="28">10/04/2026 18:42</text>
+  <line x1="80" y1="280" x2="820" y2="280" stroke="#B9DEEA" stroke-width="3"/>
+  <text x="80" y="350" fill="#10202A" font-family="Courier New, monospace" font-size="30">CAFETERA DELONGHI</text>
+  <text x="720" y="350" fill="#10202A" font-family="Courier New, monospace" font-size="30">229.99</text>
+  <line x1="80" y1="400" x2="820" y2="400" stroke="#B9DEEA" stroke-width="3"/>
+  <text x="80" y="500" fill="#10202A" font-family="Courier New, monospace" font-size="34" font-weight="700">TOTAL</text>
+  <text x="650" y="500" fill="#10202A" font-family="Courier New, monospace" font-size="34" font-weight="700">229.99 EUR</text>
+  <text x="80" y="620" fill="#48626E" font-family="Courier New, monospace" font-size="24">Pago tarjeta ****1284</text>
+  <text x="80" y="690" fill="#48626E" font-family="Courier New, monospace" font-size="24">Gracias por su compra</text>
+</svg>

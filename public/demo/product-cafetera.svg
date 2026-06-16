@@ -1,0 +1,10 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="900" rx="60" fill="#0D6F90"/>
+  <rect x="80" y="80" width="1040" height="740" rx="40" fill="#27A9CF"/>
+  <rect x="390" y="220" width="320" height="380" rx="40" fill="#10202A"/>
+  <rect x="445" y="270" width="210" height="150" rx="22" fill="#DFF4FA"/>
+  <circle cx="550" cy="508" r="26" fill="#FFD31A"/>
+  <path d="M730 280H818C874.333 280 920 325.667 920 382V388C920 444.333 874.333 490 818 490H730V280Z" fill="#10202A"/>
+  <rect x="328" y="600" width="544" height="40" rx="20" fill="#10202A"/>
+  <text x="120" y="760" fill="white" font-family="Arial, sans-serif" font-size="74" font-weight="700">CAFETERA DELONGHI</text>
+</svg>
