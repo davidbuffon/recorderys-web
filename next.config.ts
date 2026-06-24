@@ -6,6 +6,11 @@ const nextConfig: NextConfig = {
     "localhost",
     "192.168.1.131",
   ],
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "20mb",
+    },
+  },
 };
 
 export default nextConfig;

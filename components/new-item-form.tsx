@@ -14,6 +14,20 @@ type NewItemFormProps = {
   categories: CategoryOption[];
 };
 
+type FileInfo = {
+  name: string;
+  size: number;
+};
+
+function getFileInfo(file: File | null): FileInfo | null {
+  if (!file) return null;
+
+  return {
+    name: file.name || "Archivo seleccionado",
+    size: file.size || 0,
+  };
+}
+
 function formatBytes(bytes: number) {
   if (!bytes) return "0 KB";
   if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
@@ -74,8 +88,9 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
   const [photoFiles, setPhotoFiles] = useState<File[]>([]);
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
   const [coverPhotoIndex, setCoverPhotoIndex] = useState(0);
-  const [receiptFile, setReceiptFile] = useState<File | null>(null);
-  const [paymentReceiptFile, setPaymentReceiptFile] = useState<File | null>(null);
+  const [receiptFileInfo, setReceiptFileInfo] = useState<FileInfo | null>(null);
+  const [paymentReceiptFileInfo, setPaymentReceiptFileInfo] =
+    useState<FileInfo | null>(null);
   const [itemName, setItemName] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [categorySource, setCategorySource] = useState<"detected" | "manual">(
@@ -212,7 +227,9 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
                 <div className="upload-card__trigger">
                   <span className="upload-card__button">Seleccionar archivo</span>
                   <span className="upload-card__filename">
-                    {receiptFile ? receiptFile.name : "Ningún archivo seleccionado"}
+                    {receiptFileInfo
+                      ? receiptFileInfo.name
+                      : "Ningún archivo seleccionado"}
                   </span>
                 </div>
                 <input
@@ -220,7 +237,7 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
                   name="receipt"
                   onChange={(event) => {
                     const file = event.target.files?.[0] ?? null;
-                    setReceiptFile(file);
+                    setReceiptFileInfo(getFileInfo(file));
                     if (!file) return;
 
                     const matchedEntry = Object.entries(demoTicketSuggestions).find(
@@ -254,11 +271,11 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
                 />
                 <div className="upload-card__placeholder upload-card__placeholder--receipt">
                   <span className="chip chip-blue">
-                    {receiptFile ? "Ticket cargado" : "Aún sin ticket"}
+                    {receiptFileInfo ? "Ticket cargado" : "Aún sin ticket"}
                   </span>
                   <p>
-                    {receiptFile
-                      ? `${receiptFile.name} · ${formatBytes(receiptFile.size)}`
+                    {receiptFileInfo
+                      ? `${receiptFileInfo.name} · ${formatBytes(receiptFileInfo.size)}`
                       : "Acepta imagen o PDF. Generaremos una huella antifraude antes de guardarlo."}
                   </p>
                 </div>
@@ -269,8 +286,8 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
                 <div className="upload-card__trigger">
                   <span className="upload-card__button">Seleccionar archivo</span>
                   <span className="upload-card__filename">
-                    {paymentReceiptFile
-                      ? paymentReceiptFile.name
+                    {paymentReceiptFileInfo
+                      ? paymentReceiptFileInfo.name
                       : "Opcional"}
                   </span>
                 </div>
@@ -278,17 +295,19 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
                   accept="image/*,application/pdf"
                   name="payment_receipt"
                   onChange={(event) => {
-                    setPaymentReceiptFile(event.target.files?.[0] ?? null);
+                    setPaymentReceiptFileInfo(
+                      getFileInfo(event.target.files?.[0] ?? null),
+                    );
                   }}
                   type="file"
                 />
                 <div className="upload-card__placeholder upload-card__placeholder--receipt">
                   <span className="chip chip-blue">
-                    {paymentReceiptFile ? "Datáfono cargado" : "Opcional"}
+                    {paymentReceiptFileInfo ? "Datáfono cargado" : "Opcional"}
                   </span>
                   <p>
-                    {paymentReceiptFile
-                      ? `${paymentReceiptFile.name} · ${formatBytes(paymentReceiptFile.size)}`
+                    {paymentReceiptFileInfo
+                      ? `${paymentReceiptFileInfo.name} · ${formatBytes(paymentReceiptFileInfo.size)}`
                       : "Guarda aquí la copia del pago por tarjeta si quieres tenerla disponible para cambios o justificantes."}
                   </p>
                 </div>
@@ -491,12 +510,12 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
 
             <div className="analysis-card__notes">
               <p>
-                {receiptFile
+                {receiptFileInfo
                   ? "El ticket se guardará con huella única de archivo y huella de metadatos."
                   : "Sube el ticket para activar la huella antifraude y la futura extracción OCR."}
               </p>
               <p>
-                {paymentReceiptFile
+                {paymentReceiptFileInfo
                   ? "También guardaremos el recibo del datáfono como justificante de pago separado."
                   : "El recibo del datáfono es opcional y quedará separado del ticket de compra."}
               </p>
