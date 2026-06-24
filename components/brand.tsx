@@ -6,6 +6,7 @@ export function Brand() {
         className="brand-mark__icon"
         src="/brand-icons/android.png"
       />
+      <span className="brand-mark__word">RECORDERYS</span>
     </div>
   );
 }

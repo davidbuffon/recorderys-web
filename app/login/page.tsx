@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Brand } from "@/components/brand";
 import { createClient } from "@/lib/supabase-browser";
@@ -13,6 +13,11 @@ export default function LoginPage() {
   const [message, setMessage] = useState("");
 
   const demoMode = !hasSupabaseEnv();
+
+  useEffect(() => {
+    const requestedMode = new URLSearchParams(window.location.search).get("mode");
+    if (requestedMode === "register") setMode("register");
+  }, []);
 
   async function signInWithProvider(provider: "google" | "apple") {
     const supabase = createClient();
@@ -95,25 +100,20 @@ export default function LoginPage() {
     <main className="auth-page">
       <section className="auth-layout">
         <div className="auth-showcase">
-          <Brand />
-          <span className="chip chip-yellow">Acceso privado</span>
-          <h1>{mode === "login" ? "Entra en RECORDERYS" : "Crea tu cuenta"}</h1>
+          <Link href="/" aria-label="Volver a Recorderys">
+            <Brand />
+          </Link>
+          <span className="chip chip-yellow">Tu espacio privado</span>
+          <h1>{mode === "login" ? "Todo donde lo dejaste." : "Tu primera compra, siempre localizada."}</h1>
           <p>
-            Accede a una biblioteca visual de compras, tickets, garantías y
-            revisión antifraude.
+            Tickets, garantías y devoluciones importantes, disponibles cuando
+            de verdad los necesitas.
           </p>
 
-          <div className="auth-benefits">
-            <div className="card auth-benefit">
-              <span className="chip chip-blue">Dashboard</span>
-              <strong>Mosaico privado</strong>
-              <p>Busca y filtra productos, tiendas y categorías desde un único lugar.</p>
-            </div>
-            <div className="card auth-benefit">
-              <span className="chip chip-red">Ticket seguro</span>
-              <strong>Huella antifraude</strong>
-              <p>RECORDERYS compara señales del ticket para detectar duplicados.</p>
-            </div>
+          <div className="auth-proof">
+            <span>Ticket localizado</span>
+            <span>Garantía vigente</span>
+            <span>Todo privado</span>
           </div>
         </div>
 

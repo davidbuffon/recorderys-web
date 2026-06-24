@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Brand } from "@/components/brand";
 import { InfinityMark } from "@/components/infinity-mark";
+import { TicketSummaryCard } from "@/components/ticket-summary-card";
 import { demoItems, hasSupabaseEnv } from "@/lib/demo";
 import { formatShortDate } from "@/lib/format-date";
 import { createClient } from "@/lib/supabase-server";
@@ -124,16 +125,6 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
         </div>
 
         <div className="detail-header__actions">
-          {receiptHref ? (
-            <a
-              className="button button-secondary"
-              href={receiptHref}
-              rel="noreferrer"
-              target="_blank"
-            >
-              Ver ticket
-            </a>
-          ) : null}
           <Link className="button button-primary" href="/messages">
             Contactar con RECORDERYS
           </Link>
@@ -174,6 +165,27 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
             <p>Compra: {formatShortDate(item.purchase_date)}</p>
             <p className="muted">{item.description || "Sin notas añadidas."}</p>
           </div>
+
+          {receiptMeta || receiptHref ? (
+            <TicketSummaryCard
+              confidence={receiptMeta?.extraction_confidence}
+              date={receiptMeta?.extracted_purchase_date || item.purchase_date}
+              href={receiptHref}
+              paymentLabel={
+                receiptMeta?.ocr_status === "processed" ? "Tarjeta detectada" : null
+              }
+              statusLabel={
+                receiptMeta?.ocr_status === "processed"
+                  ? "Ticket resumido"
+                  : receiptMeta?.ocr_status === "failed"
+                    ? "Revisión pendiente"
+                    : "Datos pendientes"
+              }
+              store={receiptMeta?.extracted_store || item.store}
+              ticketNumber={receiptMeta?.extracted_ticket_number}
+              total={receiptMeta?.extracted_total_amount}
+            />
+          ) : null}
 
           {customerPhotos.length ? (
             <div>
