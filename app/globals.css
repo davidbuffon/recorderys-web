@@ -2771,6 +2771,16 @@ textarea {
   min-width: 0;
 }
 
+.legal-footer__brand-link {
+  border-radius: 8px;
+  display: inline-flex;
+}
+
+.legal-footer__brand-link:focus-visible {
+  outline: 3px solid rgba(13, 111, 144, 0.26);
+  outline-offset: 6px;
+}
+
 .legal-footer__links {
   align-items: center;
   display: flex;

@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Brand } from "@/components/brand";
+import { hasSupabaseEnv } from "@/lib/demo";
+import { createClient } from "@/lib/supabase-server";
 
 const legalLinks = [
   { href: "/legal/aviso-legal", label: "Aviso legal" },
@@ -8,11 +10,28 @@ const legalLinks = [
   { href: "/legal/terminos", label: "Términos" },
 ];
 
-export function LegalFooter() {
+async function getBrandHref() {
+  if (!hasSupabaseEnv()) {
+    return "/dashboard";
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  return user ? "/dashboard" : "/";
+}
+
+export async function LegalFooter() {
+  const brandHref = await getBrandHref();
+
   return (
     <footer className="legal-footer">
       <div className="legal-footer__brand">
-        <Brand tagline="Tu App de garantía." />
+        <Link className="legal-footer__brand-link" href={brandHref}>
+          <Brand tagline="Tu App de garantía." />
+        </Link>
       </div>
 
       <nav className="legal-footer__links" aria-label="Enlaces legales">
