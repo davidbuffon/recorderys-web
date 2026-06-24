@@ -2,6 +2,53 @@ import { redirect } from "next/navigation";
 import { Brand } from "@/components/brand";
 import { demoMessages, hasSupabaseEnv } from "@/lib/demo";
 import { createClient } from "@/lib/supabase-server";
+import { uploadUserFile } from "@/lib/storage";
+
+async function createMessage(formData: FormData) {
+  "use server";
+
+  if (!hasSupabaseEnv()) {
+    redirect("/messages");
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const subject = String(formData.get("subject") || "").trim();
+  const body = String(formData.get("body") || "").trim();
+  const attachment = formData.get("attachment") as File | null;
+
+  if (!subject || !body) {
+    redirect("/messages");
+  }
+
+  const attachmentPath = await uploadUserFile({
+    supabase,
+    userId: user.id,
+    bucket: "message-attachments",
+    file: attachment,
+    prefix: "message",
+  });
+
+  const { error } = await supabase.from("messages").insert({
+    user_id: user.id,
+    subject,
+    body,
+    attachment_path: attachmentPath,
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  redirect("/messages");
+}
 
 export default async function MessagesPage() {
   let messages = demoMessages;
@@ -31,25 +78,64 @@ export default async function MessagesPage() {
           Dashboard
         </a>
       </nav>
-      <section className="card form-card" style={{ marginTop: 28, maxWidth: 760 }}>
-        <span className="chip chip-yellow">Ayuda</span>
-        <h1>Mensajes</h1>
-        <p className="muted">
-          Buzón preparado para soporte entre usuario y plataforma.
-        </p>
-        {messages.length ? (
-          messages.map((message) => (
-            <article className="date-block" key={message.id}>
-              <span className="chip chip-blue">{message.status}</span>
-              <h2>{message.subject}</h2>
-              <p className="muted">
-                {message.admin_response || "Pendiente de respuesta."}
-              </p>
-            </article>
-          ))
-        ) : (
-          <p>No tienes mensajes todavía.</p>
-        )}
+      <section className="support-layout">
+        <div className="card support-composer">
+          <span className="chip chip-yellow">Ayuda</span>
+          <h1>Contacta con RECORDERYS</h1>
+          <p className="muted">
+            Cuéntanos qué ocurre y añade una foto, ticket o documento si ayuda
+            a revisar el caso.
+          </p>
+
+          <form action={createMessage} className="support-form">
+            <label>
+              <span>Asunto</span>
+              <input
+                name="subject"
+                placeholder="Ej. Necesito revisar una garantía"
+                required
+              />
+            </label>
+            <label>
+              <span>Descripción</span>
+              <textarea
+                name="body"
+                placeholder="Describe el producto, la compra o el problema..."
+                required
+                rows={6}
+              />
+            </label>
+            <label>
+              <span>Archivo o foto</span>
+              <input
+                accept="image/*,application/pdf"
+                name="attachment"
+                type="file"
+              />
+            </label>
+            <button className="button button-primary" type="submit">
+              Enviar mensaje
+            </button>
+          </form>
+        </div>
+
+        <div className="card support-inbox">
+          <span className="chip chip-blue">Buzón</span>
+          <h2>Mensajes</h2>
+          {messages.length ? (
+            messages.map((message) => (
+              <article className="support-message" key={message.id}>
+                <span className="chip chip-blue">{message.status}</span>
+                <h3>{message.subject}</h3>
+                <p className="muted">
+                  {message.admin_response || "Pendiente de respuesta."}
+                </p>
+              </article>
+            ))
+          ) : (
+            <p className="muted">No tienes mensajes todavía.</p>
+          )}
+        </div>
       </section>
     </main>
   );

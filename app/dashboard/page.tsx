@@ -65,7 +65,22 @@ export default async function DashboardPage({
     }
 
     const { data: itemsData } = await query;
-    typedItems = (itemsData ?? []) as unknown as ItemCardData[];
+    typedItems = await Promise.all(
+      ((itemsData ?? []) as unknown as ItemCardData[]).map(async (item) => {
+        if (!item.photo_path) {
+          return item;
+        }
+
+        const { data: signedPhoto } = await supabase.storage
+          .from("item-photos")
+          .createSignedUrl(item.photo_path, 60 * 10);
+
+        return {
+          ...item,
+          photo_path: signedPhoto?.signedUrl ?? null,
+        };
+      }),
+    );
   }
   const initialCategorySlug = categories.some(
     (category) => category.slug === categorySlug,

@@ -35,9 +35,9 @@ body {
 body {
   margin: 0;
   background:
-    radial-gradient(circle at top left, rgba(255, 211, 26, 0.22), transparent 24rem),
-    radial-gradient(circle at top right, rgba(39, 169, 207, 0.2), transparent 26rem),
-    linear-gradient(180deg, #d8f0f8 0%, #eefbff 100%);
+    radial-gradient(circle at top left, rgba(255, 211, 26, 0.16), transparent 22rem),
+    radial-gradient(circle at top right, rgba(39, 169, 207, 0.12), transparent 24rem),
+    linear-gradient(180deg, #fbfeff 0%, #f4fbfd 100%);
   color: var(--text);
   font-family: var(--font-rounded);
 }
@@ -834,12 +834,8 @@ textarea {
 
 .dashboard__hero {
   align-items: stretch;
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--brand-panel-blue) 97%, white),
-    color-mix(in srgb, var(--brand-panel-blue-deep) 99%, white)
-  );
-  color: white;
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--text);
   display: grid;
   gap: 26px;
   grid-template-columns: minmax(0, 1fr) minmax(340px, 0.78fr);
@@ -856,7 +852,7 @@ textarea {
 }
 
 .dashboard__hero .muted {
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--muted);
 }
 
 .dashboard__hero-copy,
@@ -879,8 +875,8 @@ textarea {
 
 .dashboard-command-card {
   align-content: space-between;
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: linear-gradient(135deg, rgba(39, 169, 207, 0.12), rgba(255, 211, 26, 0.12));
+  border: 1px solid rgba(39, 169, 207, 0.12);
   border-radius: 24px;
   color: var(--text);
   display: grid;
@@ -1012,6 +1008,13 @@ textarea {
   display: flex;
   height: 76px;
   justify-content: center;
+  overflow: hidden;
+}
+
+.overview-item__mark img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
 }
 
 .overview-item__body {
@@ -1158,6 +1161,77 @@ textarea {
   justify-items: center;
   padding: 54px;
   text-align: center;
+}
+
+.support-layout {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.72fr);
+  margin-top: 28px;
+}
+
+.support-composer,
+.support-inbox {
+  display: grid;
+  gap: 18px;
+  padding: 32px;
+}
+
+.support-composer h1,
+.support-inbox h2 {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.04;
+  margin: 0;
+}
+
+.support-form {
+  display: grid;
+  gap: 16px;
+}
+
+.support-form label {
+  display: grid;
+  gap: 8px;
+}
+
+.support-form label span {
+  color: var(--brand-blue-deep);
+  font-weight: 900;
+}
+
+.support-form input,
+.support-form textarea {
+  background: #fbfeff;
+  border: 1px solid rgba(13, 111, 144, 0.18);
+  border-radius: 18px;
+  color: var(--text);
+  outline: 0;
+  padding: 15px 16px;
+  width: 100%;
+}
+
+.support-form textarea {
+  resize: vertical;
+}
+
+.support-form .button {
+  justify-self: start;
+}
+
+.support-message {
+  border: 1px solid rgba(39, 169, 207, 0.16);
+  border-radius: 20px;
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+}
+
+.support-message h3 {
+  font-size: 24px;
+  line-height: 1.08;
+  margin: 0;
 }
 
 .detail-grid {
@@ -1505,6 +1579,7 @@ textarea {
   .dashboard__hero,
   .detail-grid,
   .dashboard-overview,
+  .support-layout,
   .auth-layout {
     grid-template-columns: 1fr;
   }
