@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { Brand } from "@/components/brand";
 import { demoMessages, hasSupabaseEnv } from "@/lib/demo";
 import { createClient } from "@/lib/supabase-server";
@@ -120,17 +121,24 @@ export default async function MessagesPage() {
         </div>
 
         <div className="card support-inbox">
-          <span className="chip chip-blue">Buzón</span>
-          <h2>Mensajes</h2>
+          <div className="support-inbox__header">
+            <span className="chip chip-blue">Buzón interno</span>
+            <h2>Consultas enviadas</h2>
+            <p className="muted">
+              Las consultas quedan guardadas aquí. No se envían por email
+              todavía.
+            </p>
+          </div>
           {messages.length ? (
             messages.map((message) => (
-              <article className="support-message" key={message.id}>
+              <Link className="support-message" href={`/messages/${message.id}`} key={message.id}>
                 <span className="chip chip-blue">{message.status}</span>
                 <h3>{message.subject}</h3>
                 <p className="muted">
                   {message.admin_response || "Pendiente de respuesta."}
                 </p>
-              </article>
+                <small>Ver detalle</small>
+              </Link>
             ))
           ) : (
             <p className="muted">No tienes mensajes todavía.</p>
