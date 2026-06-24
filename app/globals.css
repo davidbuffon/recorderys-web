@@ -2230,19 +2230,28 @@ textarea {
 }
 
 .auth-proof {
+  align-items: flex-start;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
+  max-width: 640px;
 }
 
 .auth-proof span {
+  align-items: center;
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid rgba(39, 169, 207, 0.18);
   border-radius: 999px;
   color: var(--brand-blue-deep);
+  display: inline-flex;
+  flex: 0 0 auto;
   font-size: 13px;
-  font-weight: 700;
-  padding: 9px 12px;
+  font-weight: 800;
+  justify-content: center;
+  line-height: 1.1;
+  min-height: 36px;
+  padding: 0 14px;
+  white-space: nowrap;
 }
 
 @media (max-width: 920px) {
