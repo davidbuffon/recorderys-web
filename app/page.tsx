@@ -65,7 +65,7 @@ export default function HomePage() {
     <main className="public-landing">
       <nav className="public-nav" aria-label="Navegación principal">
         <Link href="/" aria-label="Inicio de Recorderys">
-          <Brand />
+          <Brand tagline="Tu App de garantía." />
         </Link>
         <div className="public-nav__actions">
           <Link className="public-link" href="/login">
