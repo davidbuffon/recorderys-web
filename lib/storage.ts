@@ -52,7 +52,12 @@ export async function uploadUserFile({
   });
 
   if (error) {
-    throw new Error(error.message);
+    console.error("Could not upload user file", {
+      bucket,
+      message: error.message,
+    });
+
+    return null;
   }
 
   return objectPath;
