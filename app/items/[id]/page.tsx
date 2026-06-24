@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Brand } from "@/components/brand";
 import { InfinityMark } from "@/components/infinity-mark";
+import { TicketDocumentViewer } from "@/components/ticket-document-viewer";
 import { TicketSummaryCard } from "@/components/ticket-summary-card";
 import { demoItems, hasSupabaseEnv } from "@/lib/demo";
 import { formatShortDate } from "@/lib/format-date";
@@ -219,14 +220,11 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
                   justificaciones.
                 </p>
               </div>
-              <a
-                className="button button-secondary"
+              <TicketDocumentViewer
+                emptyMessage="El recibo datáfono aún no está disponible."
                 href={paymentReceiptHref}
-                rel="noreferrer"
-                target="_blank"
-              >
-                Ver ticket datáfono
-              </a>
+                title="Recibo datáfono"
+              />
             </div>
           ) : null}
 

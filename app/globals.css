@@ -1581,14 +1581,12 @@ textarea {
 }
 
 .payment-receipt-card {
-  align-items: center;
+  align-items: stretch;
   background: linear-gradient(135deg, rgba(39, 169, 207, 0.1), rgba(255, 211, 26, 0.12));
   border: 1px solid rgba(13, 111, 144, 0.12);
   border-radius: 20px;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 16px;
-  justify-content: space-between;
   padding: 18px;
 }
 

@@ -1,6 +1,4 @@
-"use client";
-
-import { useState } from "react";
+import { TicketDocumentViewer } from "@/components/ticket-document-viewer";
 import { formatShortDate } from "@/lib/format-date";
 
 type TicketSummaryCardProps = {
@@ -33,31 +31,6 @@ export function TicketSummaryCard({
   ticketNumber,
   total,
 }: TicketSummaryCardProps) {
-  const [shareMessage, setShareMessage] = useState("");
-
-  async function handleShareTicket() {
-    if (!href) return;
-
-    const shareData = {
-      text: "Ticket guardado en Recorderys",
-      title: "Ticket original",
-      url: href,
-    };
-
-    try {
-      if (navigator.share) {
-        await navigator.share(shareData);
-        setShareMessage("");
-        return;
-      }
-
-      await navigator.clipboard.writeText(href);
-      setShareMessage("Enlace copiado. Puedes pegarlo en un email o mensaje.");
-    } catch {
-      setShareMessage("No se pudo compartir. Abre el ticket en una pestaña nueva.");
-    }
-  }
-
   return (
     <section className="ticket-summary" aria-label="Resumen del ticket">
       <div className="ticket-summary__top">
@@ -91,25 +64,11 @@ export function TicketSummaryCard({
         </div>
       </dl>
 
-      {href ? (
-        <details className="ticket-original">
-          <summary>Ver ticket original</summary>
-          <div className="ticket-original__frame">
-            <iframe src={href} title="Ticket original" />
-          </div>
-          <div className="ticket-original__actions">
-            <button className="button button-primary" onClick={handleShareTicket} type="button">
-              Compartir o enviar
-            </button>
-            <a className="button button-secondary" href={href} rel="noreferrer" target="_blank">
-              Abrir para imprimir
-            </a>
-          </div>
-          {shareMessage ? <p className="ticket-original__message">{shareMessage}</p> : null}
-        </details>
-      ) : (
-        <p className="ticket-summary__empty">El ticket original aún no está disponible.</p>
-      )}
+      <TicketDocumentViewer
+        emptyMessage="El ticket original aún no está disponible."
+        href={href}
+        title="Ticket original"
+      />
     </section>
   );
 }
