@@ -1816,6 +1816,7 @@ textarea {
 }
 
 .purchase-preview__body strong {
+  font-family: "Avenir Next", "Nunito Sans", "Segoe UI", sans-serif;
   font-size: 15px;
 }
 
@@ -2361,7 +2362,7 @@ textarea {
     align-items: stretch;
     display: grid;
     grid-row: auto;
-    grid-template-columns: 104px minmax(0, 1fr);
+    grid-template-columns: minmax(140px, 34%) minmax(0, 1fr);
     min-height: 118px;
   }
 
@@ -2376,8 +2377,8 @@ textarea {
   .purchase-preview img,
   .purchase-preview--1 img {
     height: 100%;
-    object-fit: contain;
-    padding: 10px;
+    object-fit: cover;
+    padding: 0;
     transform: none;
   }
 

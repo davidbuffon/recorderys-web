@@ -5,5 +5,4 @@
   <circle cx="550" cy="508" r="26" fill="#FFD31A"/>
   <path d="M730 280H818C874.333 280 920 325.667 920 382V388C920 444.333 874.333 490 818 490H730V280Z" fill="#10202A"/>
   <rect x="328" y="600" width="544" height="40" rx="20" fill="#10202A"/>
-  <text x="600" y="705" fill="white" font-family="Arial, sans-serif" font-size="70" font-weight="700" text-anchor="middle">CAFETERA DELONGHI</text>
 </svg>
