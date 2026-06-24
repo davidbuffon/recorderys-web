@@ -10,6 +10,7 @@ import { createClient } from "@/lib/supabase-server";
 type Params = Promise<{ id: string }>;
 
 export default async function ItemDetailPage({ params }: { params: Params }) {
+  let coverImageHref: string | null = null;
   let receiptHref: string | null = null;
   let receiptMeta: {
     duplicate_status: string;
@@ -27,6 +28,7 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
 
   if (!hasSupabaseEnv()) {
     item = demoItems.find((entry) => entry.id === id);
+    coverImageHref = item?.cover_image_path || item?.photo_path || null;
     receiptHref = item?.receipt_path ?? null;
     receiptMeta = item?.receipts?.[0]
       ? {
@@ -64,6 +66,13 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
     item = data;
     receiptMeta = data?.receipts?.[0] ?? null;
 
+    if (data?.photo_path) {
+      const { data: signedPhoto } = await supabase.storage
+        .from("item-photos")
+        .createSignedUrl(data.photo_path, 60 * 10);
+      coverImageHref = signedPhoto?.signedUrl ?? null;
+    }
+
     if (data?.receipt_path) {
       const { data: signedReceipt } = await supabase.storage
         .from("receipts")
@@ -76,13 +85,7 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
     notFound();
   }
 
-  const coverImage = item.cover_image_path || item.photo_path || null;
-  const customerPhotos =
-    item.user_photos?.length
-      ? item.user_photos
-      : item.photo_path
-        ? [item.photo_path]
-        : [];
+  const customerPhotos = coverImageHref ? [coverImageHref] : [];
 
   return (
     <main className="shell">
@@ -136,10 +139,18 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
 
       <section className="detail-grid">
         <div className="card detail-hero">
-          {coverImage ? (
-            <img alt="" src={coverImage} />
+          {coverImageHref ? (
+            <img alt="" src={coverImageHref} />
           ) : (
-            <InfinityMark />
+            <div className="detail-hero__placeholder">
+              <InfinityMark />
+              <span>{item.categories?.name ?? "Artículo guardado"}</span>
+              <strong>{item.name}</strong>
+              <small>
+                {[item.brand, item.store].filter(Boolean).join(" · ") ||
+                  "Foto pendiente de guardar"}
+              </small>
+            </div>
           )}
         </div>
         <div className="card detail-panel">
@@ -166,26 +177,26 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
             <p className="muted">{item.description || "Sin notas añadidas."}</p>
           </div>
 
-          {receiptMeta || receiptHref ? (
-            <TicketSummaryCard
-              confidence={receiptMeta?.extraction_confidence}
-              date={receiptMeta?.extracted_purchase_date || item.purchase_date}
-              href={receiptHref}
-              paymentLabel={
-                receiptMeta?.ocr_status === "processed" ? "Tarjeta detectada" : null
-              }
-              statusLabel={
-                receiptMeta?.ocr_status === "processed"
-                  ? "Ticket resumido"
-                  : receiptMeta?.ocr_status === "failed"
-                    ? "Revisión pendiente"
-                    : "Datos pendientes"
-              }
-              store={receiptMeta?.extracted_store || item.store}
-              ticketNumber={receiptMeta?.extracted_ticket_number}
-              total={receiptMeta?.extracted_total_amount}
-            />
-          ) : null}
+          <TicketSummaryCard
+            confidence={receiptMeta?.extraction_confidence}
+            date={receiptMeta?.extracted_purchase_date || item.purchase_date}
+            href={receiptHref}
+            paymentLabel={
+              receiptMeta?.ocr_status === "processed" ? "Tarjeta detectada" : null
+            }
+            statusLabel={
+              receiptMeta?.ocr_status === "processed"
+                ? "Ticket resumido"
+                : receiptMeta?.ocr_status === "failed"
+                  ? "Revisión pendiente"
+                  : receiptHref
+                    ? "Ticket guardado"
+                    : "Resumen de compra"
+            }
+            store={receiptMeta?.extracted_store || item.store}
+            ticketNumber={receiptMeta?.extracted_ticket_number}
+            total={receiptMeta?.extracted_total_amount}
+          />
 
           {customerPhotos.length ? (
             <div>
