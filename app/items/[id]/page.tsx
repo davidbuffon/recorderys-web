@@ -11,6 +11,7 @@ type Params = Promise<{ id: string }>;
 
 export default async function ItemDetailPage({ params }: { params: Params }) {
   let coverImageHref: string | null = null;
+  let paymentReceiptHref: string | null = null;
   let receiptHref: string | null = null;
   let receiptMeta: {
     duplicate_status: string;
@@ -78,6 +79,13 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
         .from("receipts")
         .createSignedUrl(data.receipt_path, 60 * 10);
       receiptHref = signedReceipt?.signedUrl ?? null;
+    }
+
+    if (data?.payment_receipt_path) {
+      const { data: signedPaymentReceipt } = await supabase.storage
+        .from("receipts")
+        .createSignedUrl(data.payment_receipt_path, 60 * 10);
+      paymentReceiptHref = signedPaymentReceipt?.signedUrl ?? null;
     }
   }
 
@@ -200,6 +208,27 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
             ticketNumber={receiptMeta?.extracted_ticket_number}
             total={receiptMeta?.extracted_total_amount}
           />
+
+          {paymentReceiptHref ? (
+            <div className="payment-receipt-card">
+              <div>
+                <span className="chip chip-blue">Justificante de pago</span>
+                <h2>Recibo datáfono</h2>
+                <p className="muted">
+                  Copia opcional del pago por tarjeta para cambios o
+                  justificaciones.
+                </p>
+              </div>
+              <a
+                className="button button-secondary"
+                href={paymentReceiptHref}
+                rel="noreferrer"
+                target="_blank"
+              >
+                Ver ticket datáfono
+              </a>
+            </div>
+          ) : null}
 
           {customerPhotos.length ? (
             <div>

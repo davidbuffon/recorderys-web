@@ -51,6 +51,7 @@ async function createItem(formData: FormData) {
   const photoFile =
     customerPhotos[coverPhotoIndex] ?? customerPhotos[0] ?? null;
   const receiptFile = formData.get("receipt") as File | null;
+  const paymentReceiptFile = formData.get("payment_receipt") as File | null;
   const receiptSignals = receiptFile
     ? await buildReceiptSignals({
         file: receiptFile,
@@ -65,7 +66,7 @@ async function createItem(formData: FormData) {
     purchaseDate,
   });
 
-  const [photoPath, receiptPath] = await Promise.all([
+  const [photoPath, receiptPath, paymentReceiptPath] = await Promise.all([
     uploadUserFile({
       supabase,
       userId: user.id,
@@ -80,11 +81,31 @@ async function createItem(formData: FormData) {
       file: receiptFile,
       prefix: "receipt",
     }),
+    uploadUserFile({
+      supabase,
+      userId: user.id,
+      bucket: "receipts",
+      file: paymentReceiptFile,
+      prefix: "payment-receipt",
+    }),
   ]);
 
-  const { data: insertedItem, error } = await supabase
-    .from("items")
-    .insert({
+  const insertPayload: {
+    user_id: string;
+    category_id: string | null;
+    name: string;
+    description: string;
+    brand: string;
+    store: string;
+    purchase_date: string;
+    return_until: string | null;
+    warranty_until_manual: string | null;
+    return_source: "estimated" | "manual" | "undefined";
+    warranty_source: "manual" | "legal_estimate";
+    photo_path: string | null;
+    receipt_path: string | null;
+    payment_receipt_path?: string;
+  } = {
     user_id: user.id,
     category_id: categoryId || null,
     name: itemName,
@@ -105,7 +126,15 @@ async function createItem(formData: FormData) {
         : "legal_estimate",
     photo_path: photoPath,
     receipt_path: receiptPath,
-  })
+  };
+
+  if (paymentReceiptPath) {
+    insertPayload.payment_receipt_path = paymentReceiptPath;
+  }
+
+  const { data: insertedItem, error } = await supabase
+    .from("items")
+    .insert(insertPayload)
     .select("id")
     .single();
 

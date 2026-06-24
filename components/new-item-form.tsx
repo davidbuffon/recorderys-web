@@ -75,6 +75,7 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
   const [coverPhotoIndex, setCoverPhotoIndex] = useState(0);
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
+  const [paymentReceiptFile, setPaymentReceiptFile] = useState<File | null>(null);
   const [itemName, setItemName] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [categorySource, setCategorySource] = useState<"detected" | "manual">(
@@ -259,6 +260,36 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
                     {receiptFile
                       ? `${receiptFile.name} · ${formatBytes(receiptFile.size)}`
                       : "Acepta imagen o PDF. Generaremos una huella antifraude antes de guardarlo."}
+                  </p>
+                </div>
+              </label>
+
+              <label className="upload-card">
+                <span className="upload-card__title">Recibo datáfono</span>
+                <div className="upload-card__trigger">
+                  <span className="upload-card__button">Seleccionar archivo</span>
+                  <span className="upload-card__filename">
+                    {paymentReceiptFile
+                      ? paymentReceiptFile.name
+                      : "Opcional"}
+                  </span>
+                </div>
+                <input
+                  accept="image/*,application/pdf"
+                  name="payment_receipt"
+                  onChange={(event) => {
+                    setPaymentReceiptFile(event.target.files?.[0] ?? null);
+                  }}
+                  type="file"
+                />
+                <div className="upload-card__placeholder upload-card__placeholder--receipt">
+                  <span className="chip chip-blue">
+                    {paymentReceiptFile ? "Datáfono cargado" : "Opcional"}
+                  </span>
+                  <p>
+                    {paymentReceiptFile
+                      ? `${paymentReceiptFile.name} · ${formatBytes(paymentReceiptFile.size)}`
+                      : "Guarda aquí la copia del pago por tarjeta si quieres tenerla disponible para cambios o justificantes."}
                   </p>
                 </div>
               </label>
@@ -463,6 +494,11 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
                 {receiptFile
                   ? "El ticket se guardará con huella única de archivo y huella de metadatos."
                   : "Sube el ticket para activar la huella antifraude y la futura extracción OCR."}
+              </p>
+              <p>
+                {paymentReceiptFile
+                  ? "También guardaremos el recibo del datáfono como justificante de pago separado."
+                  : "El recibo del datáfono es opcional y quedará separado del ticket de compra."}
               </p>
               <p>
                 {photoFiles.length

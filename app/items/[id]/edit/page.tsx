@@ -38,12 +38,13 @@ async function updateItem(id: string, formData: FormData) {
   const warrantyManual = String(formData.get("warranty_until_manual") || "");
   const photoFile = formData.get("customer_photo") as File | null;
   const receiptFile = formData.get("receipt") as File | null;
+  const paymentReceiptFile = formData.get("payment_receipt") as File | null;
 
   if (!itemName || !purchaseDate) {
     redirect(`/items/${id}/edit`);
   }
 
-  const [photoPath, receiptPath] = await Promise.all([
+  const [photoPath, receiptPath, paymentReceiptPath] = await Promise.all([
     uploadUserFile({
       supabase,
       userId: user.id,
@@ -57,6 +58,13 @@ async function updateItem(id: string, formData: FormData) {
       bucket: "receipts",
       file: receiptFile,
       prefix: "receipt",
+    }),
+    uploadUserFile({
+      supabase,
+      userId: user.id,
+      bucket: "receipts",
+      file: paymentReceiptFile,
+      prefix: "payment-receipt",
     }),
   ]);
 
@@ -73,6 +81,7 @@ async function updateItem(id: string, formData: FormData) {
     warranty_source: "manual" | "legal_estimate";
     photo_path?: string;
     receipt_path?: string;
+    payment_receipt_path?: string;
   } = {
     category_id: categoryId || null,
     name: itemName,
@@ -92,6 +101,10 @@ async function updateItem(id: string, formData: FormData) {
 
   if (receiptPath) {
     updatePayload.receipt_path = receiptPath;
+  }
+
+  if (paymentReceiptPath) {
+    updatePayload.payment_receipt_path = paymentReceiptPath;
   }
 
   const { error } = await supabase
@@ -315,6 +328,15 @@ export default async function EditItemPage({ params }: { params: Params }) {
               <input accept="image/*,application/pdf" name="receipt" type="file" />
             </label>
           </div>
+
+          <label>
+            <span>Nuevo recibo datáfono</span>
+            <input
+              accept="image/*,application/pdf"
+              name="payment_receipt"
+              type="file"
+            />
+          </label>
 
           <div className="edit-item-form__actions">
             <button className="button button-primary" type="submit">

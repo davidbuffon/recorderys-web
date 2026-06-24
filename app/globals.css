@@ -1556,6 +1556,28 @@ textarea {
   margin: 0;
 }
 
+.payment-receipt-card {
+  align-items: center;
+  background: linear-gradient(135deg, rgba(39, 169, 207, 0.1), rgba(255, 211, 26, 0.12));
+  border: 1px solid rgba(13, 111, 144, 0.12);
+  border-radius: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: space-between;
+  padding: 18px;
+}
+
+.payment-receipt-card h2 {
+  font-size: 26px;
+  line-height: 1.08;
+  margin: 10px 0 6px;
+}
+
+.payment-receipt-card p {
+  margin: 0;
+}
+
 .admin-panel {
   max-width: 980px;
 }
