@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { unstable_noStore as noStore } from "next/cache";
 import { Brand } from "@/components/brand";
 import { NewItemForm } from "@/components/new-item-form";
 import { demoCategories, hasSupabaseEnv } from "@/lib/demo";
@@ -161,26 +162,51 @@ async function createItem(formData: FormData) {
 }
 
 export default async function NewItemPage() {
+  noStore();
+
   let categories: { id: string; name: string }[] = [];
 
   if (!hasSupabaseEnv()) {
     categories = demoCategories.map(({ id, name }) => ({ id, name }));
   } else {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    let hasUser = false;
 
-    if (!user) {
-      redirect("/login");
+    try {
+      const supabase = await createClient();
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError) {
+        console.error("Could not load user for new item page", userError.message);
+      }
+
+      hasUser = Boolean(user);
+
+      if (hasUser) {
+        const { data: categoriesData, error: categoriesError } = await supabase
+          .from("categories")
+          .select("id,name")
+          .eq("is_active", true)
+          .order("sort_order");
+
+        if (categoriesError) {
+          console.error(
+            "Could not load categories for new item page",
+            categoriesError.message,
+          );
+        }
+
+        categories = categoriesData ?? [];
+      }
+    } catch (error) {
+      console.error("Could not prepare new item page", error);
     }
 
-    const { data: categoriesData } = await supabase
-      .from("categories")
-      .select("id,name")
-      .eq("is_active", true)
-      .order("sort_order");
-    categories = categoriesData ?? [];
+    if (!hasUser) {
+      redirect("/login");
+    }
   }
 
   return (
