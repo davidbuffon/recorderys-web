@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Brand } from "@/components/brand";
+import { BrandHomeLink } from "@/components/brand-home-link";
 
 const purchases = [
   {
@@ -64,9 +64,7 @@ export default function HomePage() {
   return (
     <main className="public-landing">
       <nav className="public-nav" aria-label="Navegación principal">
-        <Link href="/" aria-label="Inicio de Recorderys">
-          <Brand tagline="Tu App de garantía." />
-        </Link>
+        <BrandHomeLink tagline="Tu App de garantía." />
         <div className="public-nav__actions">
           <Link className="public-link" href="/login">
             Entrar

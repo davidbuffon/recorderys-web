@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { Brand } from "@/components/brand";
+import { BrandHomeLink } from "@/components/brand-home-link";
 
 export const metadata = {
   title: "Política de cookies | RECORDERYS",
@@ -10,9 +9,7 @@ export default function CookiesPage() {
   return (
     <main className="legal-page">
       <header className="legal-hero">
-        <Link href="/" aria-label="Volver a Recorderys">
-          <Brand />
-        </Link>
+        <BrandHomeLink />
         <span className="legal-eyebrow">Cookies</span>
         <h1>Política de cookies</h1>
         <p>

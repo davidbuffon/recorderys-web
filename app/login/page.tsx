@@ -100,7 +100,7 @@ export default function LoginPage() {
     <main className="auth-page">
       <section className="auth-layout">
         <div className="auth-showcase">
-          <Link href="/" aria-label="Volver a Recorderys">
+          <Link href="/dashboard" aria-label="Volver a Recorderys">
             <Brand />
           </Link>
           <span className="chip chip-yellow">Tu espacio privado</span>

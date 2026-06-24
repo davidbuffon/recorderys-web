@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { Brand } from "@/components/brand";
+import { BrandHomeLink } from "@/components/brand-home-link";
 
 export const metadata = {
   title: "Aviso legal | RECORDERYS",
@@ -10,9 +9,7 @@ export default function AvisoLegalPage() {
   return (
     <main className="legal-page">
       <header className="legal-hero">
-        <Link href="/" aria-label="Volver a Recorderys">
-          <Brand />
-        </Link>
+        <BrandHomeLink />
         <span className="legal-eyebrow">Información legal</span>
         <h1>Aviso legal</h1>
         <p>
