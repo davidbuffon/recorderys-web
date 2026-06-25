@@ -104,22 +104,16 @@ export default async function DashboardPage({
 
       <section className="dashboard__hero card">
         <div className="dashboard__hero-copy">
-          <span className="chip chip-yellow">Dashboard privado</span>
-          <h1>Tu biblioteca de compras importantes</h1>
-          <p className="muted">
-            Tickets, garantías y devoluciones a mano, sin perder tiempo buscando
-            cuando lo necesitas.
-          </p>
+          <h1>Tus artículos</h1>
           <div className="dashboard-quick-actions">
             <Link className="button button-primary" href="/items/new">
-              Añadir nueva compra
+              Añadir artículo
             </Link>
           </div>
         </div>
         <div className="dashboard-command-card">
           <div>
-            <span className="chip chip-blue">Acceso rápido</span>
-            <h2>Encuentra cualquier compra en segundos.</h2>
+            <span className="chip chip-blue">Buscar</span>
           </div>
           <form className="search-form dashboard-search">
             <input

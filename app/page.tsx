@@ -87,8 +87,8 @@ export default function HomePage() {
             <Link className="button button-primary public-cta" href="/login?mode=register">
               Guardar mi primera compra
             </Link>
-            <Link className="button button-secondary" href="/dashboard">
-              Explorar la demo
+            <Link className="button button-secondary" href="#como-funciona">
+              Ver cómo funciona
             </Link>
           </div>
           <div className="public-trust" aria-label="Ventajas principales">
@@ -209,7 +209,7 @@ export default function HomePage() {
       <section className="public-section brand-showcase" aria-label="Productos reales">
         <div className="brand-showcase__heading">
           <div>
-            <p className="public-eyebrow">Biblioteca visual</p>
+            <p className="public-eyebrow">Ejemplos reales</p>
             <h2>Productos reales. Tickets reales. Todo localizado.</h2>
           </div>
           <p>

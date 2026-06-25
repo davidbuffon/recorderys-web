@@ -98,6 +98,9 @@ export default async function ProfilePage() {
           </label>
           <label>
             Dirección
+            <span className="muted" style={{ fontSize: "0.8em", fontWeight: "normal" }}>
+              Opcional — útil si en el futuro añadimos gestión de devoluciones a domicilio.
+            </span>
             <textarea
               defaultValue={profile?.address ?? ""}
               name="address"

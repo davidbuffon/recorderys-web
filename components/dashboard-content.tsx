@@ -104,29 +104,31 @@ export function DashboardContent({
         </div>
       </section>
 
-      <section className="category-row" aria-label="Categorías">
-        <button
-          className={`chip ${selectedCategory ? "chip-blue" : "chip-yellow"}`}
-          onClick={() => setSelectedCategory("")}
-          type="button"
-        >
-          Todos
-        </button>
-        {categories.map((category) => (
+      {items.length > 0 && (
+        <section className="category-row" aria-label="Categorías">
           <button
-            className={`chip ${
-              selectedCategory === category.slug ? "chip-yellow" : "chip-blue"
-            }`}
-            key={category.id}
-            onClick={() => setSelectedCategory(category.slug)}
+            className={`chip ${selectedCategory ? "chip-blue" : "chip-yellow"}`}
+            onClick={() => setSelectedCategory("")}
             type="button"
           >
-            {category.name}
+            Todos
           </button>
-        ))}
-      </section>
+          {categories.map((category) => (
+            <button
+              className={`chip ${
+                selectedCategory === category.slug ? "chip-yellow" : "chip-blue"
+              }`}
+              key={category.id}
+              onClick={() => setSelectedCategory(category.slug)}
+              type="button"
+            >
+              {category.name}
+            </button>
+          ))}
+        </section>
+      )}
 
-      <section className="dashboard-overview">
+      <section className={`dashboard-overview${items.length === 0 ? " dashboard-overview--single" : ""}`}>
         <div className="card overview-panel">
           <div className="overview-panel__header">
             <div>
@@ -185,8 +187,9 @@ export function DashboardContent({
           )}
         </div>
 
+        {items.length > 0 && (
         <div className="card antifraud-panel">
-          <span className="chip chip-red">Antifraude</span>
+          <span className="chip chip-blue">Validación</span>
           <h2>Estado de tickets</h2>
           <p className="muted">
             RECORDERYS vigila duplicados entre cuentas y deja listos los casos
@@ -232,13 +235,14 @@ export function DashboardContent({
             </Link>
           ) : null}
         </div>
+        )}
       </section>
 
       {typedItems.length ? (
         <section className="dashboard-collection" aria-label="Artículos">
           <div className="dashboard-collection__header">
             <div>
-              <span className="chip chip-blue">Mosaico</span>
+              <span className="chip chip-blue">Colección</span>
               <h2>
                 {selectedCategoryName
                   ? `Artículos de ${selectedCategoryName}`

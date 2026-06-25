@@ -4,8 +4,8 @@ import { LegalFooter } from "@/components/legal-footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "RECORDERYS",
-  description: "Guarda tus compras importantes y controla devoluciones y garantías.",
+  title: "Recorderys — Guarda tickets, garantías y devoluciones en un solo sitio",
+  description: "Guarda tus tickets, controla devoluciones y nunca pierdas una garantía. Tu postcompra, organizada y siempre a mano.",
   manifest: "/manifest.webmanifest",
   icons: {
     icon: "/brand-icons/browser.png",
