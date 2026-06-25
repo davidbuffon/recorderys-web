@@ -1,0 +1,22 @@
+{
+  "name": "RECORDERYS",
+  "short_name": "Recorderys",
+  "description": "Guarda tickets, controla devoluciones y nunca pierdas una garantía.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#d4ecf5",
+  "theme_color": "#29a8d3",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/brand-icons/android.png",
+      "sizes": "196x196",
+      "type": "image/png"
+    },
+    {
+      "src": "/brand-icons/iphone.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

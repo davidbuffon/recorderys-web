@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CookieConsent } from "@/components/cookie-consent";
+import { InstallPrompt } from "@/components/install-prompt";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -28,6 +29,7 @@ export default function RootLayout({
       <body>
         <div className="site-content">{children}</div>
         <CookieConsent />
+        <InstallPrompt />
       </body>
     </html>
   );
