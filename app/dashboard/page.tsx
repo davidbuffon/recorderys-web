@@ -27,10 +27,12 @@ export default async function DashboardPage({
   let categories: Category[] = [];
   let typedItems: ItemCardData[] = [];
   let isAdmin = false;
+  let totalItemCount = 0;
 
   if (!hasSupabaseEnv()) {
     categories = demoCategories;
     isAdmin = true;
+    totalItemCount = demoItems.length;
     typedItems = demoItems.filter((item) => {
       const matchesSearch = !search
         ? true
@@ -79,7 +81,11 @@ export default async function DashboardPage({
       );
     }
 
-    const { data: itemsData } = await query;
+    const [countResult, { data: itemsData }] = await Promise.all([
+      supabase.from("items").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      query,
+    ]);
+    totalItemCount = countResult.count ?? 0;
     typedItems = await Promise.all(
       ((itemsData ?? []) as unknown as ItemCardData[]).map(async (item) => {
         if (!item.photo_path) {
@@ -134,19 +140,16 @@ export default async function DashboardPage({
               Buscar
             </button>
           </form>
-          <div className="dashboard-command-card__hints" aria-label="Atajos sugeridos">
-            <Link className="dashboard-hint" href="/dashboard?q=garantía">Garantías activas</Link>
-            <Link className="dashboard-hint" href="/dashboard?q=devolución">Devoluciones</Link>
-            <Link className="dashboard-hint" href="/dashboard?q=ticket">Tickets</Link>
-          </div>
         </div>
       </section>
 
       <DashboardContent
         categories={categories}
+        hasItems={totalItemCount > 0}
         isAdmin={isAdmin}
         initialCategorySlug={initialCategorySlug}
         items={typedItems}
+        search={search}
       />
     </main>
   );

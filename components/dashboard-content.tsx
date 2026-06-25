@@ -10,16 +10,20 @@ import type { Category, ItemCardData } from "@/lib/types";
 
 type DashboardContentProps = {
   categories: Category[];
+  hasItems?: boolean;
   initialCategorySlug?: string;
   isAdmin?: boolean;
   items: ItemCardData[];
+  search?: string;
 };
 
 export function DashboardContent({
   categories,
+  hasItems = false,
   initialCategorySlug = "",
   isAdmin = false,
   items,
+  search = "",
 }: DashboardContentProps) {
   const [selectedCategory, setSelectedCategory] = useState(initialCategorySlug);
   const typedItems = useMemo(
@@ -86,7 +90,7 @@ export function DashboardContent({
 
   return (
     <>
-      {items.length === 0 ? (
+      {!hasItems ? (
         <section className="card onboarding-banner">
           <div>
             <span className="chip chip-yellow">Primeros pasos</span>
@@ -120,7 +124,7 @@ export function DashboardContent({
         </section>
       )}
 
-      {items.length > 0 && (
+      {hasItems && (
         <section className="category-row" aria-label="Categorías">
           <button
             className={`chip ${selectedCategory ? "chip-blue" : "chip-yellow"}`}
@@ -144,7 +148,7 @@ export function DashboardContent({
         </section>
       )}
 
-      <section className={`dashboard-overview${items.length === 0 ? " dashboard-overview--single" : ""}`}>
+      <section className={`dashboard-overview${!hasItems ? " dashboard-overview--single" : ""}`}>
         <div className="card overview-panel">
           <div className="overview-panel__header">
             <div>
@@ -200,7 +204,7 @@ export function DashboardContent({
           )}
         </div>
 
-        {items.length > 0 && (
+        {hasItems && (
         <div className="card antifraud-panel">
           <span className="chip chip-blue">Validación</span>
           <h2>Estado de tickets</h2>
@@ -272,17 +276,22 @@ export function DashboardContent({
         <section className="card empty-state">
           <InfinityMark />
           <h2>
-            {selectedCategoryName
-              ? `No hay artículos en ${selectedCategoryName}`
-              : "Aún no hay artículos"}
+            {search
+              ? `Sin resultados para "${search}"`
+              : selectedCategoryName
+                ? `No hay artículos en ${selectedCategoryName}`
+                : "Aún no hay artículos"}
           </h2>
           <p className="muted">
-            Guarda tu primera compra importante y empieza a controlar sus
-            plazos.
+            {search
+              ? "Prueba con el nombre del producto, la tienda o la marca."
+              : "Guarda tu primera compra importante y empieza a controlar sus plazos."}
           </p>
-          <Link className="button button-primary" href="/items/new">
-            Añadir artículo
-          </Link>
+          {!search && (
+            <Link className="button button-primary" href="/items/new">
+              Añadir artículo
+            </Link>
+          )}
         </section>
       )}
     </>
