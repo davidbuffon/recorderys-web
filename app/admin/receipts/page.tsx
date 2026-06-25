@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Brand } from "@/components/brand";
+import { AppNav } from "@/components/app-nav";
 import { InfinityMark } from "@/components/infinity-mark";
 import { demoReceipts, hasSupabaseEnv } from "@/lib/demo";
 import { formatShortDate } from "@/lib/format-date";
@@ -138,15 +138,7 @@ export default async function AdminReceiptsPage() {
 
   return (
     <main className="shell">
-      <nav className="dashboard__nav">
-        <Brand />
-        <div className="dashboard__nav-actions">
-          <Link className="button button-secondary" href="/dashboard">
-            Dashboard
-          </Link>
-          <span className="chip chip-red">Antifraude</span>
-        </div>
-      </nav>
+      <AppNav isAdmin />
 
       <section className="card form-card admin-panel" style={{ marginTop: 28, maxWidth: 980 }}>
         <div>

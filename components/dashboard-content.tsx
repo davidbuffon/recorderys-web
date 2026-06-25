@@ -11,12 +11,14 @@ import type { Category, ItemCardData } from "@/lib/types";
 type DashboardContentProps = {
   categories: Category[];
   initialCategorySlug?: string;
+  isAdmin?: boolean;
   items: ItemCardData[];
 };
 
 export function DashboardContent({
   categories,
   initialCategorySlug = "",
+  isAdmin = false,
   items,
 }: DashboardContentProps) {
   const [selectedCategory, setSelectedCategory] = useState(initialCategorySlug);
@@ -224,9 +226,11 @@ export function DashboardContent({
             </div>
           )}
 
-          <Link className="button button-secondary" href="/admin/receipts">
-            Abrir panel de revisión
-          </Link>
+          {isAdmin ? (
+            <Link className="button button-secondary" href="/admin/receipts">
+              Abrir panel de revisión
+            </Link>
+          ) : null}
         </div>
       </section>
 

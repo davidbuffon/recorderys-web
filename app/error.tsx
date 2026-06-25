@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Brand } from "@/components/brand";
+import { AppNav } from "@/components/app-nav";
 
 export default function Error({
   reset,
@@ -11,12 +11,7 @@ export default function Error({
 }) {
   return (
     <main className="shell error-page">
-      <nav className="dashboard__nav">
-        <Brand />
-        <Link className="button button-secondary" href="/dashboard">
-          Dashboard
-        </Link>
-      </nav>
+      <AppNav />
 
       <section className="card error-card">
         <span className="chip chip-yellow">RECORDERYS</span>

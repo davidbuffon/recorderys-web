@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { Brand } from "@/components/brand";
+import { AppNav } from "@/components/app-nav";
 import { InfinityMark } from "@/components/infinity-mark";
 import { TicketDocumentViewer } from "@/components/ticket-document-viewer";
 import { TicketSummaryCard } from "@/components/ticket-summary-card";
+import { getIsAdmin } from "@/lib/admin";
 import { demoItems, hasSupabaseEnv } from "@/lib/demo";
 import { formatShortDate, isPastDate } from "@/lib/format-date";
 import { createClient } from "@/lib/supabase-server";
@@ -27,8 +28,10 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
   } | null = null;
   const { id } = await params;
   let item: any = null;
+  let isAdmin = false;
 
   if (!hasSupabaseEnv()) {
+    isAdmin = true;
     item = demoItems.find((entry) => entry.id === id);
     coverImageHref = item?.cover_image_path || item?.photo_path || null;
     receiptHref = item?.receipt_path ?? null;
@@ -59,6 +62,8 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
     if (!user) {
       redirect("/login");
     }
+
+    isAdmin = await getIsAdmin(supabase, user.id);
 
     const { data } = await supabase
       .from("items")
@@ -100,12 +105,7 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
 
   return (
     <main className="shell">
-      <nav className="dashboard__nav">
-        <Brand />
-        <Link className="button button-secondary" href="/dashboard">
-          Volver
-        </Link>
-      </nav>
+      <AppNav isAdmin={isAdmin} />
 
       <section className="card detail-header" style={{ marginTop: 28 }}>
         <div className="detail-header__copy">

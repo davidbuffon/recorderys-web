@@ -157,6 +157,25 @@ textarea {
   color: var(--brand-blue-deep);
 }
 
+.nav-signout {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 48px;
+  padding: 0 14px;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: color 160ms ease, text-decoration-color 160ms ease;
+}
+
+.nav-signout:hover {
+  color: var(--text);
+  text-decoration-color: currentColor;
+}
+
 .card {
   background: rgba(255, 255, 255, 0.94);
   border: 1px solid rgba(39, 169, 207, 0.16);
@@ -1959,6 +1978,10 @@ textarea {
 
   .dashboard__nav-actions .button,
   .dashboard__nav-actions form .button {
+    width: 100%;
+  }
+
+  .dashboard__nav-actions form .nav-signout {
     width: 100%;
   }
 

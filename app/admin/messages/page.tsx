@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Brand } from "@/components/brand";
+import { AppNav } from "@/components/app-nav";
 import { InfinityMark } from "@/components/infinity-mark";
 import { requireAdmin } from "@/lib/admin";
 import { demoMessages } from "@/lib/demo";
@@ -76,17 +76,7 @@ export default async function AdminMessagesPage() {
 
   return (
     <main className="shell">
-      <nav className="dashboard__nav">
-        <Brand />
-        <div className="dashboard__nav-actions">
-          <Link className="button button-secondary" href="/dashboard">
-            Dashboard
-          </Link>
-          <Link className="button button-secondary" href="/admin/receipts">
-            Revisar tickets
-          </Link>
-        </div>
-      </nav>
+      <AppNav isAdmin />
 
       <section className="card admin-panel admin-messages">
         <div className="admin-messages__header">

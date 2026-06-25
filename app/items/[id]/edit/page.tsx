@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { Brand } from "@/components/brand";
+import { AppNav } from "@/components/app-nav";
+import { getIsAdmin } from "@/lib/admin";
 import { demoCategories, hasSupabaseEnv } from "@/lib/demo";
 import {
   buildInitialExtractionSignals,
@@ -194,6 +195,7 @@ export default async function EditItemPage({ params }: { params: Params }) {
     return_until: string | null;
     warranty_until_manual: string | null;
   } | null = null;
+  let isAdmin = false;
 
   if (hasSupabaseEnv()) {
     const supabase = await createClient();
@@ -204,6 +206,8 @@ export default async function EditItemPage({ params }: { params: Params }) {
     if (!user) {
       redirect("/login");
     }
+
+    isAdmin = await getIsAdmin(supabase, user.id);
 
     const { data: categoriesData } = await supabase
       .from("categories")
@@ -233,12 +237,11 @@ export default async function EditItemPage({ params }: { params: Params }) {
 
   return (
     <main className="shell">
-      <nav className="dashboard__nav">
-        <Brand />
-        <Link className="button button-secondary" href={`/items/${item.id}`}>
-          Volver al artículo
-        </Link>
-      </nav>
+      <AppNav
+        backHref={`/items/${item.id}`}
+        backLabel="Volver al artículo"
+        isAdmin={isAdmin}
+      />
 
       <section className="card form-card edit-item-card" style={{ marginTop: 28 }}>
         <div>

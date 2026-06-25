@@ -1,6 +1,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { Brand } from "@/components/brand";
+import { AppNav } from "@/components/app-nav";
+import { getIsAdmin } from "@/lib/admin";
 import { demoProfile, hasSupabaseEnv } from "@/lib/demo";
 import { createClient } from "@/lib/supabase-server";
 
@@ -43,6 +44,7 @@ async function updateProfile(formData: FormData) {
 export default async function ProfilePage() {
   let profile: any = demoProfile;
   let email = demoProfile.email;
+  let isAdmin = false;
 
   if (hasSupabaseEnv()) {
     const supabase = await createClient();
@@ -61,23 +63,14 @@ export default async function ProfilePage() {
       .maybeSingle();
     profile = data ?? { email: user.email ?? "" };
     email = user.email ?? data?.email ?? "";
+    isAdmin = await getIsAdmin(supabase, user.id);
+  } else {
+    isAdmin = true;
   }
 
   return (
     <main className="shell">
-      <nav className="dashboard__nav">
-        <Brand />
-        <div className="dashboard__nav-actions">
-          <a className="button button-secondary" href="/dashboard">
-            Dashboard
-          </a>
-          <form action="/auth/signout" method="post">
-            <button className="button button-primary" type="submit">
-              Cerrar sesión
-            </button>
-          </form>
-        </div>
-      </nav>
+      <AppNav isAdmin={isAdmin} />
       <section className="card form-card profile-card" style={{ marginTop: 28 }}>
         <div className="profile-card__head">
           <span className="chip chip-yellow">Perfil</span>

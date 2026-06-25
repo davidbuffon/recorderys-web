@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 import { unstable_noStore as noStore } from "next/cache";
-import { Brand } from "@/components/brand";
+import { AppNav } from "@/components/app-nav";
 import { NewItemForm } from "@/components/new-item-form";
+import { getIsAdmin } from "@/lib/admin";
 import { demoCategories, hasSupabaseEnv } from "@/lib/demo";
 import {
   buildInitialExtractionSignals,
@@ -194,8 +195,10 @@ export default async function NewItemPage() {
   noStore();
 
   let categories: { id: string; name: string }[] = [];
+  let isAdmin = false;
 
   if (!hasSupabaseEnv()) {
+    isAdmin = true;
     categories = demoCategories.map(({ id, name }) => ({ id, name }));
   } else {
     let hasUser = false;
@@ -213,7 +216,9 @@ export default async function NewItemPage() {
 
       hasUser = Boolean(user);
 
-      if (hasUser) {
+      if (hasUser && user) {
+        isAdmin = await getIsAdmin(supabase, user.id);
+
         const { data: categoriesData, error: categoriesError } = await supabase
           .from("categories")
           .select("id,name")
@@ -240,12 +245,7 @@ export default async function NewItemPage() {
 
   return (
     <main className="shell">
-      <nav className="dashboard__nav">
-        <Brand />
-        <a className="button button-secondary" href="/dashboard">
-          Volver al dashboard
-        </a>
-      </nav>
+      <AppNav isAdmin={isAdmin} />
 
       <section className="card form-card new-item-card" style={{ marginTop: 28 }}>
         <div>

@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { Brand } from "@/components/brand";
+import { AppNav } from "@/components/app-nav";
 import { requireAdmin } from "@/lib/admin";
 import { demoMessages } from "@/lib/demo";
 import { formatShortDate } from "@/lib/format-date";
@@ -123,17 +122,7 @@ export default async function AdminMessageDetailPage({
 
   return (
     <main className="shell">
-      <nav className="dashboard__nav">
-        <Brand />
-        <div className="dashboard__nav-actions">
-          <Link className="button button-secondary" href="/admin/messages">
-            Volver al buzón
-          </Link>
-          <Link className="button button-secondary" href="/dashboard">
-            Dashboard
-          </Link>
-        </div>
-      </nav>
+      <AppNav isAdmin />
 
       <section className="card message-detail admin-message-detail">
         <div className="message-detail__header">

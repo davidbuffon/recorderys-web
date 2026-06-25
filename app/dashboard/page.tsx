@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Brand } from "@/components/brand";
+import { AppNav } from "@/components/app-nav";
 import { DashboardContent } from "@/components/dashboard-content";
 import { demoCategories, demoItems, hasSupabaseEnv } from "@/lib/demo";
 import { createClient } from "@/lib/supabase-server";
@@ -21,9 +21,11 @@ export default async function DashboardPage({
   const categorySlug = params.category ?? "";
   let categories: Category[] = [];
   let typedItems: ItemCardData[] = [];
+  let isAdmin = false;
 
   if (!hasSupabaseEnv()) {
     categories = demoCategories;
+    isAdmin = true;
     typedItems = demoItems.filter((item) => {
       const matchesSearch = !search
         ? true
@@ -43,6 +45,13 @@ export default async function DashboardPage({
     if (!user) {
       redirect("/login");
     }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+    isAdmin = profile?.role === "admin";
 
     const { data: categoriesData } = await supabase
       .from("categories")
@@ -91,23 +100,7 @@ export default async function DashboardPage({
 
   return (
     <main className="shell dashboard">
-      <nav className="dashboard__nav">
-        <Brand />
-        <div className="dashboard__nav-actions">
-          <Link className="button button-secondary" href="/admin/messages">
-            Soporte
-          </Link>
-          <Link className="button button-secondary" href="/admin/receipts">
-            Revisar tickets
-          </Link>
-          <Link className="button button-secondary" href="/profile">
-            Perfil
-          </Link>
-          <Link className="button button-primary" href="/items/new">
-            Añadir artículo
-          </Link>
-        </div>
-      </nav>
+      <AppNav isAdmin={isAdmin} />
 
       <section className="dashboard__hero card">
         <div className="dashboard__hero-copy">
@@ -120,12 +113,6 @@ export default async function DashboardPage({
           <div className="dashboard-quick-actions">
             <Link className="button button-primary" href="/items/new">
               Añadir nueva compra
-            </Link>
-            <Link className="button button-secondary" href="/admin/messages">
-              Soporte
-            </Link>
-            <Link className="button button-secondary" href="/admin/receipts">
-              Revisar tickets
             </Link>
           </div>
         </div>
@@ -158,6 +145,7 @@ export default async function DashboardPage({
 
       <DashboardContent
         categories={categories}
+        isAdmin={isAdmin}
         initialCategorySlug={initialCategorySlug}
         items={typedItems}
       />

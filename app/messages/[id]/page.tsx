@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { Brand } from "@/components/brand";
+import { AppNav } from "@/components/app-nav";
+import { getIsAdmin } from "@/lib/admin";
 import { demoMessages, hasSupabaseEnv } from "@/lib/demo";
 import { createClient } from "@/lib/supabase-server";
 
@@ -9,6 +9,7 @@ type Params = Promise<{ id: string }>;
 export default async function MessageDetailPage({ params }: { params: Params }) {
   const { id } = await params;
   let attachmentHref: string | null = null;
+  let isAdmin = false;
   let message: {
     id: string;
     subject: string;
@@ -20,6 +21,7 @@ export default async function MessageDetailPage({ params }: { params: Params }) 
   } | null = null;
 
   if (!hasSupabaseEnv()) {
+    isAdmin = true;
     message = demoMessages.find((entry) => entry.id === id) ?? null;
   } else {
     const supabase = await createClient();
@@ -30,6 +32,8 @@ export default async function MessageDetailPage({ params }: { params: Params }) 
     if (!user) {
       redirect("/login");
     }
+
+    isAdmin = await getIsAdmin(supabase, user.id);
 
     const { data } = await supabase
       .from("messages")
@@ -54,12 +58,7 @@ export default async function MessageDetailPage({ params }: { params: Params }) 
 
   return (
     <main className="shell">
-      <nav className="dashboard__nav">
-        <Brand />
-        <Link className="button button-secondary" href="/messages">
-          Volver a mensajes
-        </Link>
-      </nav>
+      <AppNav backHref="/messages" backLabel="Volver a mensajes" isAdmin={isAdmin} />
 
       <section className="card message-detail">
         <div className="message-detail__header">

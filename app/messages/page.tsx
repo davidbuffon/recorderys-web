@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Brand } from "@/components/brand";
+import { AppNav } from "@/components/app-nav";
+import { getIsAdmin } from "@/lib/admin";
 import { demoMessages, hasSupabaseEnv } from "@/lib/demo";
 import { createClient } from "@/lib/supabase-server";
 import { uploadUserFile } from "@/lib/storage";
@@ -53,6 +54,7 @@ async function createMessage(formData: FormData) {
 
 export default async function MessagesPage() {
   let messages = demoMessages;
+  let isAdmin = false;
 
   if (hasSupabaseEnv()) {
     const supabase = await createClient();
@@ -64,21 +66,20 @@ export default async function MessagesPage() {
       redirect("/login");
     }
 
+    isAdmin = await getIsAdmin(supabase, user.id);
+
     const { data: messagesData } = await supabase
       .from("messages")
       .select("id,subject,status,admin_response,updated_at")
       .order("updated_at", { ascending: false });
     messages = messagesData ?? [];
+  } else {
+    isAdmin = true;
   }
 
   return (
     <main className="shell">
-      <nav className="dashboard__nav">
-        <Brand />
-        <a className="button button-secondary" href="/dashboard">
-          Dashboard
-        </a>
-      </nav>
+      <AppNav isAdmin={isAdmin} />
       <section className="support-layout">
         <div className="card support-composer">
           <span className="chip chip-yellow">Ayuda</span>
