@@ -139,14 +139,11 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
         </div>
 
         <div className="detail-header__actions">
-          <Link className="button button-secondary" href={`/items/${item.id}/edit`}>
+          <Link className="button button-primary" href={`/items/${item.id}/edit`}>
             Editar artículo
           </Link>
-          <Link className="button button-primary" href="/messages">
-            Contactar con RECORDERYS
-          </Link>
-          <Link className="button button-secondary" href="/dashboard">
-            Ver artículos
+          <Link className="button button-secondary" href="/messages">
+            Contactar con soporte
           </Link>
         </div>
       </section>

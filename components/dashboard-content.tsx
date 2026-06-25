@@ -139,9 +139,6 @@ export function DashboardContent({
                   : "Lo más urgente ahora"}
               </h2>
             </div>
-            <Link className="button button-secondary" href="/items/new">
-              Añadir artículo
-            </Link>
           </div>
 
           {urgentMilestones.length ? (

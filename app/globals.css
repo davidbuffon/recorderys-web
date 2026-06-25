@@ -157,6 +157,15 @@ textarea {
   color: var(--brand-blue-deep);
 }
 
+.button-danger {
+  background: #c0392b;
+  color: #fff;
+}
+
+.button-danger:hover {
+  background: #a93226;
+}
+
 .nav-signout {
   background: transparent;
   border: 0;
