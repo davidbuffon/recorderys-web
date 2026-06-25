@@ -1779,8 +1779,8 @@ textarea {
 
 .payment-receipt-card {
   align-items: stretch;
-  background: linear-gradient(135deg, rgba(39, 169, 207, 0.1), rgba(255, 211, 26, 0.12));
-  border: 1px solid rgba(13, 111, 144, 0.12);
+  background: #fffdf3;
+  border: 1px solid #ede8d0;
   border-radius: 20px;
   display: grid;
   gap: 16px;
