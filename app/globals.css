@@ -398,6 +398,7 @@ textarea {
 }
 
 .auth-showcase > .chip {
+  font-size: clamp(1rem, 2vw, 1.35rem);
   justify-content: flex-start;
   justify-self: stretch;
   min-height: 54px;
