@@ -1,3 +1,13 @@
+export function isPastDate(date: string | null | undefined) {
+  if (!date) return false;
+
+  const parsed = new Date(date);
+
+  if (Number.isNaN(parsed.getTime())) return false;
+
+  return parsed.getTime() < Date.now();
+}
+
 export function formatShortDate(date: string | null | undefined) {
   if (!date) return "Sin definir";
 

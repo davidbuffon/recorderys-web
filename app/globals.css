@@ -1167,14 +1167,14 @@ textarea {
 }
 
 .brand-logo--fallback {
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(12, 88, 118, 0.12);
-  border-radius: 999px;
-  color: #0c5876;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  padding: 8px 12px;
+  background: rgba(16, 32, 42, 0.07);
+  border: none;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 4px 8px;
   text-transform: uppercase;
 }
 

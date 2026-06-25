@@ -5,7 +5,7 @@ import { InfinityMark } from "@/components/infinity-mark";
 import { TicketDocumentViewer } from "@/components/ticket-document-viewer";
 import { TicketSummaryCard } from "@/components/ticket-summary-card";
 import { demoItems, hasSupabaseEnv } from "@/lib/demo";
-import { formatShortDate } from "@/lib/format-date";
+import { formatShortDate, isPastDate } from "@/lib/format-date";
 import { createClient } from "@/lib/supabase-server";
 
 type Params = Promise<{ id: string }>;
@@ -96,6 +96,7 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
   }
 
   const customerPhotos = coverImageHref ? [coverImageHref] : [];
+  const returnExpired = isPastDate(item.return_until);
 
   return (
     <main className="shell">
@@ -170,7 +171,9 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
           <div className="date-blocks">
             <div className="date-block">
               <div className="date-block__hero">
-                <span className="chip chip-yellow">Fin de devolución</span>
+                <span className={`chip ${returnExpired ? "chip-red" : "chip-yellow"}`}>
+                  {returnExpired ? "Devolución caducada" : "Fin de devolución"}
+                </span>
                 <strong>{formatShortDate(item.return_until)}</strong>
               </div>
               <p className="muted">{item.return_source}</p>
