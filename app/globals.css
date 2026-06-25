@@ -2703,9 +2703,11 @@ textarea {
   }
 
   .public-nav__actions .public-link {
+    align-items: center;
     background: var(--brand-yellow);
     border-radius: 999px;
     color: var(--brand-blue-deep);
+    display: flex;
     font-size: 0.9rem;
     font-weight: 700;
     min-height: 44px;
