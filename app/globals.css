@@ -973,13 +973,20 @@ textarea {
   gap: 8px;
 }
 
-.dashboard-command-card__hints span {
+.dashboard-command-card__hints span,
+.dashboard-hint {
   background: #e8f7fb;
   border-radius: 999px;
   color: var(--brand-blue-deep);
   font-size: 13px;
   font-weight: 700;
   padding: 8px 10px;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.dashboard-hint:hover {
+  background: #d0eef6;
 }
 
 .stat-card {

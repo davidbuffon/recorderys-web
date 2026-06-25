@@ -1,10 +1,39 @@
+import type { Metadata } from "next";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { AppNav } from "@/components/app-nav";
+
+export const metadata: Metadata = {
+  title: "Perfil — Recorderys",
+};
 import { getIsAdmin } from "@/lib/admin";
 import { demoProfile, hasSupabaseEnv } from "@/lib/demo";
 import { createAdminClient, createClient } from "@/lib/supabase-server";
+
+async function changePassword(formData: FormData) {
+  "use server";
+
+  if (!hasSupabaseEnv()) {
+    redirect("/profile");
+  }
+
+  const newPassword = String(formData.get("new_password") || "").trim();
+  const confirm = String(formData.get("confirm_password") || "").trim();
+
+  if (!newPassword || newPassword.length < 8 || newPassword !== confirm) {
+    redirect("/profile?pw_error=1");
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
+
+  if (error) {
+    redirect("/profile?pw_error=1");
+  }
+
+  redirect("/profile?pw_ok=1");
+}
 
 async function deleteAccount() {
   "use server";
@@ -71,7 +100,14 @@ async function updateProfile(formData: FormData) {
   redirect("/profile");
 }
 
-export default async function ProfilePage() {
+export default async function ProfilePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ pw_ok?: string; pw_error?: string }>;
+}) {
+  const params = await searchParams;
+  const pwOk = params.pw_ok === "1";
+  const pwError = params.pw_error === "1";
   let profile: any = demoProfile;
   let email = demoProfile.email;
   let isAdmin = false;
@@ -139,6 +175,29 @@ export default async function ProfilePage() {
           </label>
           <button className="button button-primary" type="submit">
             Guardar cambios
+          </button>
+        </form>
+      </section>
+
+      <section className="card form-card" style={{ marginTop: 16 }}>
+        <div>
+          <span className="chip chip-blue">Seguridad</span>
+          <h2>Cambiar contraseña</h2>
+          <p className="muted">Elige una contraseña nueva de al menos 8 caracteres.</p>
+        </div>
+        {pwOk && <p className="auth-message" style={{ color: "green" }}>Contraseña actualizada correctamente.</p>}
+        {pwError && <p className="auth-message" style={{ color: "#c0392b" }}>Error al actualizar. Comprueba que ambas contraseñas coinciden y tienen al menos 8 caracteres.</p>}
+        <form action={changePassword} className="item-form">
+          <label>
+            Nueva contraseña
+            <input autoComplete="new-password" minLength={8} name="new_password" required type="password" />
+          </label>
+          <label>
+            Confirmar contraseña
+            <input autoComplete="new-password" minLength={8} name="confirm_password" required type="password" />
+          </label>
+          <button className="button button-secondary" type="submit">
+            Actualizar contraseña
           </button>
         </form>
       </section>

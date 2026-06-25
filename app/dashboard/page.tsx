@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AppNav } from "@/components/app-nav";
@@ -5,6 +6,10 @@ import { DashboardContent } from "@/components/dashboard-content";
 import { demoCategories, demoItems, hasSupabaseEnv } from "@/lib/demo";
 import { createClient } from "@/lib/supabase-server";
 import type { Category, ItemCardData } from "@/lib/types";
+
+export const metadata: Metadata = {
+  title: "Mis artículos — Recorderys",
+};
 
 type SearchParams = Promise<{
   q?: string;
@@ -130,9 +135,9 @@ export default async function DashboardPage({
             </button>
           </form>
           <div className="dashboard-command-card__hints" aria-label="Atajos sugeridos">
-            <span>Garantías activas</span>
-            <span>Devoluciones</span>
-            <span>Tickets revisados</span>
+            <Link className="dashboard-hint" href="/dashboard?q=garantía">Garantías activas</Link>
+            <Link className="dashboard-hint" href="/dashboard?q=devolución">Devoluciones</Link>
+            <Link className="dashboard-hint" href="/dashboard?q=ticket">Tickets</Link>
           </div>
         </div>
       </section>

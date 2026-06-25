@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { AppNav } from "@/components/app-nav";
@@ -10,6 +11,19 @@ import { formatShortDate, isPastDate } from "@/lib/format-date";
 import { createClient } from "@/lib/supabase-server";
 
 type Params = Promise<{ id: string }>;
+
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+  const { id } = await params;
+
+  if (!hasSupabaseEnv()) {
+    const item = demoItems.find((entry) => entry.id === id);
+    return { title: item ? `${item.name} — Recorderys` : "Artículo — Recorderys" };
+  }
+
+  const supabase = await createClient();
+  const { data } = await supabase.from("items").select("name").eq("id", id).single();
+  return { title: data?.name ? `${data.name} — Recorderys` : "Artículo — Recorderys" };
+}
 
 export default async function ItemDetailPage({ params }: { params: Params }) {
   let coverImageHref: string | null = null;
@@ -245,63 +259,42 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
             </div>
           ) : null}
 
-          {receiptMeta ? (
+          {receiptMeta && receiptMeta.duplicate_status !== "clear" ? (
             <div className="date-block">
-              <span
-                className={`chip ${
-                  receiptMeta.duplicate_status === "clear"
-                    ? "chip-green"
-                    : receiptMeta.duplicate_status === "under_review"
-                      ? "chip-yellow"
-                      : "chip-red"
-                }`}
-              >
-                {receiptMeta.duplicate_status === "clear"
-                  ? "Ticket limpio"
-                  : receiptMeta.duplicate_status === "under_review"
-                    ? "Ticket en revisión"
-                    : "Posible duplicado"}
+              <span className={`chip ${receiptMeta.duplicate_status === "under_review" ? "chip-yellow" : "chip-red"}`}>
+                {receiptMeta.duplicate_status === "under_review" ? "Ticket en revisión" : "Posible duplicado"}
               </span>
-              <strong>Confianza: {receiptMeta.trust_score}/100</strong>
               <p className="muted">
-                {receiptMeta.review_notes ||
-                  "No se han detectado duplicados del ticket entre cuentas."}
+                {receiptMeta.review_notes || "Este ticket está siendo revisado."}
               </p>
             </div>
           ) : null}
 
-          {receiptMeta ? (
-            <div className="date-block">
-              <span
-                className={`chip ${
-                  receiptMeta.ocr_status === "processed"
-                    ? "chip-blue"
-                    : receiptMeta.ocr_status === "failed"
-                      ? "chip-red"
-                      : "chip-yellow"
-                }`}
-              >
-                {receiptMeta.ocr_status === "processed"
-                  ? "Datos extraídos"
-                  : receiptMeta.ocr_status === "failed"
-                    ? "OCR fallido"
-                    : "OCR pendiente"}
-              </span>
-              <strong>
-                Extracción: {receiptMeta.extraction_confidence ?? 0}/100
-              </strong>
-              <p className="muted">
-                Tienda: {receiptMeta.extracted_store || "sin detectar"} · Fecha:{" "}
-                {formatShortDate(receiptMeta.extracted_purchase_date || null)}
-              </p>
-              <p className="muted">
-                Importe:{" "}
-                {receiptMeta.extracted_total_amount != null
-                  ? `${receiptMeta.extracted_total_amount} €`
-                  : "sin detectar"}{" "}
-                · Ticket: {receiptMeta.extracted_ticket_number || "sin detectar"}
-              </p>
-            </div>
+          {isAdmin && receiptMeta ? (
+            <details className="date-block admin-details">
+              <summary className="muted" style={{ cursor: "pointer", fontSize: 13 }}>
+                Datos técnicos (solo admin)
+              </summary>
+              <div style={{ marginTop: 8 }}>
+                <p className="muted">
+                  Confianza: {receiptMeta.trust_score}/100 · OCR: {receiptMeta.ocr_status ?? "—"}
+                </p>
+                <p className="muted">
+                  Extracción: {receiptMeta.extraction_confidence ?? 0}/100
+                </p>
+                <p className="muted">
+                  Tienda: {receiptMeta.extracted_store || "sin detectar"} · Fecha:{" "}
+                  {formatShortDate(receiptMeta.extracted_purchase_date || null)}
+                </p>
+                <p className="muted">
+                  Importe:{" "}
+                  {receiptMeta.extracted_total_amount != null
+                    ? `${receiptMeta.extracted_total_amount} €`
+                    : "sin detectar"}{" "}
+                  · Ticket: {receiptMeta.extracted_ticket_number || "sin detectar"}
+                </p>
+              </div>
+            </details>
           ) : null}
         </div>
       </section>

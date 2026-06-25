@@ -304,7 +304,7 @@ export default async function EditItemPage({ params }: { params: Params }) {
           </div>
 
           <label>
-            <span>Fin de garantía manual</span>
+            <span>Fecha de fin de garantía</span>
             <input
               name="warranty_until_manual"
               type="date"

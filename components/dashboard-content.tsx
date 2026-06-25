@@ -86,23 +86,39 @@ export function DashboardContent({
 
   return (
     <>
-      <section className="stats-grid" aria-label="Resumen">
-        <div className="card stat-card">
-          <strong>{typedItems.length}</strong>
-          <span>Artículos guardados</span>
-          <small>Tu biblioteca privada de compras y tickets.</small>
-        </div>
-        <div className="card stat-card">
-          <strong>{warrantyActiveCount}</strong>
-          <span>Garantías activas</span>
-          <small>Productos todavía cubiertos por garantía.</small>
-        </div>
-        <div className="card stat-card">
-          <strong>{upcomingReturnCount}</strong>
-          <span>Devoluciones próximas</span>
-          <small>Compras que conviene revisar pronto.</small>
-        </div>
-      </section>
+      {items.length === 0 ? (
+        <section className="card onboarding-banner">
+          <div>
+            <span className="chip chip-yellow">Primeros pasos</span>
+            <h2>Guarda tu primera compra</h2>
+            <p className="muted">
+              Añade un artículo con su ticket o factura y Recorderys controlará
+              los plazos de devolución y garantía por ti.
+            </p>
+          </div>
+          <Link className="button button-primary" href="/items/new">
+            Añadir artículo
+          </Link>
+        </section>
+      ) : (
+        <section className="stats-grid" aria-label="Resumen">
+          <div className="card stat-card">
+            <strong>{typedItems.length}</strong>
+            <span>Artículos guardados</span>
+            <small>Tu biblioteca privada de compras y tickets.</small>
+          </div>
+          <div className="card stat-card">
+            <strong>{warrantyActiveCount}</strong>
+            <span>Garantías activas</span>
+            <small>Productos todavía cubiertos por garantía.</small>
+          </div>
+          <div className="card stat-card">
+            <strong>{upcomingReturnCount}</strong>
+            <span>Devoluciones próximas</span>
+            <small>Compras que conviene revisar pronto.</small>
+          </div>
+        </section>
+      )}
 
       {items.length > 0 && (
         <section className="category-row" aria-label="Categorías">
