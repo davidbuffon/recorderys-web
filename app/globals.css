@@ -33,10 +33,7 @@ body {
 }
 
 body {
-  background:
-    radial-gradient(circle at top left, rgba(255, 211, 26, 0.16), transparent 22rem),
-    radial-gradient(circle at top right, rgba(39, 169, 207, 0.12), transparent 24rem),
-    linear-gradient(180deg, #fbfeff 0%, #f4fbfd 100%);
+  background: #d4ecf5;
   color: var(--text);
   display: flex;
   flex-direction: column;
