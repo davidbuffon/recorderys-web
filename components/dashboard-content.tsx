@@ -255,12 +255,9 @@ export function DashboardContent({
         <section className="dashboard-collection" aria-label="Artículos">
           <div className="dashboard-collection__header">
             <div>
-              <span className="chip chip-blue">Colección</span>
-              <h2>
-                {selectedCategoryName
-                  ? `Artículos de ${selectedCategoryName}`
-                  : "Tus artículos"}
-              </h2>
+              <span className="chip chip-blue">
+                {selectedCategoryName ? `Colección · ${selectedCategoryName}` : "Colección"}
+              </span>
             </div>
           </div>
           <div className="items-grid">

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { CookieConsent } from "@/components/cookie-consent";
-import { LegalFooter } from "@/components/legal-footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -28,7 +27,6 @@ export default function RootLayout({
     <html lang="es">
       <body>
         <div className="site-content">{children}</div>
-        <LegalFooter />
         <CookieConsent />
       </body>
     </html>

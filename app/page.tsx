@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BrandHomeLink } from "@/components/brand-home-link";
+import { LegalFooter } from "@/components/legal-footer";
 
 const purchases = [
   {
@@ -62,6 +63,7 @@ const partnerProducts = [
 
 export default function HomePage() {
   return (
+    <>
     <main className="public-landing">
       <nav className="public-nav" aria-label="Navegación principal">
         <BrandHomeLink tagline="Tu App de garantía." />
@@ -248,5 +250,7 @@ export default function HomePage() {
         </Link>
       </section>
     </main>
+    <LegalFooter />
+    </>
   );
 }
