@@ -217,7 +217,7 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
                 : receiptMeta?.ocr_status === "failed"
                   ? "Revisión pendiente"
                   : receiptHref
-                    ? "Ticket guardado"
+                    ? "Ticket / Factura"
                     : "Resumen de compra"
             }
             store={receiptMeta?.extracted_store || item.store}
