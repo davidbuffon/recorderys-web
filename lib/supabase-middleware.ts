@@ -3,7 +3,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { hasSupabaseEnv } from "@/lib/demo";
 import { getSupabaseEnv } from "@/lib/env";
 
-const PROTECTED_PREFIXES = ["/dashboard", "/items", "/profile", "/messages"];
+const PROTECTED_PREFIXES = ["/dashboard", "/items", "/profile", "/messages", "/admin"];
 
 export async function updateSession(request: NextRequest) {
   if (!hasSupabaseEnv()) {

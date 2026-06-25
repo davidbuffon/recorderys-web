@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>
-        {children}
+        <div className="site-content">{children}</div>
         <LegalFooter />
         <CookieConsent />
       </body>

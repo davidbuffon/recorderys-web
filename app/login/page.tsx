@@ -11,12 +11,16 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState<"login" | "register" | "recover">("login");
   const [message, setMessage] = useState("");
+  const [nextPath, setNextPath] = useState("/dashboard");
 
   const demoMode = !hasSupabaseEnv();
 
   useEffect(() => {
-    const requestedMode = new URLSearchParams(window.location.search).get("mode");
+    const params = new URLSearchParams(window.location.search);
+    const requestedMode = params.get("mode");
+    const requestedNext = params.get("next");
     if (requestedMode === "register") setMode("register");
+    if (requestedNext?.startsWith("/")) setNextPath(requestedNext);
   }, []);
 
   async function signInWithProvider(provider: "google" | "apple") {
@@ -24,7 +28,7 @@ export default function LoginPage() {
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`,
       },
     });
   }
@@ -93,7 +97,7 @@ export default function LoginPage() {
       return;
     }
 
-    window.location.href = "/dashboard";
+    window.location.href = nextPath;
   }
 
   return (

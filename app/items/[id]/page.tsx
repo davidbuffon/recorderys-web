@@ -64,6 +64,7 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
       .from("items")
       .select("*,categories(name,slug,color),receipts(duplicate_status,trust_score,review_notes,ocr_status,extraction_confidence,extracted_store,extracted_purchase_date,extracted_total_amount,extracted_ticket_number)")
       .eq("id", id)
+      .eq("user_id", user.id)
       .single();
     item = data;
     receiptMeta = data?.receipts?.[0] ?? null;

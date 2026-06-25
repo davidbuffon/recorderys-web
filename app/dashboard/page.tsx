@@ -56,6 +56,7 @@ export default async function DashboardPage({
       .select(
         "id,name,brand,store,purchase_date,return_until,warranty_until,photo_path,categories(id,name,slug,color),receipts(duplicate_status,trust_score)",
       )
+      .eq("user_id", user.id)
       .order("created_at", { ascending: false });
 
     if (search) {
@@ -93,6 +94,9 @@ export default async function DashboardPage({
       <nav className="dashboard__nav">
         <Brand />
         <div className="dashboard__nav-actions">
+          <Link className="button button-secondary" href="/admin/messages">
+            Soporte
+          </Link>
           <Link className="button button-secondary" href="/admin/receipts">
             Revisar tickets
           </Link>
@@ -116,6 +120,9 @@ export default async function DashboardPage({
           <div className="dashboard-quick-actions">
             <Link className="button button-primary" href="/items/new">
               Añadir nueva compra
+            </Link>
+            <Link className="button button-secondary" href="/admin/messages">
+              Soporte
             </Link>
             <Link className="button button-secondary" href="/admin/receipts">
               Revisar tickets

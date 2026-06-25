@@ -33,13 +33,20 @@ body {
 }
 
 body {
-  margin: 0;
   background:
     radial-gradient(circle at top left, rgba(255, 211, 26, 0.16), transparent 22rem),
     radial-gradient(circle at top right, rgba(39, 169, 207, 0.12), transparent 24rem),
     linear-gradient(180deg, #fbfeff 0%, #f4fbfd 100%);
   color: var(--text);
+  display: flex;
+  flex-direction: column;
   font-family: var(--font-rounded);
+  margin: 0;
+  min-height: 100vh;
+}
+
+.site-content {
+  flex: 1 0 auto;
 }
 
 a {
@@ -360,6 +367,14 @@ textarea {
   display: grid;
   gap: 18px;
   padding: 18px 8px;
+}
+
+.auth-showcase > .chip {
+  justify-content: flex-start;
+  justify-self: stretch;
+  min-height: 54px;
+  padding: 0 22px;
+  width: 100%;
 }
 
 .auth-showcase h1 {
@@ -1240,6 +1255,7 @@ textarea {
 }
 
 .support-form input,
+.support-form select,
 .support-form textarea {
   background: #fbfeff;
   border: 1px solid rgba(13, 111, 144, 0.18);
@@ -1336,6 +1352,74 @@ textarea {
 
 .message-bubble--admin {
   background: linear-gradient(135deg, rgba(39, 169, 207, 0.09), rgba(255, 255, 255, 0.96));
+}
+
+.admin-messages {
+  display: grid;
+  gap: 22px;
+  margin: 28px auto 40px;
+  max-width: 1100px;
+  padding: 34px;
+  width: min(100%, 1100px);
+}
+
+.admin-messages__header {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-messages__header .chip {
+  justify-self: start;
+}
+
+.admin-message-list {
+  display: grid;
+  gap: 14px;
+}
+
+.admin-message-card {
+  align-items: center;
+  border: 1px solid rgba(39, 169, 207, 0.16);
+  border-radius: 22px;
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 20px;
+  transition:
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.admin-message-card:hover {
+  border-color: rgba(13, 111, 144, 0.28);
+  transform: translateY(-1px);
+}
+
+.admin-message-card .chip {
+  justify-self: start;
+}
+
+.admin-message-card h2 {
+  font-size: clamp(26px, 3vw, 38px);
+  line-height: 1.04;
+  margin: 10px 0 8px;
+}
+
+.admin-message-card p {
+  margin: 0;
+}
+
+.admin-message-detail__grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr);
+}
+
+.admin-reply-form {
+  align-content: start;
+  border: 1px solid rgba(39, 169, 207, 0.16);
+  border-radius: 22px;
+  padding: 20px;
 }
 
 .error-page {
@@ -1728,6 +1812,7 @@ textarea {
   .detail-grid,
   .dashboard-overview,
   .support-layout,
+  .admin-message-detail__grid,
   .auth-layout {
     grid-template-columns: 1fr;
   }
@@ -1782,6 +1867,7 @@ textarea {
   .detail-gallery,
   .photo-picker,
   .review-form,
+  .admin-message-card,
   .hero__floating-grid,
   .benefits,
   .auth-benefits {
