@@ -18,7 +18,7 @@ export function ChangePasswordSection({ action, pwOk, pwError }: ChangePasswordP
   if (!open) {
     return (
       <button
-        className="button button-nav"
+        className="button button-secondary"
         onClick={() => setOpen(true)}
         style={{ width: "100%" }}
         type="button"
@@ -69,9 +69,9 @@ export function DeleteAccountSection({ action }: DeleteAccountProps) {
   if (!open) {
     return (
       <button
-        className="button button-nav"
+        className="danger-link"
         onClick={() => setOpen(true)}
-        style={{ width: "100%" }}
+        style={{ justifySelf: "center" }}
         type="button"
       >
         Eliminar mi cuenta

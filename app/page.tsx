@@ -28,12 +28,12 @@ const purchases = [
 
 const partnerProducts = [
   {
-    brand: "DeLonghi",
+    brand: "Dyson",
     category: "Hogar",
-    name: "Cafetera automática",
-    image: "/demo/product-cafetera.svg?v=5",
+    name: "Aspiradora sin cable",
+    image: "/demo/product-aspiradora.svg",
     note: "Garantía y ticket siempre a mano",
-    store: "El Corte Inglés",
+    store: "MediaMarkt",
   },
   {
     brand: "Nordikas",
@@ -50,14 +50,6 @@ const partnerProducts = [
     image: "/demo/product-auriculares.svg?v=5",
     note: "Compra localizada en segundos",
     store: "Amazon",
-  },
-  {
-    brand: "Recorderys",
-    category: "Ticket",
-    name: "Justificante guardado",
-    image: "/demo/ticket-cafetera.svg",
-    note: "Documento, producto y garantía conectados",
-    store: "Compra demo",
   },
 ];
 
@@ -116,7 +108,12 @@ export default function HomePage() {
                 key={purchase.name}
               >
                 <div className="purchase-preview__media">
-                  <img src={purchase.image} alt={purchase.name} />
+                  <img
+                    alt={purchase.name}
+                    height={900}
+                    src={purchase.image}
+                    width={1200}
+                  />
                 </div>
                 <div className="purchase-preview__body">
                   <span className={`status-pill status-pill--${purchase.tone}`}>
@@ -190,7 +187,13 @@ export default function HomePage() {
             </div>
             <div className="how-product-visual" aria-label="Producto registrado">
               <div className="how-product-visual__media">
-                <img src="/demo/product-cafetera-wide.svg" alt="" />
+                <img
+                  alt=""
+                  height={520}
+                  loading="lazy"
+                  src="/demo/product-cafetera-wide.svg"
+                  width={1200}
+                />
               </div>
             </div>
           </article>
@@ -223,7 +226,13 @@ export default function HomePage() {
           {partnerProducts.map((product) => (
             <article className="brand-product-card" key={`${product.brand}-${product.name}`}>
               <div className="brand-product-card__media">
-                <img src={product.image} alt={product.name} />
+                <img
+                  alt={product.name}
+                  height={900}
+                  loading="lazy"
+                  src={product.image}
+                  width={1200}
+                />
               </div>
               <div className="brand-product-card__body">
                 <span>{product.category}</span>

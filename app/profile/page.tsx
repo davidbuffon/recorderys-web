@@ -150,6 +150,7 @@ export default async function ProfilePage({
           <label>
             Nombre
             <input
+              autoComplete="name"
               defaultValue={profile?.name ?? ""}
               name="name"
               placeholder="Tu nombre"
@@ -158,17 +159,21 @@ export default async function ProfilePage({
           <label>
             Teléfono
             <input
+              autoComplete="tel"
               defaultValue={profile?.phone ?? ""}
+              inputMode="tel"
               name="phone"
-              placeholder="+34..."
+              placeholder="+34 600 000 000"
+              type="tel"
             />
           </label>
           <label>
             Dirección
             <span className="muted" style={{ fontSize: "0.8em", fontWeight: "normal" }}>
-              Opcional — útil si en el futuro añadimos gestión de devoluciones a domicilio.
+              Opcional
             </span>
             <textarea
+              autoComplete="street-address"
               defaultValue={profile?.address ?? ""}
               name="address"
               placeholder="Tu dirección"

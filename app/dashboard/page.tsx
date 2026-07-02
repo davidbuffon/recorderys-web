@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AppNav } from "@/components/app-nav";
 import { DashboardContent } from "@/components/dashboard-content";
+import { InstallPrompt } from "@/components/install-prompt";
 import { demoCategories, demoItems, hasSupabaseEnv } from "@/lib/demo";
 import { createClient } from "@/lib/supabase-server";
 import type { Category, ItemCardData } from "@/lib/types";
@@ -123,15 +124,13 @@ export default async function DashboardPage({
           </div>
         </div>
         <div className="dashboard-command-card">
-          <div>
-            <span className="chip chip-blue">Buscar</span>
-          </div>
           <form className="search-form dashboard-search">
             <input
               aria-label="Buscar artículos"
               defaultValue={search}
               name="q"
-              placeholder="Producto, tienda, marca o ticket..."
+              placeholder="Producto, tienda, marca o ticket…"
+              type="search"
             />
             {initialCategorySlug ? (
               <input name="category" type="hidden" value={initialCategorySlug} />
@@ -146,11 +145,11 @@ export default async function DashboardPage({
       <DashboardContent
         categories={categories}
         hasItems={totalItemCount > 0}
-        isAdmin={isAdmin}
         initialCategorySlug={initialCategorySlug}
         items={typedItems}
         search={search}
       />
+      <InstallPrompt />
     </main>
   );
 }

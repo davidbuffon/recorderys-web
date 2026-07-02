@@ -13,8 +13,10 @@ type AppNavProps = {
 export function AppNav({ backHref, backLabel, isAdmin = false }: AppNavProps) {
   const pathname = usePathname();
 
-  function navClass(href: string) {
-    const active = pathname === href || pathname.startsWith(href + "/");
+  function navClass(...hrefs: string[]) {
+    const active = hrefs.some(
+      (href) => pathname === href || pathname.startsWith(href + "/"),
+    );
     return active ? "button button-nav-active" : "button button-nav";
   }
 
@@ -31,7 +33,7 @@ export function AppNav({ backHref, backLabel, isAdmin = false }: AppNavProps) {
           Dashboard
         </Link>
         <Link
-          className={navClass(isAdmin ? "/admin/messages" : "/messages")}
+          className={navClass("/messages", "/admin/messages")}
           href={isAdmin ? "/admin/messages" : "/messages"}
         >
           Soporte

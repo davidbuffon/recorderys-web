@@ -113,12 +113,6 @@ export default function LoginPage() {
             Tickets, garantías y devoluciones importantes, disponibles cuando
             de verdad los necesitas.
           </p>
-
-          <div className="auth-proof">
-            <span>Ticket localizado</span>
-            <span>Garantía vigente</span>
-            <span>Todo privado</span>
-          </div>
         </div>
 
         <section className="card auth-card auth-card--elevated">

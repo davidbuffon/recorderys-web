@@ -259,17 +259,6 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
             </div>
           ) : null}
 
-          {receiptMeta && receiptMeta.duplicate_status !== "clear" ? (
-            <div className="date-block">
-              <span className={`chip ${receiptMeta.duplicate_status === "under_review" ? "chip-yellow" : "chip-red"}`}>
-                {receiptMeta.duplicate_status === "under_review" ? "Ticket en revisión" : "Posible duplicado"}
-              </span>
-              <p className="muted">
-                {receiptMeta.review_notes || "Este ticket está siendo revisado."}
-              </p>
-            </div>
-          ) : null}
-
           {isAdmin && receiptMeta ? (
             <details className="date-block admin-details">
               <summary className="muted" style={{ cursor: "pointer", fontSize: 13 }}>

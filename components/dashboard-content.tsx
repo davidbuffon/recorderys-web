@@ -12,7 +12,6 @@ type DashboardContentProps = {
   categories: Category[];
   hasItems?: boolean;
   initialCategorySlug?: string;
-  isAdmin?: boolean;
   items: ItemCardData[];
   search?: string;
 };
@@ -21,11 +20,21 @@ export function DashboardContent({
   categories,
   hasItems = false,
   initialCategorySlug = "",
-  isAdmin = false,
   items,
   search = "",
 }: DashboardContentProps) {
   const [selectedCategory, setSelectedCategory] = useState(initialCategorySlug);
+
+  function selectCategory(slug: string) {
+    setSelectedCategory(slug);
+    const url = new URL(window.location.href);
+    if (slug) {
+      url.searchParams.set("category", slug);
+    } else {
+      url.searchParams.delete("category");
+    }
+    window.history.replaceState(null, "", url);
+  }
   const typedItems = useMemo(
     () =>
       selectedCategory
@@ -38,18 +47,11 @@ export function DashboardContent({
   const now = new Date();
   const soon = new Date();
   soon.setDate(now.getDate() + 30);
-  const warrantyActiveCount = typedItems.filter(
-    (item) => new Date(item.warranty_until) >= now,
-  ).length;
-  const upcomingReturnCount = typedItems.filter((item) => {
-    if (!item.return_until) return false;
-    const date = new Date(item.return_until);
-    return date >= now && date <= soon;
+  const warrantyActiveCount = typedItems.filter((item) => {
+    if (!item.warranty_until) return false;
+    const date = new Date(item.warranty_until);
+    return !Number.isNaN(date.getTime()) && date >= now;
   }).length;
-  const suspiciousTickets = typedItems.filter((item) => {
-    const status = item.receipts?.[0]?.duplicate_status;
-    return status === "possible_duplicate" || status === "under_review";
-  });
   const urgentMilestones = typedItems
     .flatMap((item) => {
       const milestones: {
@@ -90,36 +92,15 @@ export function DashboardContent({
 
   return (
     <>
-      {!hasItems ? (
-        <section className="card onboarding-banner">
-          <div>
-            <span className="chip chip-yellow">Primeros pasos</span>
-            <h2>Guarda tu primera compra</h2>
-            <p className="muted">
-              Añade un artículo con su ticket o factura y Recorderys controlará
-              los plazos de devolución y garantía por ti.
-            </p>
-          </div>
-          <Link className="button button-primary" href="/items/new">
-            Añadir artículo
-          </Link>
-        </section>
-      ) : (
+      {hasItems && (
         <section className="stats-grid" aria-label="Resumen">
           <div className="card stat-card">
             <strong>{typedItems.length}</strong>
             <span>Artículos guardados</span>
-            <small>Tu biblioteca privada de compras y tickets.</small>
           </div>
           <div className="card stat-card">
             <strong>{warrantyActiveCount}</strong>
             <span>Garantías activas</span>
-            <small>Productos todavía cubiertos por garantía.</small>
-          </div>
-          <div className="card stat-card">
-            <strong>{upcomingReturnCount}</strong>
-            <span>Devoluciones próximas</span>
-            <small>Compras que conviene revisar pronto.</small>
           </div>
         </section>
       )}
@@ -128,7 +109,7 @@ export function DashboardContent({
         <section className="category-row" aria-label="Categorías">
           <button
             className={`chip ${selectedCategory ? "chip-blue" : "chip-yellow"}`}
-            onClick={() => setSelectedCategory("")}
+            onClick={() => selectCategory("")}
             type="button"
           >
             Todos
@@ -139,7 +120,7 @@ export function DashboardContent({
                 selectedCategory === category.slug ? "chip-yellow" : "chip-blue"
               }`}
               key={category.id}
-              onClick={() => setSelectedCategory(category.slug)}
+              onClick={() => selectCategory(category.slug)}
               type="button"
             >
               {category.name}
@@ -148,7 +129,8 @@ export function DashboardContent({
         </section>
       )}
 
-      <section className={`dashboard-overview${!hasItems ? " dashboard-overview--single" : ""}`}>
+      {hasItems && (
+      <section className="dashboard-overview">
         <div className="card overview-panel">
           <div className="overview-panel__header">
             <div>
@@ -203,57 +185,8 @@ export function DashboardContent({
             </p>
           )}
         </div>
-
-        {hasItems && (
-        <div className="card antifraud-panel">
-          <span className="chip chip-blue">Validación</span>
-          <h2>Estado de tickets</h2>
-          <p className="muted">
-            RECORDERYS vigila duplicados entre cuentas y deja listos los casos
-            para revisión manual.
-          </p>
-
-          <div className="antifraud-panel__score">
-            <strong>{suspiciousTickets.length}</strong>
-            <span>casos a revisar</span>
-          </div>
-
-          {suspiciousTickets.length ? (
-            <div className="antifraud-panel__list">
-              {suspiciousTickets.map((item) => (
-                <Link href={`/items/${item.id}`} key={item.id}>
-                  <div className="antifraud-mini">
-                    <strong>{item.name}</strong>
-                    <span
-                      className={`chip ${
-                        item.receipts?.[0]?.duplicate_status === "under_review"
-                          ? "chip-yellow"
-                          : "chip-red"
-                      }`}
-                    >
-                      {item.receipts?.[0]?.duplicate_status === "under_review"
-                        ? "En revisión"
-                        : "Posible duplicado"}
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <div className="antifraud-panel__ok">
-              <span className="chip chip-green">Todo limpio</span>
-              <p>No hay tickets sospechosos en este momento.</p>
-            </div>
-          )}
-
-          {isAdmin ? (
-            <Link className="button button-secondary" href="/admin/receipts">
-              Abrir panel de revisión
-            </Link>
-          ) : null}
-        </div>
-        )}
       </section>
+      )}
 
       {typedItems.length ? (
         <section className="dashboard-collection" aria-label="Artículos">

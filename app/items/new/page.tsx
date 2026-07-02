@@ -260,10 +260,6 @@ export default async function NewItemPage() {
               aún no guarda datos persistentes.
             </p>
           ) : null}
-          <p className="muted">
-            RECORDERYS genera una huella del ticket para detectar duplicados y
-            marcar posibles fraudes entre cuentas.
-          </p>
         </div>
 
         <NewItemForm action={createItem} categories={categories} />

@@ -4,6 +4,7 @@ import { InfinityMark } from "@/components/infinity-mark";
 import { requireAdmin } from "@/lib/admin";
 import { demoMessages } from "@/lib/demo";
 import { formatShortDate } from "@/lib/format-date";
+import { getMessageStatusLabel } from "@/lib/message-status";
 
 type AdminMessage = {
   id: string;
@@ -19,18 +20,6 @@ type AdminMessage = {
 type MessageRow = AdminMessage & {
   profiles: { email: string } | { email: string }[] | null;
 };
-
-function getStatusLabel(status: string) {
-  if (status === "closed") {
-    return "Respondido";
-  }
-
-  if (status === "in_progress") {
-    return "En revisión";
-  }
-
-  return "Abierto";
-}
 
 export default async function AdminMessagesPage() {
   const admin = await requireAdmin();
@@ -112,7 +101,7 @@ export default async function AdminMessagesPage() {
                           : "chip-blue"
                     }`}
                   >
-                    {getStatusLabel(message.status)}
+                    {getMessageStatusLabel(message.status)}
                   </span>
                   <h2>{message.subject}</h2>
                   <p className="muted">

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { AppNav } from "@/components/app-nav";
 import { getIsAdmin } from "@/lib/admin";
 import { demoMessages, hasSupabaseEnv } from "@/lib/demo";
+import { getMessageStatusLabel } from "@/lib/message-status";
 import { createClient } from "@/lib/supabase-server";
 import { uploadUserFile } from "@/lib/storage";
 
@@ -102,7 +103,7 @@ export default async function MessagesPage() {
               <span>Descripción</span>
               <textarea
                 name="body"
-                placeholder="Describe el producto, la compra o el problema..."
+                placeholder="Describe el producto, la compra o el problema…"
                 required
                 rows={6}
               />
@@ -126,14 +127,15 @@ export default async function MessagesPage() {
             <span className="chip chip-blue">Buzón interno</span>
             <h2>Consultas enviadas</h2>
             <p className="muted">
-              Las consultas quedan guardadas aquí. No se envían por email
-              todavía.
+              Aquí verás tus consultas y nuestras respuestas.
             </p>
           </div>
           {messages.length ? (
             messages.map((message) => (
               <Link className="support-message" href={`/messages/${message.id}`} key={message.id}>
-                <span className="chip chip-blue">{message.status}</span>
+                <span className="chip chip-blue">
+                  {getMessageStatusLabel(message.status)}
+                </span>
                 <h3>{message.subject}</h3>
                 <p className="muted">
                   {message.admin_response || "Pendiente de respuesta."}

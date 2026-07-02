@@ -35,10 +35,11 @@ export function ItemCard({ item }: { item: ItemCardData }) {
         <h3>{item.name}</h3>
         <p className="muted">{subtitle || "Compra guardada"}</p>
         <div className="item-card__dates">
-          <span className={`chip ${returnExpired ? "chip-red" : "chip-yellow"}`}>
-            Devolución: {formatShortDate(item.return_until)}
-            {returnExpired ? " · Caducada" : ""}
-          </span>
+          {item.return_until && !returnExpired ? (
+            <span className="chip chip-yellow">
+              Devolución: {formatShortDate(item.return_until)}
+            </span>
+          ) : null}
           <span className="chip chip-green">
             Garantía: {formatShortDate(item.warranty_until)}
           </span>

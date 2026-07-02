@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { InfinityMark } from "@/components/infinity-mark";
-import { formatShortDate } from "@/lib/format-date";
 import type { ExtractionResult } from "@/app/api/extract-receipt/route";
 
 type CategoryOption = {
@@ -127,33 +126,6 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
   const [returnSource, setReturnSource] = useState<"estimated" | "manual">("manual");
   const [warrantySource, setWarrantySource] = useState<"legal_estimate" | "manual">("legal_estimate");
 
-  const extractionSignals = [
-    {
-      label: "Tienda",
-      value: store || "Pendiente",
-      ready: Boolean(store),
-    },
-    {
-      label: "Fecha",
-      value: purchaseDate || "Pendiente",
-      ready: Boolean(purchaseDate),
-    },
-    {
-      label: "Producto",
-      value: itemName || "Pendiente",
-      ready: Boolean(itemName),
-    },
-    {
-      label: "Marca",
-      value: brand || "Pendiente",
-      ready: Boolean(brand),
-    },
-  ];
-
-  const completion = extractionSignals.filter((signal) => signal.ready).length;
-  const selectedCategoryName =
-    categories.find((category) => category.id === categoryId)?.name ??
-    "Sin categoría";
   const coverPhotoPreview = photoPreviews[coverPhotoIndex] ?? photoPreviews[0] ?? null;
 
   return (
@@ -461,7 +433,7 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
                     setStore(event.target.value);
                     setStoreSource("manual");
                   }}
-                  placeholder="Nordikas, Amazon, MediaMarkt..."
+                  placeholder="Nordikas, Amazon, MediaMarkt…"
                   value={store}
                 />
                 <input name="store_source" type="hidden" value={storeSource} />
@@ -473,7 +445,7 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
                 <input
                   name="brand"
                   onChange={(event) => setBrand(event.target.value)}
-                  placeholder="Apple, Dyson, DeLonghi..."
+                  placeholder="Apple, Dyson, DeLonghi…"
                   value={brand}
                 />
               </label>
@@ -537,130 +509,11 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
               />
             </label>
           </div>
+
+          <button className="button button-primary" type="submit">
+            Guardar artículo
+          </button>
         </div>
-
-        <aside className="item-form__aside">
-          <div className="card analysis-card">
-            <span className="chip chip-blue">Preanálisis</span>
-            <h2>Resumen antes de guardar</h2>
-            <p className="muted">
-              RECORDERYS está preparado para extraer datos del ticket y detectar
-              duplicados entre cuentas.
-            </p>
-
-            <div className="analysis-card__meter">
-              <strong>{completion}/4 señales preparadas</strong>
-              <div className="analysis-card__bar">
-                <span style={{ width: `${(completion / 4) * 100}%` }} />
-              </div>
-            </div>
-
-            <div className="analysis-card__signals">
-              {extractionSignals.map((signal) => (
-                <div className="analysis-signal" key={signal.label}>
-                  <span className={`chip ${signal.ready ? "chip-green" : "chip-yellow"}`}>
-                    {signal.label}
-                  </span>
-                  <strong>{signal.value}</strong>
-                </div>
-              ))}
-            </div>
-
-            <div className="analysis-card__notes">
-              <p>
-                {extracting
-                  ? "Claude Haiku está analizando tu ticket. Los campos se rellenarán en unos segundos."
-                  : extractionDone
-                    ? "Los datos del ticket han sido extraídos con IA. Revisa los campos marcados en verde."
-                    : receiptFileInfo
-                      ? "El ticket se guardará con huella única de archivo y huella de metadatos."
-                      : "Sube el ticket y la IA extraerá automáticamente tienda, fecha y producto."}
-              </p>
-              <p>
-                {paymentReceiptFileInfo
-                  ? "También guardaremos el recibo del datáfono como justificante de pago separado."
-                  : "El recibo del datáfono es opcional y quedará separado del ticket de compra."}
-              </p>
-              <p>
-                {photoFiles.length
-                  ? "La portada elegida se verá en el dashboard y el resto de fotos quedarán como prueba del cliente."
-                  : "Las fotos del artículo ayudan a validar la compra y a documentar incidencias futuras."}
-              </p>
-              <p>
-                Cuando el sistema detecte tienda, fecha o plazos del ticket, los
-                completará por defecto y podrás corregirlos si hace falta.
-              </p>
-            </div>
-
-            <button className="button button-primary" type="submit">
-              Guardar artículo
-            </button>
-          </div>
-
-          <div className="card draft-preview">
-            <span className="chip chip-yellow">Vista previa</span>
-            <h2>Así se verá tu ficha</h2>
-
-            <article className="card item-card item-card--preview">
-              <div className="item-card__image">
-                {coverPhotoPreview ? (
-                  <img alt="" src={coverPhotoPreview} />
-                ) : (
-                  <InfinityMark />
-                )}
-              </div>
-              <div className="item-card__body">
-                <div className="item-card__top">
-                  <span className="chip chip-blue">{selectedCategoryName}</span>
-                  <span
-                    className={`chip ${
-                      categorySource !== "manual" ? "chip-green" : "chip-yellow"
-                    }`}
-                  >
-                    {categorySource !== "manual" ? "Autoclasificado" : "Editable"}
-                  </span>
-                </div>
-                <h3>{itemName || "Tu artículo aparecerá aquí"}</h3>
-                <p className="muted">
-                  {[brand, store].filter(Boolean).join(" · ") ||
-                    "Marca y tienda cuando estén disponibles"}
-                </p>
-                <div className="item-card__dates">
-                  <span className="chip chip-yellow">
-                    Devolución: {formatShortDate(returnUntil)}
-                  </span>
-                  <span className="chip chip-green">
-                    Garantía:{" "}
-                    {warrantyUntilManual
-                      ? formatShortDate(warrantyUntilManual)
-                      : "Estimado legal"}
-                  </span>
-                </div>
-                <small className="muted">
-                  Compra: {purchaseDate ? formatShortDate(purchaseDate) : "Pendiente"}
-                </small>
-              </div>
-            </article>
-
-            {photoPreviews.length ? (
-              <div className="preview-gallery">
-                <div className="detail-section__header">
-                  <h3>Fotos del cliente</h3>
-                  <span className="chip chip-blue">
-                    {photoPreviews.length} archivo{photoPreviews.length > 1 ? "s" : ""}
-                  </span>
-                </div>
-                <div className="detail-gallery">
-                  {photoPreviews.map((preview, index) => (
-                    <div className="detail-gallery__item" key={`preview-${index}`}>
-                      <img alt={`Vista previa ${index + 1}`} src={preview} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : null}
-          </div>
-        </aside>
       </div>
     </form>
   );
