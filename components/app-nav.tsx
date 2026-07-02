@@ -1,44 +1,47 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Brand } from "@/components/brand";
 
 type AppNavProps = {
-  /** Enlace contextual de "volver" cuando el destino no está ya en la navegación global. */
   backHref?: string;
   backLabel?: string;
   isAdmin?: boolean;
 };
 
-/**
- * Navegación superior común a toda pantalla autenticada.
- * Mantiene siempre el mismo conjunto de accesos (Dashboard, Soporte, Perfil,
- * Revisar tickets si es admin) y Cerrar sesión con un peso visual menor que
- * la acción principal de cada pantalla.
- */
 export function AppNav({ backHref, backLabel, isAdmin = false }: AppNavProps) {
+  const pathname = usePathname();
+
+  function navClass(href: string) {
+    const active = pathname === href || pathname.startsWith(href + "/");
+    return active ? "button button-nav-active" : "button button-nav";
+  }
+
   return (
     <nav className="dashboard__nav">
       <Brand />
       <div className="dashboard__nav-actions">
         {backHref ? (
-          <Link className="button button-secondary" href={backHref}>
+          <Link className="button button-nav" href={backHref}>
             {backLabel ?? "Volver"}
           </Link>
         ) : null}
-        <Link className="button button-secondary" href="/dashboard">
+        <Link className={navClass("/dashboard")} href="/dashboard">
           Dashboard
         </Link>
         <Link
-          className="button button-secondary"
+          className={navClass(isAdmin ? "/admin/messages" : "/messages")}
           href={isAdmin ? "/admin/messages" : "/messages"}
         >
           Soporte
         </Link>
         {isAdmin ? (
-          <Link className="button button-secondary" href="/admin/receipts">
+          <Link className={navClass("/admin/receipts")} href="/admin/receipts">
             Revisar tickets
           </Link>
         ) : null}
-        <Link className="button button-secondary" href="/profile">
+        <Link className={navClass("/profile")} href="/profile">
           Perfil
         </Link>
         <form action="/auth/signout" method="post">

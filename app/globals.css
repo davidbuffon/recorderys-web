@@ -154,6 +154,18 @@ textarea {
   color: var(--brand-blue-deep);
 }
 
+.button-nav {
+  background: var(--brand-yellow);
+  color: var(--brand-blue-deep);
+  font-weight: 700;
+}
+
+.button-nav-active {
+  background: var(--brand-blue);
+  color: #fff;
+  font-weight: 700;
+}
+
 .button-danger {
   background: #c0392b;
   color: #fff;

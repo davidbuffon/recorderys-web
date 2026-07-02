@@ -15,6 +15,19 @@ type DeleteAccountProps = {
 export function ChangePasswordSection({ action, pwOk, pwError }: ChangePasswordProps) {
   const [open, setOpen] = useState(pwOk || pwError);
 
+  if (!open) {
+    return (
+      <button
+        className="button button-nav"
+        onClick={() => setOpen(true)}
+        style={{ width: "100%", marginTop: 12 }}
+        type="button"
+      >
+        Cambiar contraseña
+      </button>
+    );
+  }
+
   return (
     <section className="card form-card" style={{ marginTop: 16 }}>
       <div>
@@ -22,69 +35,49 @@ export function ChangePasswordSection({ action, pwOk, pwError }: ChangePasswordP
         <h2>Cambiar contraseña</h2>
         <p className="muted">Elige una contraseña nueva de al menos 8 caracteres.</p>
       </div>
-
-      {!open ? (
-        <button
-          className="button button-secondary"
-          onClick={() => setOpen(true)}
-          type="button"
-        >
-          Cambiar contraseña
-        </button>
-      ) : (
-        <>
-          {pwOk && (
-            <p className="auth-message" style={{ color: "green" }}>
-              Contraseña actualizada correctamente.
-            </p>
-          )}
-          {pwError && (
-            <p className="auth-message" style={{ color: "#c0392b" }}>
-              Error al actualizar. Comprueba que ambas contraseñas coinciden y tienen al menos 8 caracteres.
-            </p>
-          )}
-          <form action={action} className="item-form">
-            <label>
-              Nueva contraseña
-              <input
-                autoComplete="new-password"
-                minLength={8}
-                name="new_password"
-                required
-                type="password"
-              />
-            </label>
-            <label>
-              Confirmar contraseña
-              <input
-                autoComplete="new-password"
-                minLength={8}
-                name="confirm_password"
-                required
-                type="password"
-              />
-            </label>
-            <div style={{ display: "flex", gap: 12 }}>
-              <button className="button button-primary" type="submit">
-                Actualizar contraseña
-              </button>
-              <button
-                className="button button-secondary"
-                onClick={() => setOpen(false)}
-                type="button"
-              >
-                Cancelar
-              </button>
-            </div>
-          </form>
-        </>
+      {pwOk && (
+        <p className="auth-message" style={{ color: "green" }}>
+          Contraseña actualizada correctamente.
+        </p>
       )}
+      {pwError && (
+        <p className="auth-message" style={{ color: "#c0392b" }}>
+          Error al actualizar. Comprueba que ambas contraseñas coinciden y tienen al menos 8 caracteres.
+        </p>
+      )}
+      <form action={action} className="item-form">
+        <label>
+          Nueva contraseña
+          <input autoComplete="new-password" minLength={8} name="new_password" required type="password" />
+        </label>
+        <label>
+          Confirmar contraseña
+          <input autoComplete="new-password" minLength={8} name="confirm_password" required type="password" />
+        </label>
+        <div style={{ display: "flex", gap: 12 }}>
+          <button className="button button-primary" type="submit">Actualizar contraseña</button>
+          <button className="button button-secondary" onClick={() => setOpen(false)} type="button">Cancelar</button>
+        </div>
+      </form>
     </section>
   );
 }
 
 export function DeleteAccountSection({ action }: DeleteAccountProps) {
   const [open, setOpen] = useState(false);
+
+  if (!open) {
+    return (
+      <button
+        className="button button-nav"
+        onClick={() => setOpen(true)}
+        style={{ width: "100%", marginTop: 12 }}
+        type="button"
+      >
+        Eliminar mi cuenta
+      </button>
+    );
+  }
 
   return (
     <section className="card form-card danger-zone" style={{ marginTop: 16 }}>
@@ -95,36 +88,15 @@ export function DeleteAccountSection({ action }: DeleteAccountProps) {
           Esta acción borra tu cuenta y todos tus datos de forma permanente e irreversible. No podrás recuperarlos.
         </p>
       </div>
-
-      {!open ? (
-        <button
-          className="button button-secondary"
-          onClick={() => setOpen(true)}
-          type="button"
-        >
-          Quiero eliminar mi cuenta
-        </button>
-      ) : (
-        <>
-          <p className="muted" style={{ marginBottom: 12 }}>
-            ¿Seguro? Se eliminarán tu cuenta, artículos, tickets y todos tus datos almacenados.
-          </p>
-          <div style={{ display: "flex", gap: 12 }}>
-            <form action={action}>
-              <button className="button button-danger" type="submit">
-                Sí, eliminar definitivamente
-              </button>
-            </form>
-            <button
-              className="button button-secondary"
-              onClick={() => setOpen(false)}
-              type="button"
-            >
-              Cancelar
-            </button>
-          </div>
-        </>
-      )}
+      <p className="muted" style={{ marginBottom: 12 }}>
+        ¿Seguro? Se eliminarán tu cuenta, artículos, tickets y todos tus datos almacenados.
+      </p>
+      <div style={{ display: "flex", gap: 12 }}>
+        <form action={action}>
+          <button className="button button-danger" type="submit">Sí, eliminar definitivamente</button>
+        </form>
+        <button className="button button-secondary" onClick={() => setOpen(false)} type="button">Cancelar</button>
+      </div>
     </section>
   );
 }
