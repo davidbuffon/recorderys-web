@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { AppNav } from "@/components/app-nav";
+import { ChangePasswordSection, DeleteAccountSection } from "@/components/profile-security";
 
 export const metadata: Metadata = {
   title: "Perfil — Recorderys",
@@ -179,53 +180,8 @@ export default async function ProfilePage({
         </form>
       </section>
 
-      <section className="card form-card" style={{ marginTop: 16 }}>
-        <div>
-          <span className="chip chip-blue">Seguridad</span>
-          <h2>Cambiar contraseña</h2>
-          <p className="muted">Elige una contraseña nueva de al menos 8 caracteres.</p>
-        </div>
-        {pwOk && <p className="auth-message" style={{ color: "green" }}>Contraseña actualizada correctamente.</p>}
-        {pwError && <p className="auth-message" style={{ color: "#c0392b" }}>Error al actualizar. Comprueba que ambas contraseñas coinciden y tienen al menos 8 caracteres.</p>}
-        <form action={changePassword} className="item-form">
-          <label>
-            Nueva contraseña
-            <input autoComplete="new-password" minLength={8} name="new_password" required type="password" />
-          </label>
-          <label>
-            Confirmar contraseña
-            <input autoComplete="new-password" minLength={8} name="confirm_password" required type="password" />
-          </label>
-          <button className="button button-secondary" type="submit">
-            Actualizar contraseña
-          </button>
-        </form>
-      </section>
-
-      <section className="card form-card danger-zone" style={{ marginTop: 16 }}>
-        <div>
-          <span className="chip chip-red">Zona de peligro</span>
-          <h2>Eliminar cuenta</h2>
-          <p className="muted">
-            Esta acción borra tu cuenta y todos tus datos de forma permanente e irreversible. No podrás recuperarlos.
-          </p>
-        </div>
-        <details>
-          <summary className="button button-secondary" style={{ display: "inline-block", cursor: "pointer" }}>
-            Quiero eliminar mi cuenta
-          </summary>
-          <div style={{ marginTop: 16 }}>
-            <p className="muted" style={{ marginBottom: 12 }}>
-              ¿Seguro? Se eliminarán tu cuenta, artículos, tickets y todos tus datos almacenados.
-            </p>
-            <form action={deleteAccount}>
-              <button className="button button-danger" type="submit">
-                Sí, eliminar mi cuenta definitivamente
-              </button>
-            </form>
-          </div>
-        </details>
-      </section>
+      <ChangePasswordSection action={changePassword} pwOk={pwOk} pwError={pwError} />
+      <DeleteAccountSection action={deleteAccount} />
     </main>
   );
 }
