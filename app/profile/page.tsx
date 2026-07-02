@@ -180,8 +180,10 @@ export default async function ProfilePage({
         </form>
       </section>
 
-      <ChangePasswordSection action={changePassword} pwOk={pwOk} pwError={pwError} />
-      <DeleteAccountSection action={deleteAccount} />
+      <div style={{ display: "grid", gap: 12, maxWidth: 720, width: "100%", marginTop: 16 }}>
+        <ChangePasswordSection action={changePassword} pwOk={pwOk} pwError={pwError} />
+        <DeleteAccountSection action={deleteAccount} />
+      </div>
     </main>
   );
 }

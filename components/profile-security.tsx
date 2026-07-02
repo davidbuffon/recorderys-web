@@ -20,7 +20,7 @@ export function ChangePasswordSection({ action, pwOk, pwError }: ChangePasswordP
       <button
         className="button button-nav"
         onClick={() => setOpen(true)}
-        style={{ width: "100%", marginTop: 12 }}
+        style={{ width: "100%" }}
         type="button"
       >
         Cambiar contraseña
@@ -29,7 +29,7 @@ export function ChangePasswordSection({ action, pwOk, pwError }: ChangePasswordP
   }
 
   return (
-    <section className="card form-card" style={{ marginTop: 16 }}>
+    <section className="card form-card" style={{ maxWidth: "100%" }}>
       <div>
         <span className="chip chip-blue">Seguridad</span>
         <h2>Cambiar contraseña</h2>
@@ -71,7 +71,7 @@ export function DeleteAccountSection({ action }: DeleteAccountProps) {
       <button
         className="button button-nav"
         onClick={() => setOpen(true)}
-        style={{ width: "100%", marginTop: 12 }}
+        style={{ width: "100%" }}
         type="button"
       >
         Eliminar mi cuenta
@@ -80,7 +80,7 @@ export function DeleteAccountSection({ action }: DeleteAccountProps) {
   }
 
   return (
-    <section className="card form-card danger-zone" style={{ marginTop: 16 }}>
+    <section className="card form-card danger-zone" style={{ maxWidth: "100%" }}>
       <div>
         <span className="chip chip-red">Zona de peligro</span>
         <h2>Eliminar cuenta</h2>
