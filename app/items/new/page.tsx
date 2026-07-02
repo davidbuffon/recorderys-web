@@ -252,7 +252,7 @@ export default async function NewItemPage() {
           <span className="chip chip-yellow">Nuevo artículo</span>
           <h1>Guarda una compra importante</h1>
           <p className="muted">
-            Primero creamos la ficha manual. Después añadiremos subida de ticket e IA de clasificación.
+            Sube el ticket y la IA rellenará automáticamente la ficha. Revisa los datos y corrige lo que sea necesario.
           </p>
           {!hasSupabaseEnv() ? (
             <p className="auth-message">
@@ -263,10 +263,6 @@ export default async function NewItemPage() {
           <p className="muted">
             RECORDERYS genera una huella del ticket para detectar duplicados y
             marcar posibles fraudes entre cuentas.
-          </p>
-          <p className="muted">
-            La extracción automática del ticket queda preparada para capturar
-            tienda, fecha, importe y número de ticket en la siguiente fase.
           </p>
         </div>
 

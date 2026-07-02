@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { InfinityMark } from "@/components/infinity-mark";
 import { formatShortDate } from "@/lib/format-date";
+import type { ExtractionResult } from "@/app/api/extract-receipt/route";
 
 type CategoryOption = {
   id: string;
@@ -18,6 +19,8 @@ type FileInfo = {
   name: string;
   size: number;
 };
+
+type FieldSource = "ai" | "detected" | "manual";
 
 function getFileInfo(file: File | null): FileInfo | null {
   if (!file) return null;
@@ -84,6 +87,24 @@ const demoTicketSuggestions: Record<
   },
 };
 
+async function extractReceiptData(file: File): Promise<ExtractionResult | null> {
+  try {
+    const fd = new FormData();
+    fd.append("receipt", file);
+    const res = await fetch("/api/extract-receipt", { method: "POST", body: fd });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+function sourceChip(source: FieldSource) {
+  if (source === "ai") return { className: "chip-green", label: "IA" };
+  if (source === "detected") return { className: "chip-blue", label: "Detectado" };
+  return { className: "chip-yellow", label: "Manual" };
+}
+
 export function NewItemForm({ action, categories }: NewItemFormProps) {
   const [photoFiles, setPhotoFiles] = useState<File[]>([]);
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
@@ -91,26 +112,20 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
   const [receiptFileInfo, setReceiptFileInfo] = useState<FileInfo | null>(null);
   const [paymentReceiptFileInfo, setPaymentReceiptFileInfo] =
     useState<FileInfo | null>(null);
+  const [extracting, setExtracting] = useState(false);
+  const [extractionDone, setExtractionDone] = useState(false);
   const [itemName, setItemName] = useState("");
   const [categoryId, setCategoryId] = useState("");
-  const [categorySource, setCategorySource] = useState<"detected" | "manual">(
-    "manual",
-  );
+  const [categorySource, setCategorySource] = useState<FieldSource>("manual");
   const [store, setStore] = useState("");
   const [brand, setBrand] = useState("");
   const [purchaseDate, setPurchaseDate] = useState("");
   const [returnUntil, setReturnUntil] = useState("");
   const [warrantyUntilManual, setWarrantyUntilManual] = useState("");
-  const [storeSource, setStoreSource] = useState<"detected" | "manual">("manual");
-  const [purchaseDateSource, setPurchaseDateSource] = useState<
-    "detected" | "manual"
-  >("manual");
-  const [returnSource, setReturnSource] = useState<"estimated" | "manual">(
-    "manual",
-  );
-  const [warrantySource, setWarrantySource] = useState<
-    "legal_estimate" | "manual"
-  >("legal_estimate");
+  const [storeSource, setStoreSource] = useState<FieldSource>("manual");
+  const [purchaseDateSource, setPurchaseDateSource] = useState<FieldSource>("manual");
+  const [returnSource, setReturnSource] = useState<"estimated" | "manual">("manual");
+  const [warrantySource, setWarrantySource] = useState<"legal_estimate" | "manual">("legal_estimate");
 
   const extractionSignals = [
     {
@@ -235,49 +250,104 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
                 <input
                   accept="image/*,application/pdf"
                   name="receipt"
-                  onChange={(event) => {
+                  onChange={async (event) => {
                     const file = event.target.files?.[0] ?? null;
                     setReceiptFileInfo(getFileInfo(file));
+                    setExtractionDone(false);
                     if (!file) return;
 
+                    // Demo mode: filename-based suggestions
                     const matchedEntry = Object.entries(demoTicketSuggestions).find(
                       ([key]) => file.name.toLowerCase().includes(key),
                     );
-
-                    if (!matchedEntry) return;
-
-                    const suggestion = matchedEntry[1];
-                    setItemName((current) => current || suggestion.itemName);
-                    setStore(suggestion.store);
-                    setBrand((current) => current || suggestion.brand);
-                    setPurchaseDate(suggestion.purchaseDate);
-                    setReturnUntil(suggestion.returnUntil);
-                    setWarrantyUntilManual(suggestion.warrantyUntilManual);
-                    const matchedCategory = categories.find(
-                      (category) => category.name === suggestion.categoryName,
-                    );
-                    if (matchedCategory) {
-                      setCategoryId(matchedCategory.id);
-                      setCategorySource("detected");
+                    if (matchedEntry) {
+                      const suggestion = matchedEntry[1];
+                      setItemName((current) => current || suggestion.itemName);
+                      setStore(suggestion.store);
+                      setBrand((current) => current || suggestion.brand);
+                      setPurchaseDate(suggestion.purchaseDate);
+                      setReturnUntil(suggestion.returnUntil);
+                      setWarrantyUntilManual(suggestion.warrantyUntilManual);
+                      const matchedCategory = categories.find(
+                        (category) => category.name === suggestion.categoryName,
+                      );
+                      if (matchedCategory) {
+                        setCategoryId(matchedCategory.id);
+                        setCategorySource("detected");
+                      }
+                      setStoreSource("detected");
+                      setPurchaseDateSource("detected");
+                      setReturnSource(suggestion.returnUntil ? "estimated" : "manual");
+                      setWarrantySource(suggestion.warrantyUntilManual ? "manual" : "legal_estimate");
+                      return;
                     }
-                    setStoreSource("detected");
-                    setPurchaseDateSource("detected");
-                    setReturnSource(suggestion.returnUntil ? "estimated" : "manual");
-                    setWarrantySource(
-                      suggestion.warrantyUntilManual ? "manual" : "legal_estimate",
-                    );
+
+                    // AI extraction
+                    setExtracting(true);
+                    const result = await extractReceiptData(file);
+                    setExtracting(false);
+                    setExtractionDone(true);
+
+                    if (!result) return;
+
+                    const THRESHOLD = 60;
+                    if (result.name && result.field_confidence.name >= THRESHOLD) {
+                      setItemName((current) => current || result.name!);
+                    }
+                    if (result.brand) {
+                      setBrand((current) => current || result.brand!);
+                    }
+                    if (result.store && result.field_confidence.store >= THRESHOLD) {
+                      setStore(result.store);
+                      setStoreSource("ai");
+                    }
+                    if (result.purchase_date && result.field_confidence.purchase_date >= THRESHOLD) {
+                      setPurchaseDate(result.purchase_date);
+                      setPurchaseDateSource("ai");
+                    }
+                    if (result.return_until && result.field_confidence.return_until >= THRESHOLD) {
+                      setReturnUntil(result.return_until);
+                      setReturnSource("estimated");
+                    }
+                    if (result.warranty_until) {
+                      setWarrantyUntilManual(result.warranty_until);
+                      setWarrantySource("manual");
+                    }
+                    if (result.category_name && result.field_confidence.category_name >= THRESHOLD) {
+                      const matchedCategory = categories.find(
+                        (c) => c.name === result.category_name,
+                      );
+                      if (matchedCategory) {
+                        setCategoryId(matchedCategory.id);
+                        setCategorySource("ai");
+                      }
+                    }
                   }}
                   type="file"
                 />
                 <div className="upload-card__placeholder upload-card__placeholder--receipt">
-                  <span className="chip chip-blue">
-                    {receiptFileInfo ? "Ticket cargado" : "Aún sin ticket"}
-                  </span>
-                  <p>
-                    {receiptFileInfo
-                      ? `${receiptFileInfo.name} · ${formatBytes(receiptFileInfo.size)}`
-                      : "Acepta imagen o PDF. Generaremos una huella antifraude antes de guardarlo."}
-                  </p>
+                  {extracting ? (
+                    <>
+                      <span className="chip chip-blue">Analizando ticket con IA…</span>
+                      <p>Claude está extrayendo los datos del ticket. Un momento.</p>
+                    </>
+                  ) : extractionDone ? (
+                    <>
+                      <span className="chip chip-green">Extracción completada</span>
+                      <p>{receiptFileInfo?.name} · Los campos se han rellenado automáticamente. Revísalos y corrige si hace falta.</p>
+                    </>
+                  ) : (
+                    <>
+                      <span className="chip chip-blue">
+                        {receiptFileInfo ? "Ticket cargado" : "Aún sin ticket"}
+                      </span>
+                      <p>
+                        {receiptFileInfo
+                          ? `${receiptFileInfo.name} · ${formatBytes(receiptFileInfo.size)}`
+                          : "Acepta imagen o PDF. La IA extraerá automáticamente los datos del ticket."}
+                      </p>
+                    </>
+                  )}
                 </div>
               </label>
 
@@ -334,12 +404,8 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
             <label>
               <span className="field-label">
                 <span>Categoría</span>
-                <span
-                  className={`chip ${
-                    categorySource === "detected" ? "chip-blue" : "chip-yellow"
-                  }`}
-                >
-                  {categorySource === "detected" ? "Detectado" : "Manual"}
+                <span className={`chip ${sourceChip(categorySource).className}`}>
+                  {sourceChip(categorySource).label}
                 </span>
               </span>
               <select
@@ -362,12 +428,8 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
               <label>
                 <span className="field-label">
                   <span>Fecha de compra</span>
-                  <span
-                    className={`chip ${
-                      purchaseDateSource === "detected" ? "chip-blue" : "chip-yellow"
-                    }`}
-                  >
-                    {purchaseDateSource === "detected" ? "Detectado" : "Manual"}
+                  <span className={`chip ${sourceChip(purchaseDateSource).className}`}>
+                    {sourceChip(purchaseDateSource).label}
                   </span>
                 </span>
                 <input
@@ -389,12 +451,8 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
               <label>
                 <span className="field-label">
                   <span>Tienda</span>
-                  <span
-                    className={`chip ${
-                      storeSource === "detected" ? "chip-blue" : "chip-yellow"
-                    }`}
-                  >
-                    {storeSource === "detected" ? "Detectado" : "Manual"}
+                  <span className={`chip ${sourceChip(storeSource).className}`}>
+                    {sourceChip(storeSource).label}
                   </span>
                 </span>
                 <input
@@ -510,9 +568,13 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
 
             <div className="analysis-card__notes">
               <p>
-                {receiptFileInfo
-                  ? "El ticket se guardará con huella única de archivo y huella de metadatos."
-                  : "Sube el ticket para activar la huella antifraude y la futura extracción OCR."}
+                {extracting
+                  ? "Claude Haiku está analizando tu ticket. Los campos se rellenarán en unos segundos."
+                  : extractionDone
+                    ? "Los datos del ticket han sido extraídos con IA. Revisa los campos marcados en verde."
+                    : receiptFileInfo
+                      ? "El ticket se guardará con huella única de archivo y huella de metadatos."
+                      : "Sube el ticket y la IA extraerá automáticamente tienda, fecha y producto."}
               </p>
               <p>
                 {paymentReceiptFileInfo
@@ -552,10 +614,10 @@ export function NewItemForm({ action, categories }: NewItemFormProps) {
                   <span className="chip chip-blue">{selectedCategoryName}</span>
                   <span
                     className={`chip ${
-                      categorySource === "detected" ? "chip-green" : "chip-yellow"
+                      categorySource !== "manual" ? "chip-green" : "chip-yellow"
                     }`}
                   >
-                    {categorySource === "detected" ? "Autoclasificado" : "Editable"}
+                    {categorySource !== "manual" ? "Autoclasificado" : "Editable"}
                   </span>
                 </div>
                 <h3>{itemName || "Tu artículo aparecerá aquí"}</h3>
