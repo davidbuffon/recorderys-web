@@ -127,6 +127,11 @@ textarea {
   outline-offset: 2px;
 }
 
+.dashboard__hero :focus-visible,
+.detail-header :focus-visible {
+  outline-color: #fff;
+}
+
 .button {
   align-items: center;
   border: 0;
@@ -354,10 +359,52 @@ textarea {
 }
 
 .steps,
-.stats-grid {
+.receipt-summary {
+  background: #fff;
+  border-radius: 24px 24px 0 0;
+  box-shadow: 0 18px 40px rgba(31, 42, 51, 0.08);
   display: grid;
-  gap: 18px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 10px;
+  padding: 24px 28px 20px;
+  position: relative;
+}
+
+.receipt-summary::after {
+  background: conic-gradient(from -45deg at 50% 0, #fff 90deg, transparent 0) 0 0 / 20px 11px repeat-x;
+  content: "";
+  height: 11px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 100%;
+}
+
+.receipt-summary__row {
+  align-items: baseline;
+  display: flex;
+  gap: 14px;
+}
+
+.receipt-summary__row span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.receipt-summary__leader {
+  border-bottom: 3px dotted rgba(8, 86, 111, 0.22);
+  flex: 1;
+  transform: translateY(-5px);
+}
+
+.receipt-summary__row strong {
+  font-size: 32px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  line-height: 1;
 }
 
 .step {
@@ -786,8 +833,13 @@ textarea {
 
 .dashboard__hero {
   align-items: stretch;
-  background: rgba(255, 255, 255, 0.94);
-  color: var(--text);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--brand-panel-blue) 97%, white),
+    color-mix(in srgb, var(--brand-panel-blue-deep) 99%, white)
+  );
+  border-color: rgba(255, 255, 255, 0.24);
+  color: white;
   display: grid;
   gap: 26px;
   grid-template-columns: minmax(0, 1fr) minmax(340px, 0.78fr);
@@ -826,11 +878,11 @@ textarea {
 }
 
 .dashboard-command-card {
-  align-content: space-between;
-  background: linear-gradient(135deg, rgba(39, 169, 207, 0.12), rgba(255, 211, 26, 0.12));
-  border: 1px solid rgba(39, 169, 207, 0.12);
+  align-content: center;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: 24px;
-  color: var(--text);
+  color: white;
   display: grid;
   gap: 18px;
   padding: 22px;
@@ -875,29 +927,6 @@ textarea {
 
 .dashboard-hint:hover {
   background: #d0eef6;
-}
-
-.stat-card {
-  display: grid;
-  gap: 6px;
-  padding: 22px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(233, 249, 254, 0.98));
-}
-
-.stat-card strong {
-  font-size: 42px;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.06em;
-}
-
-.stat-card span {
-  color: var(--muted);
-  font-weight: 600;
-}
-
-.stat-card small {
-  color: var(--muted);
-  line-height: 1.5;
 }
 
 .category-row {
@@ -956,6 +985,14 @@ textarea {
   gap: 14px;
   grid-template-columns: 76px minmax(0, 1fr);
   padding: 14px;
+}
+
+.overview-item--return {
+  border-left: 6px solid var(--brand-yellow);
+}
+
+.overview-item--warranty {
+  border-left: 6px solid #7fc98b;
 }
 
 .overview-item__mark {
@@ -1710,7 +1747,6 @@ textarea {
   }
 
   .items-grid,
-  .stats-grid,
   .steps,
   .auth-benefits {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1750,7 +1786,6 @@ textarea {
 
 @media (max-width: 640px) {
   .items-grid,
-  .stats-grid,
   .steps,
   .mock-grid,
   .date-blocks,

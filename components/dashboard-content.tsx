@@ -93,14 +93,16 @@ export function DashboardContent({
   return (
     <>
       {hasItems && (
-        <section className="stats-grid" aria-label="Resumen">
-          <div className="card stat-card">
-            <strong>{typedItems.length}</strong>
+        <section className="receipt-summary" aria-label="Resumen">
+          <div className="receipt-summary__row">
             <span>Artículos guardados</span>
+            <i aria-hidden="true" className="receipt-summary__leader" />
+            <strong>{typedItems.length}</strong>
           </div>
-          <div className="card stat-card">
-            <strong>{warrantyActiveCount}</strong>
+          <div className="receipt-summary__row">
             <span>Garantías activas</span>
+            <i aria-hidden="true" className="receipt-summary__leader" />
+            <strong>{warrantyActiveCount}</strong>
           </div>
         </section>
       )}
@@ -147,7 +149,11 @@ export function DashboardContent({
             <div className="overview-list">
               {urgentMilestones.map((milestone) => (
                 <Link
-                  className="overview-item"
+                  className={`overview-item ${
+                    milestone.tone === "chip-yellow"
+                      ? "overview-item--return"
+                      : "overview-item--warranty"
+                  }`}
                   href={`/items/${milestone.item.id}`}
                   key={`${milestone.item.id}-${milestone.label}`}
                 >
