@@ -46,11 +46,6 @@ export function AppNav({ backHref, backLabel, isAdmin = false }: AppNavProps) {
         <Link className={navClass("/profile")} href="/profile">
           Perfil
         </Link>
-        <form action="/auth/signout" method="post">
-          <button className="button button-nav" type="submit">
-            Cerrar
-          </button>
-        </form>
       </div>
     </nav>
   );

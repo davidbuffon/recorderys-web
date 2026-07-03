@@ -187,6 +187,11 @@ export default async function ProfilePage({
 
       <div style={{ display: "grid", gap: 12, maxWidth: 720, width: "100%", marginTop: 16 }}>
         <ChangePasswordSection action={changePassword} pwOk={pwOk} pwError={pwError} />
+        <form action="/auth/signout" method="post">
+          <button className="button button-signout" style={{ width: "100%" }} type="submit">
+            Cerrar sesión
+          </button>
+        </form>
         <DeleteAccountSection action={deleteAccount} />
       </div>
     </main>

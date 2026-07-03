@@ -191,6 +191,12 @@ textarea {
   font-weight: 700;
 }
 
+.button-signout {
+  background: var(--surface-strong);
+  border: 1px solid rgba(192, 57, 43, 0.25);
+  color: #c0392b;
+}
+
 .button-danger {
   background: #c0392b;
   color: #fff;
