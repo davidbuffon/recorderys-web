@@ -69,9 +69,9 @@ export function DeleteAccountSection({ action }: DeleteAccountProps) {
   if (!open) {
     return (
       <button
-        className="danger-link"
+        className="button button-signout"
         onClick={() => setOpen(true)}
-        style={{ justifySelf: "center" }}
+        style={{ width: "100%" }}
         type="button"
       >
         Eliminar mi cuenta

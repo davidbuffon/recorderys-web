@@ -127,25 +127,6 @@ textarea {
   outline-offset: 2px;
 }
 
-.danger-link {
-  background: transparent;
-  border: 0;
-  color: #c0392b;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  min-height: 44px;
-  padding: 0 14px;
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  transition: color 160ms ease, text-decoration-color 160ms ease;
-}
-
-.danger-link:hover {
-  color: #a93226;
-  text-decoration-color: currentColor;
-}
-
 .button {
   align-items: center;
   border: 0;
