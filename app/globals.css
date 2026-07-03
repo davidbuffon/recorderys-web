@@ -809,6 +809,11 @@ textarea {
 .dashboard {
   display: grid;
   gap: 24px;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.dashboard > * {
+  min-width: 0;
 }
 
 .dashboard__hero {
