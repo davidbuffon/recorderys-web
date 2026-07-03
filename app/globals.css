@@ -200,25 +200,6 @@ textarea {
   background: #a93226;
 }
 
-.nav-signout {
-  background: transparent;
-  border: 0;
-  color: var(--muted);
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  min-height: 48px;
-  padding: 0 14px;
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  transition: color 160ms ease, text-decoration-color 160ms ease;
-}
-
-.nav-signout:hover {
-  color: var(--text);
-  text-decoration-color: currentColor;
-}
-
 .card {
   background: rgba(255, 255, 255, 0.94);
   border: 1px solid rgba(39, 169, 207, 0.16);
@@ -1871,30 +1852,16 @@ textarea {
 
   .dashboard__nav-actions {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     gap: 8px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
     width: 100%;
-  }
-
-  .dashboard__nav-actions::-webkit-scrollbar {
-    display: none;
   }
 
   .dashboard__nav-actions .button,
   .dashboard__nav-actions form .button {
-    flex-shrink: 0;
     font-size: 14px;
     min-height: 40px;
-    padding: 0 16px;
-    white-space: nowrap;
-  }
-
-  .dashboard__nav-actions form .nav-signout {
-    flex-shrink: 0;
-    min-height: 40px;
+    padding: 0 14px;
     white-space: nowrap;
   }
 

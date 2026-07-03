@@ -30,7 +30,7 @@ export function AppNav({ backHref, backLabel, isAdmin = false }: AppNavProps) {
           </Link>
         ) : null}
         <Link className={navClass("/dashboard")} href="/dashboard">
-          Dashboard
+          Panel
         </Link>
         <Link
           className={navClass("/messages", "/admin/messages")}
@@ -40,15 +40,15 @@ export function AppNav({ backHref, backLabel, isAdmin = false }: AppNavProps) {
         </Link>
         {isAdmin ? (
           <Link className={navClass("/admin/receipts")} href="/admin/receipts">
-            Revisar tickets
+            Tickets
           </Link>
         ) : null}
         <Link className={navClass("/profile")} href="/profile">
           Perfil
         </Link>
         <form action="/auth/signout" method="post">
-          <button className="nav-signout" type="submit">
-            Cerrar sesión
+          <button className="button button-nav" type="submit">
+            Cerrar
           </button>
         </form>
       </div>
