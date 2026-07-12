@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { AppNav } from "@/components/app-nav";
-import { ChangePasswordSection, DeleteAccountSection } from "@/components/profile-security";
+import { AppShell } from "@/components/app-shell";
+import { SettingsV2 } from "@/components/settings-v2";
 
 export const metadata: Metadata = {
   title: "Perfil — Recorderys",
@@ -136,64 +136,18 @@ export default async function ProfilePage({
   }
 
   return (
-    <main className="shell">
-      <AppNav isAdmin={isAdmin} />
-      <section className="card form-card profile-card" style={{ marginTop: 28 }}>
-        <div className="profile-card__head">
-          <span className="chip chip-yellow">Perfil</span>
-          <div className="profile-card__identity">
-            <h1>{profile?.name || "Tu perfil"}</h1>
-            <p className="profile-card__email muted">{profile?.email || email}</p>
-          </div>
-        </div>
-        <form action={updateProfile} className="item-form">
-          <label>
-            Nombre
-            <input
-              autoComplete="name"
-              defaultValue={profile?.name ?? ""}
-              name="name"
-              placeholder="Tu nombre"
-            />
-          </label>
-          <label>
-            Teléfono
-            <input
-              autoComplete="tel"
-              defaultValue={profile?.phone ?? ""}
-              inputMode="tel"
-              name="phone"
-              placeholder="+34 600 000 000"
-              type="tel"
-            />
-          </label>
-          <label>
-            Dirección
-            <span className="muted" style={{ fontSize: "0.8em", fontWeight: "normal" }}>
-              Opcional
-            </span>
-            <textarea
-              autoComplete="street-address"
-              defaultValue={profile?.address ?? ""}
-              name="address"
-              placeholder="Tu dirección"
-            />
-          </label>
-          <button className="button button-primary" type="submit">
-            Guardar cambios
-          </button>
-        </form>
-      </section>
-
-      <div style={{ display: "grid", gap: 12, maxWidth: 720, width: "100%", marginTop: 16 }}>
-        <ChangePasswordSection action={changePassword} pwOk={pwOk} pwError={pwError} />
-        <form action="/auth/signout" method="post">
-          <button className="button button-signout" style={{ width: "100%" }} type="submit">
-            Cerrar sesión
-          </button>
-        </form>
-        <DeleteAccountSection action={deleteAccount} />
-      </div>
-    </main>
+    <AppShell isAdmin={isAdmin}>
+      <SettingsV2
+        address={profile?.address ?? ""}
+        changePasswordAction={changePassword}
+        deleteAccountAction={deleteAccount}
+        email={profile?.email || email}
+        name={profile?.name ?? ""}
+        phone={profile?.phone ?? ""}
+        pwError={pwError}
+        pwOk={pwOk}
+        updateProfileAction={updateProfile}
+      />
+    </AppShell>
   );
 }
