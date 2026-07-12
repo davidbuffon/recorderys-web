@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { unstable_noStore as noStore } from "next/cache";
-import { AppNav } from "@/components/app-nav";
-import { NewItemForm } from "@/components/new-item-form";
+import { AppShell } from "@/components/app-shell";
+import { NewItemWizard } from "@/components/new-item-wizard";
 import { getIsAdmin } from "@/lib/admin";
 import { demoCategories, hasSupabaseEnv } from "@/lib/demo";
 import {
@@ -244,26 +244,17 @@ export default async function NewItemPage() {
   }
 
   return (
-    <main className="shell">
-      <AppNav isAdmin={isAdmin} />
-
-      <section className="card form-card new-item-card" style={{ marginTop: 28 }}>
-        <div>
-          <span className="chip chip-yellow">Nuevo artículo</span>
-          <h1>Guarda una compra importante</h1>
-          <p className="muted">
-            Sube el ticket y la IA rellenará automáticamente la ficha. Revisa los datos y corrige lo que sea necesario.
+    <AppShell isAdmin={isAdmin}>
+      <div className="wizard-page">
+        <h1>Añadir compra</h1>
+        {!hasSupabaseEnv() ? (
+          <p className="wizard__hint">
+            Estás en modo demo. El formulario sirve para revisar la UX, pero
+            aún no guarda datos persistentes.
           </p>
-          {!hasSupabaseEnv() ? (
-            <p className="auth-message">
-              Estás en modo demo. El formulario sirve para revisar la UX, pero
-              aún no guarda datos persistentes.
-            </p>
-          ) : null}
-        </div>
-
-        <NewItemForm action={createItem} categories={categories} />
-      </section>
-    </main>
+        ) : null}
+        <NewItemWizard action={createItem} categories={categories} />
+      </div>
+    </AppShell>
   );
 }

@@ -4142,3 +4142,268 @@ textarea {
     font-size: 26px;
   }
 }
+
+/* ===================== v2: wizard añadir compra ===================== */
+
+.wizard-page {
+  margin: 0 auto;
+  max-width: 620px;
+}
+
+.wizard-page h1 {
+  font-size: 28px;
+  margin: 0 0 18px;
+}
+
+.wizard__progress {
+  background: var(--border);
+  border-radius: 999px;
+  height: 6px;
+  overflow: hidden;
+}
+
+.wizard__progress span {
+  background: var(--cyan);
+  border-radius: 999px;
+  display: block;
+  height: 100%;
+  transition: width 260ms ease;
+}
+
+.wizard__step-label {
+  color: var(--text-3);
+  font-size: 12.5px;
+  font-weight: 600;
+  margin: 8px 0 20px;
+}
+
+.wizard__panel {
+  display: grid;
+  gap: 14px;
+  justify-items: stretch;
+}
+
+.wizard__panel--hidden {
+  display: none;
+}
+
+.wizard__panel h2 {
+  font-size: 21px;
+  margin: 0;
+}
+
+.wizard__hint {
+  color: var(--text-2);
+  font-size: 14px;
+  margin: 0;
+}
+
+.wizard-dropzone {
+  align-items: center;
+  background: var(--surface-card);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-card);
+  color: var(--text-2);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 38px 24px;
+  text-align: center;
+  transition: border-color 150ms ease;
+}
+
+.wizard-dropzone:hover {
+  border-color: var(--cyan);
+}
+
+.wizard-dropzone--filled {
+  border-color: var(--cyan);
+  border-style: solid;
+}
+
+.wizard-dropzone input {
+  display: none;
+}
+
+.wizard-dropzone svg {
+  color: var(--cyan);
+}
+
+.wizard-dropzone strong {
+  color: var(--text-1);
+  font-size: 15px;
+}
+
+.wizard-dropzone small {
+  font-size: 13px;
+}
+
+.wizard__extras {
+  display: grid;
+  gap: 10px;
+}
+
+.wizard-file {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-button);
+  color: var(--text-2);
+  cursor: pointer;
+  display: block;
+  font-size: 13.5px;
+  font-weight: 500;
+  padding: 12px 16px;
+}
+
+.wizard-file input {
+  display: none;
+}
+
+.wizard__fields {
+  display: grid;
+  gap: 12px;
+}
+
+.wizard__fields label {
+  color: var(--text-2);
+  display: grid;
+  font-size: 13.5px;
+  font-weight: 600;
+  gap: 6px;
+}
+
+.wizard__fields input,
+.wizard__fields textarea {
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-button);
+  color: var(--text-1);
+  font-family: var(--font-ui);
+  font-size: 14.5px;
+  font-weight: 400;
+  padding: 12px 14px;
+}
+
+.wizard__fields input:focus,
+.wizard__fields textarea:focus {
+  border-color: var(--cyan);
+  outline: none;
+}
+
+.wizard__row {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 520px) {
+  .wizard__row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.wizard-ai-tag {
+  background: var(--badge-warranty-bg);
+  border-radius: 999px;
+  color: var(--cyan-dark);
+  font-size: 10.5px;
+  font-style: normal;
+  font-weight: 700;
+  margin-left: 6px;
+  padding: 2px 8px;
+  vertical-align: middle;
+}
+
+:root[data-theme="dark"] .wizard-ai-tag {
+  background: var(--navy-3);
+  color: var(--cyan);
+}
+
+.wizard__chips-label {
+  color: var(--text-2);
+  font-size: 13.5px;
+  font-weight: 600;
+  margin: 6px 0 0;
+}
+
+.wizard__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.wizard-chip {
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-2);
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 9px 16px;
+  transition: background 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+
+.wizard-chip:hover {
+  border-color: var(--navy);
+}
+
+.wizard-chip--active {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+
+:root[data-theme="dark"] .wizard-chip--active {
+  background: var(--cyan);
+  border-color: var(--cyan);
+  color: var(--navy);
+}
+
+.wizard-summary {
+  padding: 20px 22px;
+}
+
+.wizard-summary h3 {
+  font-size: 16px;
+  margin: 0 0 12px;
+}
+
+.wizard-summary dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.wizard-summary dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.wizard-summary dt {
+  color: var(--text-2);
+  font-size: 13.5px;
+}
+
+.wizard-summary dd {
+  color: var(--text-1);
+  font-size: 13.5px;
+  font-weight: 600;
+  margin: 0;
+  text-align: right;
+}
+
+.wizard__nav {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.wizard__nav .pd-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
