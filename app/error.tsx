@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { AppNav } from "@/components/app-nav";
+import { AppShell } from "@/components/app-shell";
 
 export default function Error({
   reset,
@@ -10,8 +10,7 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <main className="shell error-page">
-      <AppNav />
+    <AppShell>
 
       <section className="card error-card">
         <span className="chip chip-yellow">RECORDERYS</span>
@@ -29,6 +28,6 @@ export default function Error({
           </Link>
         </div>
       </section>
-    </main>
+    </AppShell>
   );
 }

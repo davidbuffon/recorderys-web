@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { AppNav } from "@/components/app-nav";
+import { AppShell } from "@/components/app-shell";
 import { getIsAdmin } from "@/lib/admin";
 import { demoMessages, hasSupabaseEnv } from "@/lib/demo";
 import { getMessageStatusLabel } from "@/lib/message-status";
@@ -79,8 +79,7 @@ export default async function MessagesPage() {
   }
 
   return (
-    <main className="shell">
-      <AppNav isAdmin={isAdmin} />
+    <AppShell isAdmin={isAdmin}>
       <section className="support-layout">
         <div className="card support-composer">
           <span className="chip chip-yellow">Ayuda</span>
@@ -148,6 +147,6 @@ export default async function MessagesPage() {
           )}
         </div>
       </section>
-    </main>
+    </AppShell>
   );
 }

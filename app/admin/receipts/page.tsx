@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { AppNav } from "@/components/app-nav";
+import { AppShell } from "@/components/app-shell";
 import { InfinityMark } from "@/components/infinity-mark";
 import { demoReceipts, hasSupabaseEnv } from "@/lib/demo";
 import { formatShortDate } from "@/lib/format-date";
@@ -137,8 +137,7 @@ export default async function AdminReceiptsPage() {
   }
 
   return (
-    <main className="shell">
-      <AppNav isAdmin />
+    <AppShell isAdmin>
 
       <section className="card form-card admin-panel" style={{ marginTop: 28, maxWidth: 980 }}>
         <div>
@@ -241,6 +240,6 @@ export default async function AdminReceiptsPage() {
           </div>
         )}
       </section>
-    </main>
+    </AppShell>
   );
 }

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { AppNav } from "@/components/app-nav";
+import { AppShell } from "@/components/app-shell";
 import { getIsAdmin } from "@/lib/admin";
 import { demoCategories, hasSupabaseEnv } from "@/lib/demo";
 import {
@@ -236,12 +236,11 @@ export default async function EditItemPage({ params }: { params: Params }) {
   const action = updateItem.bind(null, item.id);
 
   return (
-    <main className="shell">
-      <AppNav
-        backHref={`/items/${item.id}`}
-        backLabel="Volver al artículo"
-        isAdmin={isAdmin}
-      />
+    <AppShell isAdmin={isAdmin}>
+      <Link className="pd-back" href={`/items/${item.id}`}>
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+        Volver al artículo
+      </Link>
 
       <section className="card form-card edit-item-card" style={{ marginTop: 28 }}>
         <div>
@@ -351,6 +350,6 @@ export default async function EditItemPage({ params }: { params: Params }) {
           </div>
         </form>
       </section>
-    </main>
+    </AppShell>
   );
 }

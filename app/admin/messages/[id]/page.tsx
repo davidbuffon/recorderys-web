@@ -1,5 +1,6 @@
 import { notFound, redirect } from "next/navigation";
-import { AppNav } from "@/components/app-nav";
+import Link from "next/link";
+import { AppShell } from "@/components/app-shell";
 import { requireAdmin } from "@/lib/admin";
 import { demoMessages } from "@/lib/demo";
 import { formatShortDate } from "@/lib/format-date";
@@ -121,8 +122,11 @@ export default async function AdminMessageDetailPage({
   }
 
   return (
-    <main className="shell">
-      <AppNav isAdmin />
+    <AppShell isAdmin>
+      <Link className="pd-back" href="/admin/messages">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+        Volver a mensajes
+      </Link>
 
       <section className="card message-detail admin-message-detail">
         <div className="message-detail__header">
@@ -194,6 +198,6 @@ export default async function AdminMessageDetailPage({
           </form>
         </div>
       </section>
-    </main>
+    </AppShell>
   );
 }

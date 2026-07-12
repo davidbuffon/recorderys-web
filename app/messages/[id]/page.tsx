@@ -1,5 +1,6 @@
 import { notFound, redirect } from "next/navigation";
-import { AppNav } from "@/components/app-nav";
+import Link from "next/link";
+import { AppShell } from "@/components/app-shell";
 import { getIsAdmin } from "@/lib/admin";
 import { demoMessages, hasSupabaseEnv } from "@/lib/demo";
 import { createClient } from "@/lib/supabase-server";
@@ -57,8 +58,11 @@ export default async function MessageDetailPage({ params }: { params: Params }) 
   }
 
   return (
-    <main className="shell">
-      <AppNav backHref="/messages" backLabel="Volver a mensajes" isAdmin={isAdmin} />
+    <AppShell isAdmin={isAdmin}>
+      <Link className="pd-back" href="/messages">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+        Volver a mensajes
+      </Link>
 
       <section className="card message-detail">
         <div className="message-detail__header">
@@ -93,6 +97,6 @@ export default async function MessageDetailPage({ params }: { params: Params }) 
           </article>
         </div>
       </section>
-    </main>
+    </AppShell>
   );
 }

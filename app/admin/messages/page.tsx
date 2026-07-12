@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AppNav } from "@/components/app-nav";
+import { AppShell } from "@/components/app-shell";
 import { InfinityMark } from "@/components/infinity-mark";
 import { requireAdmin } from "@/lib/admin";
 import { demoMessages } from "@/lib/demo";
@@ -64,8 +64,7 @@ export default async function AdminMessagesPage() {
   }
 
   return (
-    <main className="shell">
-      <AppNav isAdmin />
+    <AppShell isAdmin>
 
       <section className="card admin-panel admin-messages">
         <div className="admin-messages__header">
@@ -127,6 +126,6 @@ export default async function AdminMessagesPage() {
           </div>
         )}
       </section>
-    </main>
+    </AppShell>
   );
 }

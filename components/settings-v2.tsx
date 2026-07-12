@@ -218,6 +218,19 @@ export function SettingsV2({
         )}
       </section>
 
+      {/* Soporte */}
+      <section className="card-v2 settings__block">
+        <div className="settings__row">
+          <div>
+            <strong>¿Necesitas ayuda?</strong>
+            <small>Escríbenos y te respondemos lo antes posible.</small>
+          </div>
+          <a className="pd-button pd-button--secondary settings__edit" href="/messages">
+            Soporte
+          </a>
+        </div>
+      </section>
+
       {/* Sesión y cuenta */}
       <section className="card-v2 settings__block">
         <form action="/auth/signout" method="post">
