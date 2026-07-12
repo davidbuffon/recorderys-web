@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Baloo_2, Inter } from "next/font/google";
 import { CookieConsent } from "@/components/cookie-consent";
 import "./globals.css";
@@ -14,6 +14,16 @@ const inter = Inter({
   weight: ["400", "500", "600", "700"],
   variable: "--font-body",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#eff8fc" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a1928" },
+  ],
+};
 
 export const metadata: Metadata = {
   title: "Recorderys — Guarda tickets, garantías y devoluciones en un solo sitio",
