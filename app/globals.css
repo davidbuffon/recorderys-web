@@ -3609,20 +3609,44 @@ textarea {
     display: none;
   }
 
+  /* La ventana no scrollea en las pantallas de app: el contenido scrollea
+     dentro de .app-main y la tabbar es un pie estático. Alturas en cadena
+     con 100% (no dvh) para que funcione igual en Safari y Chrome iOS. */
+  html:has(.app-shell),
+  html:has(.app-shell) body {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  html:has(.app-shell) .site-content {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .app-shell {
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
   .app-main {
-    padding: 20px 16px calc(96px + env(safe-area-inset-bottom));
+    -webkit-overflow-scrolling: touch;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 20px 16px 40px;
   }
 
   .app-tabbar {
     background: var(--surface-card);
     border-top: 1px solid var(--border);
-    bottom: 0;
     display: flex;
+    flex-shrink: 0;
     justify-content: space-around;
-    left: 0;
     padding: 8px 0 max(10px, env(safe-area-inset-bottom));
-    position: fixed;
-    right: 0;
     z-index: 50;
   }
 
