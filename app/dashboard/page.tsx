@@ -115,7 +115,14 @@ export default async function DashboardPage({
 
   return (
     <AppShell isAdmin={isAdmin}>
-      <DashboardV2 avatarInitial={avatarInitial} items={typedItems} search={search} totalCount={totalItemCount} />
+      <DashboardV2
+        avatarInitial={avatarInitial}
+        categories={categories}
+        initialCategorySlug={initialCategorySlug}
+        items={typedItems}
+        search={search}
+        totalCount={totalItemCount}
+      />
       <InstallPrompt />
     </AppShell>
   );

@@ -1,11 +1,14 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { getItemStatus, statusBadgeClass, statusLabel } from "@/lib/item-status";
-import type { ItemCardData } from "@/lib/types";
+import type { Category, ItemCardData } from "@/lib/types";
 
 type DashboardV2Props = {
   avatarInitial?: string;
+  categories?: Category[];
+  initialCategorySlug?: string;
   items: ItemCardData[];
   search?: string;
   totalCount: number;
@@ -22,11 +25,41 @@ function ItemImage({ item }: { item: ItemCardData }) {
   );
 }
 
-export function DashboardV2({ avatarInitial = "R", items, search = "", totalCount }: DashboardV2Props) {
-  const withStatus = items.map((item) => ({ item, status: getItemStatus(item) }));
+export function DashboardV2({
+  avatarInitial = "R",
+  categories = [],
+  initialCategorySlug = "",
+  items,
+  search = "",
+  totalCount,
+}: DashboardV2Props) {
+  const [selectedCategory, setSelectedCategory] = useState(initialCategorySlug);
+
+  function selectCategory(slug: string) {
+    setSelectedCategory(slug);
+    const url = new URL(window.location.href);
+    if (slug) {
+      url.searchParams.set("category", slug);
+    } else {
+      url.searchParams.delete("category");
+    }
+    window.history.replaceState(null, "", url);
+  }
+
+  const filteredItems = useMemo(
+    () =>
+      selectedCategory
+        ? items.filter((item) => item.categories?.slug === selectedCategory)
+        : items,
+    [items, selectedCategory],
+  );
+
+  const withStatus = filteredItems.map((item) => ({ item, status: getItemStatus(item) }));
   const urgent = withStatus.filter(
     ({ status }) => status.kind === "return" && status.urgent,
   );
+  const selectedCategoryName =
+    categories.find((c) => c.slug === selectedCategory)?.name ?? "";
 
   return (
     <>
@@ -63,6 +96,30 @@ export function DashboardV2({ avatarInitial = "R", items, search = "", totalCoun
           </Link>
         </div>
       </header>
+
+      {categories.length > 0 && (
+        <div className="dz-families" role="group" aria-label="Filtrar por familia">
+          <button
+            className={`wizard-chip ${!selectedCategory ? "wizard-chip--active" : ""}`}
+            onClick={() => selectCategory("")}
+            type="button"
+          >
+            Todos
+          </button>
+          {categories.map((category) => (
+            <button
+              className={`wizard-chip ${
+                selectedCategory === category.slug ? "wizard-chip--active" : ""
+              }`}
+              key={category.id}
+              onClick={() => selectCategory(category.slug)}
+              type="button"
+            >
+              {category.name}
+            </button>
+          ))}
+        </div>
+      )}
 
       {urgent.length > 0 && (
         <section className="attention-banner" aria-label="Compras que necesitan atención">
@@ -109,13 +166,21 @@ export function DashboardV2({ avatarInitial = "R", items, search = "", totalCoun
         </div>
       ) : (
         <section className="card-v2 dz-empty">
-          <h2>{search ? `Sin resultados para "${search}"` : "Aún no hay compras"}</h2>
+          <h2>
+            {search
+              ? `Sin resultados para "${search}"`
+              : selectedCategoryName
+                ? `No hay compras en ${selectedCategoryName}`
+                : "Aún no hay compras"}
+          </h2>
           <p>
             {search
               ? "Prueba con el nombre del producto, la tienda o la marca."
-              : "Guarda tu primera compra importante y empieza a controlar sus plazos."}
+              : selectedCategoryName
+                ? "Prueba con otra familia o añade una compra nueva."
+                : "Guarda tu primera compra importante y empieza a controlar sus plazos."}
           </p>
-          {!search && (
+          {!search && !selectedCategoryName && (
             <Link className="dz-add-button" href="/items/new">
               Añadir compra
             </Link>

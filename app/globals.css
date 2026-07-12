@@ -5397,3 +5397,33 @@ textarea {
     padding: 0 22px;
   }
 }
+
+/* ===================== v2: carrusel de familias ===================== */
+
+.dz-families {
+  display: flex;
+  gap: 8px;
+  margin: -6px 0 24px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dz-families::-webkit-scrollbar {
+  display: none;
+}
+
+.dz-families .wizard-chip {
+  flex-shrink: 0;
+}
+
+@media (max-width: 767px) {
+  /* Compensa el padding lateral para que el carrusel llegue al borde */
+  .dz-families {
+    margin-left: -16px;
+    margin-right: -16px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
