@@ -3508,3 +3508,142 @@ textarea {
 .theme-toggle--on .theme-toggle__knob {
   transform: translateX(22px);
 }
+
+/* ===================== v2: app shell ===================== */
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-sidebar {
+  align-items: center;
+  background: var(--surface-card);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  padding: 18px 0 22px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 88px;
+  flex-shrink: 0;
+}
+
+.app-sidebar__logo img {
+  border-radius: 12px;
+  display: block;
+  height: 44px;
+  width: 44px;
+}
+
+.app-sidebar__items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.app-sidebar__item {
+  align-items: center;
+  border-radius: 14px;
+  color: var(--text-2);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  margin: 0 12px;
+  padding: 10px 0;
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.app-sidebar__item:hover {
+  background: var(--surface-2);
+  color: var(--text-1);
+}
+
+.app-sidebar__item--active {
+  background: var(--badge-warranty-bg);
+  color: var(--cyan-dark);
+}
+
+:root[data-theme="dark"] .app-sidebar__item--active {
+  background: var(--navy-3);
+  color: var(--cyan);
+}
+
+.app-sidebar__logout {
+  margin-top: auto;
+}
+
+.app-sidebar__logout button {
+  background: none;
+  border: 0;
+  border-radius: 12px;
+  color: var(--text-3);
+  cursor: pointer;
+  padding: 10px;
+  transition: color 150ms ease, background 150ms ease;
+}
+
+.app-sidebar__logout button:hover {
+  background: var(--badge-expired-bg);
+  color: var(--danger);
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+  padding: 34px 40px 60px;
+}
+
+.app-tabbar {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .app-sidebar {
+    display: none;
+  }
+
+  .app-main {
+    padding: 20px 16px 96px;
+  }
+
+  .app-tabbar {
+    background: var(--surface-card);
+    border-top: 1px solid var(--border);
+    bottom: 0;
+    display: flex;
+    justify-content: space-around;
+    left: 0;
+    padding: 8px 0 max(10px, env(safe-area-inset-bottom));
+    position: fixed;
+    right: 0;
+    z-index: 50;
+  }
+
+  .app-tabbar__item {
+    align-items: center;
+    color: var(--text-2);
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 600;
+    gap: 3px;
+    padding: 4px 18px;
+    border-radius: 12px;
+  }
+
+  .app-tabbar__item--active {
+    color: var(--cyan-dark);
+  }
+
+  :root[data-theme="dark"] .app-tabbar__item--active {
+    color: var(--cyan);
+  }
+}
