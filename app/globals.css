@@ -3909,3 +3909,236 @@ textarea {
   color: var(--text-2);
   margin: 0 0 8px;
 }
+
+/* ===================== v2: ficha de producto ===================== */
+
+.pd-back {
+  align-items: center;
+  color: var(--text-2);
+  display: inline-flex;
+  font-size: 14px;
+  font-weight: 600;
+  gap: 6px;
+  margin-bottom: 22px;
+  transition: color 150ms ease;
+}
+
+.pd-back:hover {
+  color: var(--text-1);
+}
+
+.pd-grid {
+  display: grid;
+  gap: 34px;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+}
+
+@media (max-width: 900px) {
+  .pd-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pd-media {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.pd-image {
+  align-items: center;
+  aspect-ratio: 4 / 3;
+  background: repeating-linear-gradient(45deg, var(--img-ph-a), var(--img-ph-a) 8px, var(--img-ph-b) 8px, var(--img-ph-b) 16px);
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.pd-image img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.pd-ticket {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+  padding: 14px 18px;
+  transition: box-shadow 150ms ease;
+}
+
+.pd-ticket:hover {
+  box-shadow: 0 14px 30px rgba(16, 40, 63, 0.14);
+}
+
+.pd-ticket__icon {
+  align-items: center;
+  background: var(--badge-warranty-bg);
+  border-radius: 10px;
+  color: var(--cyan-dark);
+  display: flex;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+:root[data-theme="dark"] .pd-ticket__icon {
+  background: var(--navy-3);
+  color: var(--cyan);
+}
+
+.pd-ticket__copy {
+  display: grid;
+  flex: 1;
+}
+
+.pd-ticket__copy strong {
+  color: var(--text-1);
+  font-size: 14px;
+}
+
+.pd-ticket__copy small {
+  color: var(--text-2);
+  font-size: 12px;
+}
+
+.pd-ticket__download {
+  color: var(--text-3);
+}
+
+.pd-info {
+  align-content: start;
+  display: grid;
+  gap: 14px;
+  justify-items: start;
+}
+
+.pd-info h1 {
+  font-size: 32px;
+  margin: 0;
+}
+
+.pd-info__meta {
+  color: var(--text-2);
+  font-size: 15px;
+  margin: 0;
+}
+
+.pd-timeline {
+  padding: 22px 24px;
+  width: 100%;
+}
+
+.pd-timeline h2 {
+  font-size: 18px;
+  margin: 0 0 16px;
+}
+
+.pd-timeline ol {
+  display: grid;
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pd-timeline__step {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
+
+.pd-timeline__dot {
+  align-items: center;
+  background: var(--yellow);
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  flex-shrink: 0;
+  height: 22px;
+  justify-content: center;
+  width: 22px;
+}
+
+.pd-timeline__step--done .pd-timeline__dot {
+  background: var(--cyan);
+}
+
+.pd-timeline__copy {
+  display: grid;
+}
+
+.pd-timeline__copy strong {
+  color: var(--text-1);
+  font-size: 14px;
+}
+
+.pd-timeline__copy small {
+  color: var(--text-2);
+  font-size: 12.5px;
+}
+
+.pd-review-note {
+  background: var(--badge-expired-bg);
+  border-radius: 12px;
+  color: var(--badge-expired-text);
+  font-size: 13.5px;
+  margin: 0;
+  padding: 12px 16px;
+}
+
+.pd-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.pd-button {
+  align-items: center;
+  border: 0;
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--font-ui);
+  font-size: 14.5px;
+  font-weight: 600;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 22px;
+  transition: background 150ms ease, box-shadow 150ms ease;
+}
+
+.pd-button--primary {
+  background: var(--cyan);
+  box-shadow: 0 8px 20px rgba(38, 182, 224, 0.35);
+  color: #fff;
+}
+
+.pd-button--primary:hover {
+  background: var(--cyan-dark);
+}
+
+.pd-button--secondary {
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  color: var(--text-1);
+}
+
+.pd-button--secondary:hover {
+  background: var(--surface-2);
+}
+
+.pd-notes {
+  color: var(--text-2);
+  font-size: 14px;
+  margin: 4px 0 0;
+}
+
+@media (max-width: 640px) {
+  .pd-info h1 {
+    font-size: 26px;
+  }
+}

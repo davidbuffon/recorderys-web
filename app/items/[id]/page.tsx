@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { AppNav } from "@/components/app-nav";
-import { InfinityMark } from "@/components/infinity-mark";
-import { TicketDocumentViewer } from "@/components/ticket-document-viewer";
-import { TicketSummaryCard } from "@/components/ticket-summary-card";
+import { AppShell } from "@/components/app-shell";
 import { getIsAdmin } from "@/lib/admin";
 import { demoItems, hasSupabaseEnv } from "@/lib/demo";
-import { formatShortDate, isPastDate } from "@/lib/format-date";
+import { formatShortDate } from "@/lib/format-date";
+import { getItemStatus, statusBadgeClass, statusLabel } from "@/lib/item-status";
 import { createClient } from "@/lib/supabase-server";
 
 type Params = Promise<{ id: string }>;
@@ -114,179 +112,147 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
     notFound();
   }
 
-  const customerPhotos = coverImageHref ? [coverImageHref] : [];
-  const returnExpired = isPastDate(item.return_until);
+  const status = getItemStatus(item);
+  const purchaseDate = item.purchase_date as string | null;
+  const returnUntil = item.return_until as string | null;
+  const warrantyUntil = (item.warranty_until_manual ?? item.warranty_until) as string | null;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const timeline = [
+    purchaseDate
+      ? { label: "Compra realizada", date: purchaseDate, done: true }
+      : null,
+    returnUntil
+      ? {
+          label: "Fin de devolución",
+          date: returnUntil,
+          done: new Date(returnUntil) < today,
+        }
+      : null,
+    warrantyUntil
+      ? {
+          label: "Fin de garantía",
+          date: warrantyUntil,
+          done: new Date(warrantyUntil) < today,
+        }
+      : null,
+  ].filter(Boolean) as { label: string; date: string; done: boolean }[];
 
   return (
-    <main className="shell">
-      <AppNav isAdmin={isAdmin} />
+    <AppShell isAdmin={isAdmin}>
+      <Link className="pd-back" href="/dashboard">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        Volver a tus compras
+      </Link>
 
-      <section className="card detail-header" style={{ marginTop: 28 }}>
-        <div className="detail-header__copy">
-          <div className="item-card__top">
-            <span className="chip chip-blue">
-              {item.categories?.name ?? "Sin categoría"}
-            </span>
-            {receiptMeta ? (
-              <span
-                className={`chip ${
-                  receiptMeta.duplicate_status === "clear"
-                    ? "chip-green"
-                    : receiptMeta.duplicate_status === "under_review"
-                      ? "chip-yellow"
-                      : "chip-red"
-                }`}
-              >
-                {receiptMeta.duplicate_status === "clear"
-                  ? "Ticket limpio"
-                  : receiptMeta.duplicate_status === "under_review"
-                    ? "Ticket en revisión"
-                    : "Posible duplicado"}
+      <div className="pd-grid">
+        <div className="pd-media">
+          <div className="pd-image card-v2">
+            {coverImageHref ? (
+              <img alt={item.name} src={coverImageHref} />
+            ) : (
+              <span className="item-card-v2__placeholder">sin-foto</span>
+            )}
+          </div>
+
+          {receiptHref ? (
+            <a className="pd-ticket card-v2" href={receiptHref} rel="noreferrer" target="_blank">
+              <span className="pd-ticket__icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 3h13l3 3v15l-2-1.5L16 21l-2-1.5L12 21l-2-1.5L8 21l-2-1.5L4 21Z" />
+                  <path d="M8 8h8M8 12h8M8 16h5" />
+                </svg>
               </span>
-            ) : null}
-          </div>
-          <h1>{item.name}</h1>
-          <p className="muted">
-            {[item.brand, item.store].filter(Boolean).join(" · ") ||
-              "Compra guardada"}
-          </p>
-        </div>
-
-        <div className="detail-header__actions">
-          <Link className="button button-primary" href={`/items/${item.id}/edit`}>
-            Editar artículo
-          </Link>
-          <Link className="button button-secondary" href="/messages">
-            Contactar con soporte
-          </Link>
-        </div>
-      </section>
-
-      <section className="detail-grid">
-        <div className="card detail-hero">
-          {coverImageHref ? (
-            <img alt="" src={coverImageHref} />
-          ) : (
-            <div className="detail-hero__placeholder">
-              <InfinityMark />
-              <span>{item.categories?.name ?? "Artículo guardado"}</span>
-              <strong>{item.name}</strong>
-              <small>
-                {[item.brand, item.store].filter(Boolean).join(" · ") ||
-                  "Foto pendiente de guardar"}
-              </small>
-            </div>
-          )}
-        </div>
-        <div className="card detail-panel">
-          <div className="date-blocks">
-            <div className="date-block">
-              <div className="date-block__hero">
-                <span className={`chip ${returnExpired ? "chip-red" : "chip-yellow"}`}>
-                  {returnExpired ? "Devolución caducada" : "Fin de devolución"}
-                </span>
-                <strong>{formatShortDate(item.return_until)}</strong>
-              </div>
-              <p className="muted">{item.return_source}</p>
-            </div>
-            <div className="date-block">
-              <div className="date-block__hero">
-                <span className="chip chip-green">Fin de garantía</span>
-                <strong>{formatShortDate(item.warranty_until)}</strong>
-              </div>
-              <p className="muted">{item.warranty_source ?? "estimada legal"}</p>
-            </div>
-          </div>
-
-          <div>
-            <h2>Datos de compra</h2>
-            <p>Compra: {formatShortDate(item.purchase_date)}</p>
-            <p className="muted">{item.description || "Sin notas añadidas."}</p>
-          </div>
-
-          <TicketSummaryCard
-            confidence={receiptMeta?.extraction_confidence}
-            date={receiptMeta?.extracted_purchase_date || item.purchase_date}
-            href={receiptHref}
-            paymentLabel={
-              receiptMeta?.ocr_status === "processed" ? "Tarjeta detectada" : null
-            }
-            statusLabel={
-              receiptMeta?.ocr_status === "processed"
-                ? "Ticket resumido"
-                : receiptMeta?.ocr_status === "failed"
-                  ? "Revisión pendiente"
-                  : receiptHref
-                    ? "Ticket / Factura"
-                    : "Resumen de compra"
-            }
-            store={receiptMeta?.extracted_store || item.store}
-            ticketNumber={receiptMeta?.extracted_ticket_number}
-            total={receiptMeta?.extracted_total_amount}
-          />
+              <span className="pd-ticket__copy">
+                <strong>Ticket original</strong>
+                <small>
+                  {purchaseDate ? `Guardado el ${formatShortDate(purchaseDate)}` : "Disponible"}
+                </small>
+              </span>
+              <svg aria-hidden="true" className="pd-ticket__download" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+            </a>
+          ) : null}
 
           {paymentReceiptHref ? (
-            <div className="payment-receipt-card">
-              <div>
-                <span className="chip chip-blue">Justificante de pago</span>
-                <h2>Recibo datáfono</h2>
-                <p className="muted">
-                  Copia opcional del pago por tarjeta para cambios o
-                  justificaciones.
-                </p>
-              </div>
-              <TicketDocumentViewer
-                emptyMessage="El recibo datáfono aún no está disponible."
-                href={paymentReceiptHref}
-                title="Recibo datáfono"
-              />
-            </div>
-          ) : null}
-
-          {customerPhotos.length ? (
-            <div>
-              <div className="detail-section__header">
-                <h2>Fotos del cliente</h2>
-                <span className="chip chip-blue">{customerPhotos.length} prueba{customerPhotos.length > 1 ? "s" : ""}</span>
-              </div>
-              <div className="detail-gallery">
-                {customerPhotos.map((photo: string, index: number) => (
-                  <div className="detail-gallery__item" key={`${photo}-${index}`}>
-                    <img alt={`Foto del cliente ${index + 1}`} src={photo} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : null}
-
-          {isAdmin && receiptMeta ? (
-            <details className="date-block admin-details">
-              <summary className="muted" style={{ cursor: "pointer", fontSize: 13 }}>
-                Datos técnicos (solo admin)
-              </summary>
-              <div style={{ marginTop: 8 }}>
-                <p className="muted">
-                  Confianza: {receiptMeta.trust_score}/100 · OCR: {receiptMeta.ocr_status ?? "—"}
-                </p>
-                <p className="muted">
-                  Extracción: {receiptMeta.extraction_confidence ?? 0}/100
-                </p>
-                <p className="muted">
-                  Tienda: {receiptMeta.extracted_store || "sin detectar"} · Fecha:{" "}
-                  {formatShortDate(receiptMeta.extracted_purchase_date || null)}
-                </p>
-                <p className="muted">
-                  Importe:{" "}
-                  {receiptMeta.extracted_total_amount != null
-                    ? `${receiptMeta.extracted_total_amount} €`
-                    : "sin detectar"}{" "}
-                  · Ticket: {receiptMeta.extracted_ticket_number || "sin detectar"}
-                </p>
-              </div>
-            </details>
+            <a className="pd-ticket card-v2" href={paymentReceiptHref} rel="noreferrer" target="_blank">
+              <span className="pd-ticket__icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="5" width="20" height="14" rx="2" />
+                  <line x1="2" y1="10" x2="22" y2="10" />
+                </svg>
+              </span>
+              <span className="pd-ticket__copy">
+                <strong>Recibo datáfono</strong>
+                <small>Justificante de pago</small>
+              </span>
+              <svg aria-hidden="true" className="pd-ticket__download" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+            </a>
           ) : null}
         </div>
-      </section>
-    </main>
+
+        <div className="pd-info">
+          <span className={statusBadgeClass(status)}>{statusLabel(status)}</span>
+          <h1>{item.name}</h1>
+          <p className="pd-info__meta">
+            {[item.store, item.brand].filter(Boolean).join(" · ") || "Compra guardada"}
+          </p>
+
+          {timeline.length > 0 && (
+            <section className="pd-timeline card-v2" aria-label="Cronología">
+              <h2>Cronología</h2>
+              <ol>
+                {timeline.map((step) => (
+                  <li className={step.done ? "pd-timeline__step pd-timeline__step--done" : "pd-timeline__step"} key={step.label}>
+                    <span className="pd-timeline__dot" aria-hidden="true">
+                      {step.done ? (
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      ) : null}
+                    </span>
+                    <span className="pd-timeline__copy">
+                      <strong>{step.label}</strong>
+                      <small>{formatShortDate(step.date)}</small>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
+
+          {receiptMeta && receiptMeta.duplicate_status !== "clear" ? (
+            <p className="pd-review-note">
+              {receiptMeta.review_notes || "Este ticket está siendo revisado."}
+            </p>
+          ) : null}
+
+          <div className="pd-actions">
+            <Link className="pd-button pd-button--primary" href={`/items/${item.id}/edit`}>
+              Editar artículo
+            </Link>
+            {receiptHref ? (
+              <a className="pd-button pd-button--secondary" href={receiptHref} rel="noreferrer" target="_blank">
+                Descargar ticket
+              </a>
+            ) : null}
+          </div>
+
+          {item.description ? (
+            <p className="pd-notes">{item.description}</p>
+          ) : null}
+        </div>
+      </div>
+    </AppShell>
   );
 }
