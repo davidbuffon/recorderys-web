@@ -3609,33 +3609,20 @@ textarea {
     display: none;
   }
 
-  /* Estructura tipo app: el contenido hace scroll en su propio contenedor
-     y la barra inferior es un pie estático — evita el salto de los
-     elementos fixed en iOS Safari al colapsar la barra de direcciones. */
-  .app-shell {
-    flex-direction: column;
-    height: 100vh;
-    height: 100dvh;
-    min-height: 0;
-    overflow: hidden;
-  }
-
   .app-main {
-    -webkit-overflow-scrolling: touch;
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    padding: 20px 16px 40px;
+    padding: 20px 16px calc(96px + env(safe-area-inset-bottom));
   }
 
   .app-tabbar {
     background: var(--surface-card);
     border-top: 1px solid var(--border);
+    bottom: 0;
     display: flex;
-    flex-shrink: 0;
     justify-content: space-around;
+    left: 0;
     padding: 8px 0 max(10px, env(safe-area-inset-bottom));
+    position: fixed;
+    right: 0;
     z-index: 50;
   }
 
