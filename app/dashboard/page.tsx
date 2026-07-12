@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import { AppNav } from "@/components/app-nav";
-import { DashboardContent } from "@/components/dashboard-content";
+import { AppShell } from "@/components/app-shell";
+import { DashboardV2 } from "@/components/dashboard-v2";
 import { InstallPrompt } from "@/components/install-prompt";
 import { demoCategories, demoItems, hasSupabaseEnv } from "@/lib/demo";
 import { createClient } from "@/lib/supabase-server";
@@ -111,45 +110,9 @@ export default async function DashboardPage({
     : "";
 
   return (
-    <main className="shell dashboard">
-      <AppNav isAdmin={isAdmin} />
-
-      <section className="dashboard__hero card">
-        <div className="dashboard__hero-copy">
-          <h1>Tus artículos</h1>
-          <div className="dashboard-quick-actions">
-            <Link className="button button-primary" href="/items/new">
-              Añadir artículo
-            </Link>
-          </div>
-        </div>
-        <div className="dashboard-command-card">
-          <form className="search-form dashboard-search">
-            <input
-              aria-label="Buscar artículos"
-              defaultValue={search}
-              name="q"
-              placeholder="Producto, tienda, marca o ticket…"
-              type="search"
-            />
-            {initialCategorySlug ? (
-              <input name="category" type="hidden" value={initialCategorySlug} />
-            ) : null}
-            <button className="button button-primary" type="submit">
-              Buscar
-            </button>
-          </form>
-        </div>
-      </section>
-
-      <DashboardContent
-        categories={categories}
-        hasItems={totalItemCount > 0}
-        initialCategorySlug={initialCategorySlug}
-        items={typedItems}
-        search={search}
-      />
+    <AppShell isAdmin={isAdmin}>
+      <DashboardV2 items={typedItems} search={search} totalCount={totalItemCount} />
       <InstallPrompt />
-    </main>
+    </AppShell>
   );
 }

@@ -39,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${baloo.variable} ${inter.variable}`}>
+    <html lang="es" className={`${baloo.variable} ${inter.variable}`} suppressHydrationWarning>
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <div className="site-content">{children}</div>
