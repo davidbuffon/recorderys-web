@@ -5,6 +5,7 @@ import { getItemStatus, statusBadgeClass, statusLabel } from "@/lib/item-status"
 import type { ItemCardData } from "@/lib/types";
 
 type DashboardV2Props = {
+  avatarInitial?: string;
   items: ItemCardData[];
   search?: string;
   totalCount: number;
@@ -21,7 +22,7 @@ function ItemImage({ item }: { item: ItemCardData }) {
   );
 }
 
-export function DashboardV2({ items, search = "", totalCount }: DashboardV2Props) {
+export function DashboardV2({ avatarInitial = "R", items, search = "", totalCount }: DashboardV2Props) {
   const withStatus = items.map((item) => ({ item, status: getItemStatus(item) }));
   const urgent = withStatus.filter(
     ({ status }) => status.kind === "return" && status.urgent,
@@ -30,12 +31,15 @@ export function DashboardV2({ items, search = "", totalCount }: DashboardV2Props
   return (
     <>
       <header className="dz-header">
-        <div>
+        <div className="dz-header__title">
           <h1>Tus compras</h1>
           <p className="dz-header__count">
             {totalCount} compra{totalCount === 1 ? "" : "s"} guardada{totalCount === 1 ? "" : "s"}
           </p>
         </div>
+        <Link aria-label="Ir a ajustes" className="dz-avatar" href="/profile">
+          {avatarInitial}
+        </Link>
         <div className="dz-header__actions">
           <form className="dz-search" role="search">
             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">

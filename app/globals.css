@@ -5312,3 +5312,64 @@ textarea {
     padding: 40px 26px;
   }
 }
+
+/* ===================== v2: ajustes móviles del diseño ===================== */
+
+.dz-avatar {
+  align-items: center;
+  background: var(--cyan);
+  border-radius: 50%;
+  color: #fff;
+  display: none;
+  flex-shrink: 0;
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 700;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
+}
+
+@media (max-width: 767px) {
+  .dz-header {
+    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    margin-bottom: 18px;
+  }
+
+  .dz-avatar {
+    display: flex;
+  }
+
+  .dz-header__actions {
+    grid-column: 1 / -1;
+    margin-top: 4px;
+  }
+
+  /* En móvil se añade desde la barra inferior */
+  .dz-header__actions .dz-add-button {
+    display: none;
+  }
+
+  .dz-search {
+    flex: 1;
+    width: 100%;
+  }
+
+  /* Home: un solo botón navy "Entrar" */
+  .home-nav__cta {
+    display: none;
+  }
+
+  .home-nav__login {
+    align-items: center;
+    background: var(--navy);
+    border-radius: 999px;
+    color: #fff;
+    display: inline-flex;
+    font-weight: 700;
+    min-height: 42px;
+    padding: 0 22px;
+  }
+}

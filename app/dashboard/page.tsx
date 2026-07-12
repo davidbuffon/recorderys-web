@@ -28,10 +28,12 @@ export default async function DashboardPage({
   let typedItems: ItemCardData[] = [];
   let isAdmin = false;
   let totalItemCount = 0;
+  let avatarInitial = "R";
 
   if (!hasSupabaseEnv()) {
     categories = demoCategories;
     isAdmin = true;
+    avatarInitial = "D";
     totalItemCount = demoItems.length;
     typedItems = demoItems.filter((item) => {
       const matchesSearch = !search
@@ -55,10 +57,12 @@ export default async function DashboardPage({
 
     const { data: profile } = await supabase
       .from("profiles")
-      .select("role")
+      .select("role,name,email")
       .eq("id", user.id)
       .single();
     isAdmin = profile?.role === "admin";
+    avatarInitial =
+      (profile?.name || profile?.email || user.email || "R").trim().charAt(0).toUpperCase() || "R";
 
     const { data: categoriesData } = await supabase
       .from("categories")
@@ -111,7 +115,7 @@ export default async function DashboardPage({
 
   return (
     <AppShell isAdmin={isAdmin}>
-      <DashboardV2 items={typedItems} search={search} totalCount={totalItemCount} />
+      <DashboardV2 avatarInitial={avatarInitial} items={typedItems} search={search} totalCount={totalItemCount} />
       <InstallPrompt />
     </AppShell>
   );

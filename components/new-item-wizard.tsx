@@ -172,7 +172,7 @@ export function NewItemWizard({ action, categories }: NewItemWizardProps) {
 
       {/* ============ PASO 1: ticket ============ */}
       <section className={step === 1 ? "wizard__panel" : "wizard__panel wizard__panel--hidden"}>
-        <h2>Sube el ticket de compra</h2>
+        <h2>Foto del ticket</h2>
         <p className="wizard__hint">
           La IA leerá el ticket y rellenará los datos por ti. También puedes
           añadir fotos del producto y el recibo del datáfono.
@@ -186,8 +186,8 @@ export function NewItemWizard({ action, categories }: NewItemWizardProps) {
             type="file"
           />
           <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M4 3h13l3 3v15l-2-1.5L16 21l-2-1.5L12 21l-2-1.5L8 21l-2-1.5L4 21Z" />
-            <path d="M8 8h8M8 12h8M8 16h5" />
+            <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z" />
+            <circle cx="12" cy="13" r="3.5" />
           </svg>
           {extracting ? (
             <>
@@ -205,7 +205,7 @@ export function NewItemWizard({ action, categories }: NewItemWizardProps) {
             </>
           ) : (
             <>
-              <strong>Toca para subir el ticket</strong>
+              <strong>Haz una foto o sube el ticket</strong>
               <small>Foto o PDF. Se genera huella antifraude.</small>
             </>
           )}
