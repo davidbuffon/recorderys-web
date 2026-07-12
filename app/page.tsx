@@ -2,264 +2,221 @@ import Link from "next/link";
 import { BrandHomeLink } from "@/components/brand-home-link";
 import { LegalFooter } from "@/components/legal-footer";
 
-const purchases = [
+const library = [
   {
     name: "Cafetera DeLonghi",
-    image: "/demo/product-cafetera.svg?v=5",
     meta: "El Corte Inglés · 229,99 €",
-    status: "Garantía hasta 2029",
-    tone: "green",
+    badge: "Garantía 2029",
+    tone: "warranty",
   },
   {
     name: "Zapatillas Nordikas",
-    image: "/demo/product-zapatillas.svg?v=5",
     meta: "Nordikas · 89,95 €",
-    status: "Devolución: 4 días",
-    tone: "yellow",
+    badge: "4 días",
+    tone: "return",
   },
   {
     name: "Auriculares Sony",
-    image: "/demo/product-auriculares.svg?v=5",
     meta: "Amazon · 149,90 €",
-    status: "Ticket guardado",
-    tone: "blue",
+    badge: "Ticket",
+    tone: "saved",
   },
 ];
 
-const partnerProducts = [
+const examples = [
   {
-    brand: "Dyson",
     category: "Hogar",
     name: "Aspiradora sin cable",
-    image: "/demo/product-aspiradora.svg",
+    meta: "Dyson · MediaMarkt",
     note: "Garantía y ticket siempre a mano",
-    store: "MediaMarkt",
   },
   {
-    brand: "Nordikas",
     category: "Calzado",
     name: "Zapatillas de casa",
-    image: "/demo/product-zapatillas.svg?v=5",
+    meta: "Nordikas · Nordikas",
     note: "Plazos de devolución bajo control",
-    store: "Nordikas",
   },
   {
-    brand: "Sony",
     category: "Electrónica",
     name: "Auriculares inalámbricos",
-    image: "/demo/product-auriculares.svg?v=5",
+    meta: "Sony · Amazon",
     note: "Compra localizada en segundos",
-    store: "Amazon",
   },
 ];
 
 export default function HomePage() {
   return (
     <>
-    <main className="public-landing">
-      <nav className="public-nav" aria-label="Navegación principal">
+      <header className="home-nav">
         <BrandHomeLink tagline="Tu App de garantía." />
-        <div className="public-nav__actions">
-          <Link className="public-link" href="/login">
+        <nav className="home-nav__center" aria-label="Navegación principal">
+          <a href="#como-funciona">Cómo funciona</a>
+        </nav>
+        <div className="home-nav__actions">
+          <Link className="home-nav__login" href="/login">
             Entrar
           </Link>
-          <Link className="button button-primary" href="/login?mode=register">
+          <Link className="home-nav__cta" href="/login?mode=register">
             Crear cuenta
           </Link>
         </div>
-      </nav>
+      </header>
 
-      <section className="public-hero">
-        <div className="public-hero__copy">
-          <p className="public-eyebrow">Tu postcompra, bajo control</p>
-          <h1>Nunca pierdas una garantía.</h1>
-          <p className="public-hero__lead">
-            Guarda tickets, controla devoluciones y encuentra cualquier compra
-            importante justo cuando la necesitas.
-          </p>
-          <div className="public-hero__actions">
-            <Link className="button button-primary public-cta" href="/login?mode=register">
-              Guardar mi primera compra
-            </Link>
-            <Link className="button button-secondary" href="#como-funciona">
-              Ver cómo funciona
-            </Link>
-          </div>
-          <div className="public-trust" aria-label="Ventajas principales">
-            <span>Privado</span>
-            <span>Fácil de encontrar</span>
-            <span>Avisos a tiempo</span>
-          </div>
-        </div>
-
-        <div className="product-preview" aria-label="Vista previa de Recorderys">
-          <div className="product-preview__bar">
-            <div>
-              <span>Mi biblioteca</span>
-              <strong>Todo sigue en su sitio</strong>
+      <main className="home-v2">
+        <section className="home-hero">
+          <div className="home-hero__copy">
+            <span className="home-eyebrow-chip">
+              <i aria-hidden="true" />
+              Tu postcompra, bajo control
+            </span>
+            <h1>Nunca pierdas una garantía.</h1>
+            <p className="home-hero__lead">
+              Guarda tickets, controla devoluciones y encuentra cualquier compra
+              importante justo cuando la necesitas.
+            </p>
+            <div className="home-hero__actions">
+              <Link className="home-btn home-btn--primary" href="/login?mode=register">
+                Guardar mi primera compra
+              </Link>
+              <a className="home-btn home-btn--ghost" href="#como-funciona">
+                Ver cómo funciona
+              </a>
             </div>
-            <span className="product-preview__count">4 compras</span>
+            <ul className="home-trust" aria-label="Ventajas principales">
+              <li>
+                <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
+                </svg>
+                Privado
+              </li>
+              <li>
+                <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                  <circle cx="11" cy="11" r="7" />
+                  <line x1="21" y1="21" x2="16.5" y2="16.5" />
+                </svg>
+                Fácil de encontrar
+              </li>
+              <li>
+                <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 8v4l2.5 2.5" />
+                  <circle cx="12" cy="12" r="9" />
+                </svg>
+                Avisos a tiempo
+              </li>
+            </ul>
           </div>
 
-          <div className="product-preview__grid">
-            {purchases.map((purchase, index) => (
-              <article
-                className={`purchase-preview purchase-preview--${index + 1}`}
-                key={purchase.name}
-              >
-                <div className="purchase-preview__media">
-                  <img
-                    alt={purchase.name}
-                    height={900}
-                    src={purchase.image}
-                    width={1200}
-                  />
-                </div>
-                <div className="purchase-preview__body">
-                  <span className={`status-pill status-pill--${purchase.tone}`}>
-                    {purchase.status}
+          <aside className="home-library card-v2" aria-label="Vista previa de Recorderys">
+            <div className="home-library__head">
+              <strong>Mi biblioteca</strong>
+              <span>5 compras</span>
+            </div>
+            <div className="home-library__list">
+              {library.map((entry) => (
+                <div className="home-library__row" key={entry.name}>
+                  <span className="home-library__thumb" aria-hidden="true" />
+                  <div className="home-library__copy">
+                    <strong>{entry.name}</strong>
+                    <small>{entry.meta}</small>
+                  </div>
+                  <span className={`status-badge status-badge--${entry.tone} home-library__badge`}>
+                    {entry.badge}
                   </span>
-                  <strong>{purchase.name}</strong>
-                  <small>{purchase.meta}</small>
+                </div>
+              ))}
+            </div>
+          </aside>
+        </section>
+
+        <section className="home-section">
+          <p className="home-eyebrow">Postcompra real</p>
+          <h2>Una compra no termina cuando pagas.</h2>
+          <div className="home-values">
+            <article className="home-value card-v2">
+              <span className="home-value__icon home-value__icon--cyan" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 3h13l3 3v15l-2-1.5L16 21l-2-1.5L12 21l-2-1.5L8 21l-2-1.5L4 21Z" />
+                  <path d="M8 8h8M8 12h8M8 16h5" />
+                </svg>
+              </span>
+              <h3>Ticket localizado.</h3>
+              <p>Sin rebuscar en chats, cajones o correos.</p>
+            </article>
+            <article className="home-value card-v2">
+              <span className="home-value__icon home-value__icon--cyan" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
+                  <path d="m9 12 2 2 4-4" />
+                </svg>
+              </span>
+              <h3>Garantía vigente.</h3>
+              <p>Sabes hasta cuándo estás cubierto.</p>
+            </article>
+            <article className="home-value card-v2">
+              <span className="home-value__icon home-value__icon--yellow" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 8v4l2.5 2.5" />
+                  <circle cx="12" cy="12" r="9" />
+                </svg>
+              </span>
+              <h3>Devolución controlada.</h3>
+              <p>Recorderys te avisa antes de que sea tarde.</p>
+            </article>
+          </div>
+        </section>
+
+        <section className="home-steps" id="como-funciona">
+          <p className="home-eyebrow home-eyebrow--yellow">Así de sencillo</p>
+          <h2>Tres pasos. Años de tranquilidad.</h2>
+          <div className="home-steps__grid">
+            <article>
+              <span>01</span>
+              <h3>Fotografía el ticket</h3>
+              <p>Añade la compra y conserva el justificante en un lugar seguro.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h3>Todo queda conectado</h3>
+              <p>Producto, tienda, fecha, ticket y garantía en una sola ficha.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <h3>Actúa antes de que sea tarde</h3>
+              <p>Detecta de un vistazo qué compras necesitan tu atención.</p>
+            </article>
+          </div>
+        </section>
+
+        <section className="home-section">
+          <p className="home-eyebrow">Ejemplos reales</p>
+          <h2>Productos reales. Tickets reales. Todo localizado.</h2>
+          <div className="home-examples">
+            {examples.map((product) => (
+              <article className="home-example card-v2" key={product.name}>
+                <span className="home-example__media" aria-hidden="true" />
+                <div className="home-example__body">
+                  <span className="home-example__category">{product.category}</span>
+                  <strong>{product.name}</strong>
+                  <small>{product.meta}</small>
+                  <p>{product.note}</p>
                 </div>
               </article>
             ))}
           </div>
+        </section>
 
-          <div className="product-alert">
-            <span className="product-alert__icon">!</span>
-            <div>
-              <strong>No dejes pasar una devolución</strong>
-              <small>Recorderys destaca lo que necesita tu atención.</small>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="problem-strip">
-        <div className="problem-strip__heading">
-          <span>Postcompra real</span>
-          <p>Una compra no termina cuando pagas.</p>
-        </div>
-        <div className="problem-strip__items">
-          <span>
-            <strong>Ticket localizado.</strong>
-            <small>Sin rebuscar en chats, cajones o correos.</small>
-          </span>
-          <span>
-            <strong>Garantía vigente.</strong>
-            <small>Sabes hasta cuándo estás cubierto.</small>
-          </span>
-          <span>
-            <strong>Devolución controlada.</strong>
-            <small>Recorderys te avisa antes de que sea tarde.</small>
-          </span>
-        </div>
-      </section>
-
-      <section className="public-section public-section--how" id="como-funciona">
-        <div className="public-section__heading">
-          <p className="public-eyebrow">Así de sencillo</p>
-          <h2>Tres pasos. Años de tranquilidad.</h2>
-        </div>
-        <div className="how-grid">
-          <article className="how-step">
-            <div className="how-step__copy">
-              <span>01</span>
-              <h3>Fotografía el ticket</h3>
-              <p>Añade la compra y conserva el justificante en un lugar seguro.</p>
-            </div>
-            <div className="how-ticket-visual" aria-label="Ticket de una compra">
-              <div className="how-ticket-visual__row">
-                <strong>Total</strong>
-                <strong>229,99 EUR</strong>
-              </div>
-              <div className="how-ticket-visual__line" />
-              <p>Pago tarjeta ****1284</p>
-              <p>Gracias por tu compra</p>
-            </div>
-          </article>
-          <article className="how-step">
-            <div className="how-step__copy">
-              <span>02</span>
-              <h3>Todo queda conectado</h3>
-              <p>Producto, tienda, fecha, ticket y garantía en una sola ficha.</p>
-            </div>
-            <div className="how-product-visual" aria-label="Producto registrado">
-              <div className="how-product-visual__media">
-                <img
-                  alt=""
-                  height={520}
-                  loading="lazy"
-                  src="/demo/product-cafetera-wide.svg"
-                  width={1200}
-                />
-              </div>
-            </div>
-          </article>
-          <article className="how-step">
-            <div className="how-step__copy">
-              <span>03</span>
-              <h3>Actúa antes de que sea tarde</h3>
-              <p>Detecta de un vistazo qué compras necesitan tu atención.</p>
-            </div>
-            <div className="how-step__notice">
-              <strong>Quedan 4 días</strong>
-              <small>Plazo de devolución</small>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section className="public-section brand-showcase" aria-label="Productos reales">
-        <div className="brand-showcase__heading">
-          <div>
-            <p className="public-eyebrow">Ejemplos reales</p>
-            <h2>Productos reales. Tickets reales. Todo localizado.</h2>
-          </div>
-          <p>
-            Una biblioteca visual para las compras que quieres tener siempre bajo
-            control.
-          </p>
-        </div>
-        <div className="brand-carousel" aria-label="Ejemplos de compras guardadas">
-          {partnerProducts.map((product) => (
-            <article className="brand-product-card" key={`${product.brand}-${product.name}`}>
-              <div className="brand-product-card__media">
-                <img
-                  alt={product.name}
-                  height={900}
-                  loading="lazy"
-                  src={product.image}
-                  width={1200}
-                />
-              </div>
-              <div className="brand-product-card__body">
-                <span>{product.category}</span>
-                <strong>{product.name}</strong>
-                <small>{product.brand} · {product.store}</small>
-                <p>{product.note}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="public-final-cta">
-        <div>
-          <p className="public-eyebrow">Siempre localizado</p>
+        <section className="home-final">
           <h2>Guarda lo que importa. Encuentra lo que necesitas.</h2>
           <p>
-            Tickets, garantías, devoluciones y documentos de tus compras importantes,
-            siempre localizados.
+            Tickets, garantías, devoluciones y documentos de tus compras
+            importantes, siempre localizados.
           </p>
-        </div>
-        <Link className="button button-primary public-cta" href="/login?mode=register">
-          Guardar mi primera compra
-        </Link>
-      </section>
-    </main>
-    <LegalFooter />
+          <Link className="home-btn home-btn--inverse" href="/login?mode=register">
+            Guardar mi primera compra
+          </Link>
+        </section>
+      </main>
+      <LegalFooter />
     </>
   );
 }
