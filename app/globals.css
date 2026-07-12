@@ -1,26 +1,77 @@
 :root {
-  --brand-blue: #27a9cf;
-  --brand-blue-dark: #0d6f90;
-  --brand-blue-deep: #08566f;
+  /* ===== Tokens v2 (handoff Opción B) ===== */
+  --bg: #eff8fc;
+  --surface-card: #ffffff;
+  --surface-2: #f6fbfd;
+  --text-1: #10283f;
+  --text-2: #5e7488;
+  --text-3: #93a7b8;
+  --border: #e3edf2;
+  --img-ph-a: #e7f3f9;
+  --img-ph-b: #dcedf6;
+
+  /* Marca (iguales en claro y oscuro) */
+  --cyan: #26b6e0;
+  --cyan-dark: #0e93bb;
+  --yellow: #ffde17;
+  --navy: #10283f;
+  --navy-2: #16324d;
+  --navy-3: #0b3a54;
+
+  /* Badges de estado (iguales en ambos modos) */
+  --badge-return-bg: #fff4cc;
+  --badge-return-text: #8a6d00;
+  --badge-return-dot: #ffde17;
+  --badge-warranty-bg: #def4fb;
+  --badge-warranty-text: #0e6e8c;
+  --badge-warranty-dot: #26b6e0;
+  --badge-expired-bg: #fbe7e5;
+  --badge-expired-text: #b23b30;
+  --badge-expired-dot: #e2574c;
+  --badge-saved-bg: #edf1f4;
+  --badge-saved-text: #4b5d6e;
+  --badge-saved-dot: #8fa2b3;
+
+  --danger: #b23b30;
+
+  /* Radios y sombra estándar */
+  --radius-card: 18px;
+  --radius-button: 13px;
+  --shadow-card: 0 10px 26px rgba(16, 40, 63, 0.08);
+
+  /* Tipografía (next/font inyecta --font-display y --font-body) */
+  --font-heading: var(--font-display), "Baloo 2", ui-rounded, sans-serif;
+  --font-ui: var(--font-body), "Inter", "Segoe UI", sans-serif;
+
+  /* ===== Alias v1 (compatibilidad durante la migración) ===== */
+  --brand-blue: var(--cyan);
+  --brand-blue-dark: var(--cyan-dark);
+  --brand-blue-deep: var(--navy);
   --brand-panel-blue: #4aa7d6;
   --brand-panel-blue-deep: #348fc1;
-  --brand-yellow: #ffdf00;
-  --surface: #dff4fa;
-  --surface-strong: #ffffff;
-  --line: #b9deea;
-  --text: #10202a;
-  --muted: #48626e;
+  --brand-yellow: var(--yellow);
+  --surface: var(--surface-2);
+  --surface-strong: var(--surface-card);
+  --line: var(--border);
+  --text: var(--text-1);
+  --muted: var(--text-2);
   --green: #6dbf73;
   --amber: #f4b942;
-  --red: #e66a6a;
-  --font-rounded:
-    "Avenir Next Rounded",
-    "Arial Rounded MT Bold",
-    ui-rounded,
-    "Nunito Sans",
-    "Avenir Next",
-    "Segoe UI",
-    sans-serif;
+  --red: #e2574c;
+  --font-rounded: var(--font-ui);
+}
+
+:root[data-theme="dark"] {
+  --bg: #0a1928;
+  --surface-card: #132a40;
+  --surface-2: #0f2338;
+  --text-1: #f2f7fa;
+  --text-2: #b9cbd9;
+  --text-3: #7e93a6;
+  --border: #20384f;
+  --img-ph-a: #17324a;
+  --img-ph-b: #132a40;
+  --shadow-card: 0 10px 26px rgba(0, 0, 0, 0.35);
 }
 
 * {
@@ -33,13 +84,21 @@ body {
 }
 
 body {
-  background: #d4ecf5;
-  color: var(--text);
+  background: var(--bg);
+  color: var(--text-1);
   display: flex;
   flex-direction: column;
-  font-family: var(--font-rounded);
+  font-family: var(--font-ui);
   margin: 0;
   min-height: 100vh;
+  transition: background 200ms ease, color 200ms ease;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
 }
 
 .site-content {
@@ -428,7 +487,7 @@ textarea {
   justify-content: center;
   min-height: 100vh;
   padding: 24px;
-  background: #d4ecf5;
+  background: var(--bg);
 }
 
 .auth-layout {
@@ -905,6 +964,10 @@ textarea {
 
 .dashboard-search {
   align-items: stretch;
+}
+
+.dashboard-search input::placeholder {
+  color: #a9bcc6;
 }
 
 .dashboard-command-card__hints {
@@ -1876,6 +1939,7 @@ textarea {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    justify-content: center;
     width: 100%;
   }
 
@@ -3349,4 +3413,98 @@ textarea {
   font-size: 0.82rem;
   margin-top: 16px;
   text-align: center;
+}
+
+/* ===================== v2: badges de estado ===================== */
+
+.status-badge {
+  align-items: center;
+  border-radius: 999px;
+  display: inline-flex;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  gap: 7px;
+  padding: 5px 12px;
+  white-space: nowrap;
+}
+
+.status-badge::before {
+  border-radius: 50%;
+  content: "";
+  display: inline-block;
+  height: 7px;
+  width: 7px;
+}
+
+.status-badge--return {
+  background: var(--badge-return-bg);
+  color: var(--badge-return-text);
+}
+.status-badge--return::before {
+  background: var(--badge-return-dot);
+}
+
+.status-badge--warranty {
+  background: var(--badge-warranty-bg);
+  color: var(--badge-warranty-text);
+}
+.status-badge--warranty::before {
+  background: var(--badge-warranty-dot);
+}
+
+.status-badge--expired {
+  background: var(--badge-expired-bg);
+  color: var(--badge-expired-text);
+}
+.status-badge--expired::before {
+  background: var(--badge-expired-dot);
+}
+
+.status-badge--saved {
+  background: var(--badge-saved-bg);
+  color: var(--badge-saved-text);
+}
+.status-badge--saved::before {
+  background: var(--badge-saved-dot);
+}
+
+/* ===================== v2: card base ===================== */
+
+.card-v2 {
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+/* ===================== v2: toggle ===================== */
+
+.theme-toggle {
+  background: var(--border);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  height: 28px;
+  padding: 3px;
+  position: relative;
+  transition: background 180ms ease;
+  width: 50px;
+}
+
+.theme-toggle--on {
+  background: var(--cyan);
+}
+
+.theme-toggle__knob {
+  background: #fff;
+  border-radius: 50%;
+  display: block;
+  height: 22px;
+  transition: transform 180ms ease;
+  width: 22px;
+}
+
+.theme-toggle--on .theme-toggle__knob {
+  transform: translateX(22px);
 }
