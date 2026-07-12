@@ -101,76 +101,102 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="auth-page">
-      <section className="auth-layout">
-        <div className="auth-showcase">
-          <Link href="/" aria-label="Volver a Recorderys">
-            <Brand />
-          </Link>
-          <span className="chip chip-yellow">Tu espacio privado</span>
-          <h1>{mode === "login" ? "Todo donde lo dejaste." : "Tu primera compra, siempre localizada."}</h1>
+    <main className="auth-v2">
+      <div className="auth-v2__panel">
+        <Link className="auth-v2__brand" href="/" aria-label="Volver a Recorderys">
+          <Brand />
+        </Link>
+        <div className="auth-v2__panel-copy">
+          <h1>
+            {mode === "login"
+              ? "Todo donde lo dejaste."
+              : mode === "register"
+                ? "Tu primera compra, siempre localizada."
+                : "Recupera el acceso."}
+          </h1>
           <p>
-            Tickets, garantías y devoluciones importantes, disponibles cuando
-            de verdad los necesitas.
+            Tickets, garantías y devoluciones importantes, disponibles cuando de
+            verdad los necesitas.
           </p>
         </div>
+      </div>
 
-        <section className="card auth-card auth-card--elevated">
-          <div>
-            <span className="chip chip-blue">
-              {mode === "login"
-                ? "Bienvenido"
-                : mode === "register"
-                  ? "Nueva cuenta"
-                  : "Recuperación"}
-            </span>
-            <h2>
-              {mode === "login"
-                ? "Accede a tu espacio"
-                : mode === "register"
-                  ? "Empieza a guardar compras"
-                  : "Recupera tu contraseña"}
-            </h2>
-            <p className="muted">
-              {mode === "recover"
-                ? "Introduce tu email y te enviaremos un enlace para crear una nueva contraseña."
-                : "Usa Google, Apple o crea tu acceso con email y contraseña."}
+      <div className="auth-v2__content">
+        <div className="auth-v2__box">
+          {mode !== "recover" ? (
+            <div className="auth-tabs" role="tablist">
+              <button
+                aria-selected={mode === "login"}
+                className={`auth-tabs__tab ${mode === "login" ? "auth-tabs__tab--active" : ""}`}
+                onClick={() => setMode("login")}
+                role="tab"
+                type="button"
+              >
+                Entrar
+              </button>
+              <button
+                aria-selected={mode === "register"}
+                className={`auth-tabs__tab ${mode === "register" ? "auth-tabs__tab--active" : ""}`}
+                onClick={() => setMode("register")}
+                role="tab"
+                type="button"
+              >
+                Crear cuenta
+              </button>
+            </div>
+          ) : null}
+
+          <h2>
+            {mode === "login"
+              ? "Accede a tu espacio"
+              : mode === "register"
+                ? "Empieza a guardar compras"
+                : "Recupera tu contraseña"}
+          </h2>
+          <p className="auth-v2__hint">
+            {mode === "recover"
+              ? "Introduce tu email y te enviaremos un enlace para crear una nueva contraseña."
+              : "Usa Google, Apple o tu email."}
+          </p>
+          {demoMode ? (
+            <p className="auth-v2__message">
+              Modo demo activo. Puedes navegar la interfaz sin conectar todavía
+              Supabase.
             </p>
-            {demoMode ? (
-              <p className="auth-message">
-                Modo demo activo. Puedes navegar la interfaz sin conectar todavía
-                Supabase.
-              </p>
-            ) : null}
-          </div>
+          ) : null}
 
-          <div className="auth-card__providers">
-            <button
-              className="button button-secondary"
-              onClick={() => signInWithProvider("google")}
-              type="button"
-            >
-              Continuar con Google
-            </button>
-            <button
-              className="button button-secondary"
-              onClick={() => signInWithProvider("apple")}
-              type="button"
-            >
-              Continuar con Apple
-            </button>
-          </div>
+          {mode !== "recover" ? (
+            <>
+              <div className="auth-v2__providers">
+                <button
+                  className="pd-button pd-button--secondary"
+                  onClick={() => signInWithProvider("google")}
+                  type="button"
+                >
+                  Continuar con Google
+                </button>
+                <button
+                  className="pd-button pd-button--secondary"
+                  onClick={() => signInWithProvider("apple")}
+                  type="button"
+                >
+                  Continuar con Apple
+                </button>
+              </div>
 
-          <div className="auth-divider">
-            <span>o continúa con email</span>
-          </div>
+              <div className="auth-v2__divider">
+                <span>o con email</span>
+              </div>
+            </>
+          ) : null}
 
-          <form className="auth-form" onSubmit={handleEmailAuth}>
+          <form className="wizard__fields" onSubmit={handleEmailAuth}>
             <label>
               Email
               <input
                 autoComplete="email"
                 onChange={(event) => setEmail(event.target.value)}
+                placeholder="tu@email.com"
                 required
                 type="email"
                 value={email}
@@ -189,46 +215,32 @@ export default function LoginPage() {
                 />
               </label>
             ) : null}
-            <button className="button button-primary" type="submit">
+            <button className="pd-button pd-button--primary auth-v2__submit" type="submit">
               {mode === "login"
-                ? "Entrar con email"
+                ? "Entrar"
                 : mode === "register"
-                  ? "Registrarme"
+                  ? "Crear cuenta"
                   : "Enviar enlace"}
             </button>
           </form>
 
-          {message ? <p className="auth-message">{message}</p> : null}
+          {message ? <p className="auth-v2__message">{message}</p> : null}
 
-          <div className="auth-actions">
-            <button
-              className="auth-switch"
-              onClick={() =>
-                setMode(
-                  mode === "login" ? "register" : "login",
-                )
-              }
-              type="button"
-            >
-              {mode === "login"
-                ? "¿No tienes cuenta? Regístrate"
-                : "Ya tengo cuenta"}
-            </button>
-            <button
-              className="auth-switch"
-              onClick={() => setMode(mode === "recover" ? "login" : "recover")}
-              type="button"
-            >
-              {mode === "recover" ? "Volver al login" : "He olvidado mi contraseña"}
-            </button>
-          </div>
+          <button
+            className="auth-v2__link"
+            onClick={() => setMode(mode === "recover" ? "login" : "recover")}
+            type="button"
+          >
+            {mode === "recover" ? "Volver al login" : "He olvidado mi contraseña"}
+          </button>
+
           {demoMode ? (
-            <Link className="button button-primary" href="/dashboard">
+            <Link className="pd-button pd-button--primary" href="/dashboard">
               Entrar en modo demo
             </Link>
           ) : null}
-        </section>
-      </section>
+        </div>
+      </div>
     </main>
   );
 }

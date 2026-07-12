@@ -4582,3 +4582,239 @@ textarea {
 .settings__delete-btn:hover {
   background: #9a2f26;
 }
+
+/* ===================== v2: login ===================== */
+
+.auth-v2 {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  min-height: 100vh;
+}
+
+.auth-v2__panel {
+  background: linear-gradient(160deg, var(--navy) 0%, var(--navy-3) 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40px 44px 60px;
+}
+
+.auth-v2__brand {
+  display: inline-flex;
+}
+
+.auth-v2__brand .brand-mark__word,
+.auth-v2__brand .brand-mark__tagline {
+  color: #fff;
+}
+
+.auth-v2__panel-copy h1 {
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 1.15;
+  margin: 0 0 14px;
+}
+
+.auth-v2__panel-copy p {
+  color: rgba(242, 247, 250, 0.75);
+  font-size: 15.5px;
+  margin: 0;
+  max-width: 380px;
+}
+
+.auth-v2__content {
+  align-items: center;
+  background: var(--bg);
+  display: flex;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.auth-v2__box {
+  display: grid;
+  gap: 14px;
+  max-width: 400px;
+  width: 100%;
+}
+
+.auth-v2__box h2 {
+  font-size: 24px;
+  margin: 4px 0 0;
+}
+
+.auth-v2__hint {
+  color: var(--text-2);
+  font-size: 14px;
+  margin: 0;
+}
+
+.auth-tabs {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-button);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 4px;
+}
+
+.auth-tabs__tab {
+  background: none;
+  border: 0;
+  border-radius: 10px;
+  color: var(--text-2);
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 40px;
+  transition: background 150ms ease, color 150ms ease, box-shadow 150ms ease;
+}
+
+.auth-tabs__tab--active {
+  background: var(--surface-card);
+  box-shadow: 0 2px 8px rgba(16, 40, 63, 0.08);
+  color: var(--text-1);
+}
+
+.auth-v2__providers {
+  display: grid;
+  gap: 10px;
+}
+
+.auth-v2__divider {
+  align-items: center;
+  color: var(--text-3);
+  display: flex;
+  font-size: 12.5px;
+  gap: 12px;
+}
+
+.auth-v2__divider::before,
+.auth-v2__divider::after {
+  background: var(--border);
+  content: "";
+  flex: 1;
+  height: 1px;
+}
+
+.auth-v2__submit {
+  margin-top: 4px;
+  width: 100%;
+}
+
+.auth-v2__message {
+  background: var(--badge-warranty-bg);
+  border-radius: 10px;
+  color: var(--badge-warranty-text);
+  font-size: 13.5px;
+  margin: 0;
+  padding: 10px 14px;
+}
+
+.auth-v2__link {
+  background: none;
+  border: 0;
+  color: var(--cyan-dark);
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 13.5px;
+  font-weight: 600;
+  justify-self: center;
+  padding: 4px;
+}
+
+.auth-v2__link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 860px) {
+  .auth-v2 {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-v2__panel {
+    gap: 26px;
+    padding: 28px 24px 36px;
+  }
+
+  .auth-v2__panel-copy h1 {
+    font-size: 28px;
+  }
+}
+
+/* ===================== v2: home pública (overrides) ===================== */
+
+.public-nav {
+  background: var(--surface-card);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 14px rgba(16, 40, 63, 0.05);
+  left: 0;
+  padding: 10px 28px;
+  position: sticky;
+  top: 0;
+  z-index: 60;
+}
+
+.public-landing {
+  padding-top: 0;
+}
+
+.public-cta,
+.public-hero__actions .button-primary,
+.public-final-cta .button-primary {
+  background: var(--cyan);
+  box-shadow: 0 10px 24px rgba(38, 182, 224, 0.4);
+  color: #fff;
+}
+
+.public-cta:hover,
+.public-hero__actions .button-primary:hover,
+.public-final-cta .button-primary:hover {
+  background: var(--cyan-dark);
+}
+
+.public-section--how {
+  background: var(--navy);
+  border-radius: var(--radius-card);
+  color: #f2f7fa;
+  padding: 44px 40px;
+}
+
+.public-section--how .public-eyebrow {
+  color: var(--yellow);
+}
+
+.public-section--how h2,
+.public-section--how h3 {
+  color: #fff;
+}
+
+.public-section--how .how-step__copy p {
+  color: rgba(242, 247, 250, 0.72);
+}
+
+.public-section--how .how-step__copy span {
+  color: var(--cyan);
+}
+
+.public-final-cta {
+  background: linear-gradient(120deg, var(--cyan) 0%, var(--cyan-dark) 100%);
+  border-radius: var(--radius-card);
+  color: #fff;
+}
+
+.public-final-cta .public-eyebrow,
+.public-final-cta h2,
+.public-final-cta p {
+  color: #fff;
+}
+
+.public-final-cta .button-primary {
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(11, 58, 84, 0.3);
+  color: var(--navy);
+}
+
+.public-final-cta .button-primary:hover {
+  background: var(--surface-2);
+}
