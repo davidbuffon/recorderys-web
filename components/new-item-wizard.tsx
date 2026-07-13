@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { compressInputFiles } from "@/lib/compress-image";
 import type { ExtractionResult } from "@/app/api/extract-receipt/route";
 
 type CategoryOption = {
@@ -182,7 +183,10 @@ export function NewItemWizard({ action, categories }: NewItemWizardProps) {
           <input
             accept="image/*,application/pdf"
             name="receipt"
-            onChange={(e) => onReceiptChange(e.target.files?.[0] ?? null)}
+            onChange={async (e) => {
+              await compressInputFiles(e.target);
+              await onReceiptChange(e.target.files?.[0] ?? null);
+            }}
             type="file"
           />
           <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -217,7 +221,10 @@ export function NewItemWizard({ action, categories }: NewItemWizardProps) {
               accept="image/*"
               multiple
               name="customer_photos"
-              onChange={(e) => setPhotoCount(e.target.files?.length ?? 0)}
+              onChange={async (e) => {
+                await compressInputFiles(e.target);
+                setPhotoCount(e.target.files?.length ?? 0);
+              }}
               type="file"
             />
             <span>
@@ -230,7 +237,10 @@ export function NewItemWizard({ action, categories }: NewItemWizardProps) {
             <input
               accept="image/*,application/pdf"
               name="payment_receipt"
-              onChange={(e) => setPaymentName(e.target.files?.[0]?.name ?? "")}
+              onChange={async (e) => {
+                await compressInputFiles(e.target);
+                setPaymentName(e.target.files?.[0]?.name ?? "");
+              }}
               type="file"
             />
             <span>{paymentName || "Recibo datáfono (opcional)"}</span>

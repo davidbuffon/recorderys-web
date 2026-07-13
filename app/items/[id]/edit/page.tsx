@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { AppShell } from "@/components/app-shell";
+import { CompressingFileInput } from "@/components/compressing-file-input";
 import { getIsAdmin } from "@/lib/admin";
 import { demoCategories, hasSupabaseEnv } from "@/lib/demo";
 import {
@@ -323,20 +324,19 @@ export default async function EditItemPage({ params }: { params: Params }) {
           <div className="form-row">
             <label>
               <span>Nueva foto del artículo</span>
-              <input accept="image/*" name="customer_photo" type="file" />
+              <CompressingFileInput accept="image/*" name="customer_photo" />
             </label>
             <label>
               <span>Nuevo ticket o factura</span>
-              <input accept="image/*,application/pdf" name="receipt" type="file" />
+              <CompressingFileInput accept="image/*,application/pdf" name="receipt" />
             </label>
           </div>
 
           <label>
             <span>Nuevo recibo datáfono</span>
-            <input
+            <CompressingFileInput
               accept="image/*,application/pdf"
               name="payment_receipt"
-              type="file"
             />
           </label>
 
