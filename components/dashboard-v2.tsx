@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { formatShortDate } from "@/lib/format-date";
 import { getItemStatus, statusBadgeClass, statusLabel } from "@/lib/item-status";
 import type { Category, ItemCardData } from "@/lib/types";
 
@@ -159,6 +160,14 @@ export function DashboardV2({
                 <small>
                   {[item.store, item.brand].filter(Boolean).join(" · ") || "Compra guardada"}
                 </small>
+                <span className="dz-item__dates">
+                  <span className="dz-item__date">
+                    Devolución: {item.return_until ? formatShortDate(item.return_until) : "—"}
+                  </span>
+                  <span className="dz-item__date">
+                    Garantía: {formatShortDate(item.warranty_until)}
+                  </span>
+                </span>
               </span>
               <span className={`${statusBadgeClass(status)} dz-item__badge`}>
                 {statusLabel(status)}
