@@ -1,6 +1,27 @@
 import Link from "next/link";
+import { unstable_noStore as noStore } from "next/cache";
 import { BrandHomeLink } from "@/components/brand-home-link";
 import { LegalFooter } from "@/components/legal-footer";
+import { hasSupabaseEnv } from "@/lib/demo";
+import { createClient } from "@/lib/supabase-server";
+
+async function getIsLoggedIn(): Promise<boolean> {
+  noStore();
+
+  if (!hasSupabaseEnv()) {
+    return false;
+  }
+
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    return Boolean(user);
+  } catch {
+    return false;
+  }
+}
 
 const library = [
   {
@@ -44,7 +65,9 @@ const examples = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const isLoggedIn = await getIsLoggedIn();
+
   return (
     <>
       <header className="home-nav">
@@ -53,12 +76,20 @@ export default function HomePage() {
           <a href="#como-funciona">Cómo funciona</a>
         </nav>
         <div className="home-nav__actions">
-          <Link className="home-nav__login" href="/login">
-            Entrar
-          </Link>
-          <Link className="home-nav__cta" href="/login?mode=register">
-            Crear cuenta
-          </Link>
+          {isLoggedIn ? (
+            <Link className="home-nav__cta home-nav__cta--panel" href="/dashboard">
+              Mi panel
+            </Link>
+          ) : (
+            <>
+              <Link className="home-nav__login" href="/login">
+                Entrar
+              </Link>
+              <Link className="home-nav__cta" href="/login?mode=register">
+                Crear cuenta
+              </Link>
+            </>
+          )}
         </div>
       </header>
 

@@ -5386,9 +5386,13 @@ html {
     width: 100%;
   }
 
-  /* Home: un solo botón navy "Entrar" */
+  /* Home: un solo botón navy "Entrar" (o "Mi panel" si hay sesión) */
   .home-nav__cta {
     display: none;
+  }
+
+  .home-nav__cta--panel {
+    display: inline-flex;
   }
 
   .home-nav__login {

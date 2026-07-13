@@ -218,7 +218,7 @@ export function SettingsV2({
         )}
       </section>
 
-      {/* Soporte */}
+      {/* Soporte y ayuda */}
       <section className="card-v2 settings__block">
         <div className="settings__row">
           <div>
@@ -227,6 +227,15 @@ export function SettingsV2({
           </div>
           <a className="pd-button pd-button--secondary settings__edit" href="/messages">
             Soporte
+          </a>
+        </div>
+        <div className="settings__row">
+          <div>
+            <strong>Cómo funciona Recorderys</strong>
+            <small>Vuelve a la página de inicio para resolver dudas.</small>
+          </div>
+          <a className="pd-button pd-button--secondary settings__edit" href="/">
+            Ver
           </a>
         </div>
       </section>

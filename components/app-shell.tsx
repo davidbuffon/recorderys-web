@@ -66,7 +66,12 @@ export function AppShell({ children, isAdmin = false }: AppShellProps) {
   return (
     <div className="app-shell">
       <aside className="app-sidebar">
-        <Link className="app-sidebar__logo" href="/dashboard" aria-label="Recorderys">
+        <Link
+          aria-label="Ir a la página de inicio de Recorderys"
+          className="app-sidebar__logo"
+          href="/"
+          title="Página de inicio"
+        >
           <img alt="" src="/brand-icons/browser.png" />
         </Link>
         <div className="app-sidebar__items">
