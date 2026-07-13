@@ -5076,12 +5076,24 @@ textarea {
 }
 
 .home-library__thumb {
-  background: repeating-linear-gradient(45deg, var(--img-ph-a), var(--img-ph-a) 6px, var(--img-ph-b) 6px, var(--img-ph-b) 12px);
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--border);
   border-radius: 12px;
-  display: block;
+  display: flex;
   flex-shrink: 0;
   height: 52px;
+  justify-content: center;
+  overflow: hidden;
   width: 52px;
+}
+
+.home-library__thumb img {
+  display: block;
+  height: 100%;
+  object-fit: contain;
+  padding: 5px;
+  width: 100%;
 }
 
 .home-library__copy {

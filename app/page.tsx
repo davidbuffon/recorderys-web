@@ -29,18 +29,21 @@ const library = [
     meta: "El Corte Inglés · 229,99 €",
     badge: "Garantía 2029",
     tone: "warranty",
+    image: "/demo/real/cafetera-delonghi.jpg",
   },
   {
     name: "Zapatillas Nordikas",
     meta: "Nordikas · 89,95 €",
     badge: "4 días",
     tone: "return",
+    image: "/demo/real/zapatillas-nordikas.jpg",
   },
   {
     name: "Auriculares Sony",
     meta: "Amazon · 149,90 €",
     badge: "Ticket",
     tone: "saved",
+    image: "/demo/real/auriculares-sony.webp",
   },
 ];
 
@@ -148,7 +151,9 @@ export default async function HomePage() {
             <div className="home-library__list">
               {library.map((entry) => (
                 <div className="home-library__row" key={entry.name}>
-                  <span className="home-library__thumb" aria-hidden="true" />
+                  <span className="home-library__thumb">
+                    <img alt={entry.name} loading="lazy" src={entry.image} />
+                  </span>
                   <div className="home-library__copy">
                     <strong>{entry.name}</strong>
                     <small>{entry.meta}</small>
