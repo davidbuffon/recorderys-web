@@ -5518,14 +5518,22 @@ html {
 .dz-item__copy {
   display: grid;
   flex: 1;
-  gap: 6px;
+  gap: 8px;
   min-width: 0;
+}
+
+.dz-item__head {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
 }
 
 .dz-item__copy strong {
   color: var(--text-1);
   font-family: var(--font-heading);
   font-size: 20px;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -5539,32 +5547,31 @@ html {
   white-space: nowrap;
 }
 
-.dz-item__dates {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  margin-top: 6px;
-}
-
-.dz-item__date {
-  color: var(--text-2);
-  font-size: 13px;
-}
-
 .dz-item__badge {
-  align-self: flex-start;
   flex-shrink: 0;
 }
 
 @media (max-width: 640px) {
   .dz-item {
-    align-items: flex-start;
+    align-items: stretch;
+    flex-direction: column;
     gap: 12px;
     padding: 12px;
   }
 
+  .dz-item__thumb {
+    aspect-ratio: 4 / 3;
+    height: auto;
+    width: 100%;
+  }
+
+  .dz-item__head {
+    align-items: center;
+    gap: 12px;
+  }
+
   .dz-item__copy strong {
-    font-size: 17px;
+    font-size: 18px;
     white-space: normal;
   }
 
@@ -5573,6 +5580,6 @@ html {
   }
 
   .dz-item__badge {
-    font-size: 11px;
+    font-size: 12px;
   }
 }
