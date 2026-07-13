@@ -48,7 +48,7 @@ export function AppShell({ children, isAdmin = false }: AppShellProps) {
   const pathname = usePathname();
 
   const items = [
-    { href: "/dashboard", label: "Inicio", icon: HomeIcon },
+    { href: "/dashboard", label: "Mi Panel", icon: HomeIcon },
     { href: "/items/new", label: "Añadir", icon: AddIcon },
     ...(isAdmin
       ? [{ href: "/admin/receipts", label: "Revisar", icon: ReviewIcon }]
