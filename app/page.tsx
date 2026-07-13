@@ -50,18 +50,21 @@ const examples = [
     name: "Aspiradora sin cable",
     meta: "Dyson · MediaMarkt",
     note: "Garantía y ticket siempre a mano",
+    image: "/demo/real/aspiradora-dyson.jpeg",
   },
   {
     category: "Calzado",
     name: "Zapatillas de casa",
     meta: "Nordikas · Nordikas",
     note: "Plazos de devolución bajo control",
+    image: "/demo/real/zapatillas-nordikas.jpg",
   },
   {
     category: "Electrónica",
     name: "Auriculares inalámbricos",
     meta: "Sony · Amazon",
     note: "Compra localizada en segundos",
+    image: "/demo/real/auriculares-sony.webp",
   },
 ];
 
@@ -224,7 +227,9 @@ export default async function HomePage() {
           <div className="home-examples">
             {examples.map((product) => (
               <article className="home-example card-v2" key={product.name}>
-                <span className="home-example__media" aria-hidden="true" />
+                <span className="home-example__media">
+                  <img alt={product.name} loading="lazy" src={product.image} />
+                </span>
                 <div className="home-example__body">
                   <span className="home-example__category">{product.category}</span>
                   <strong>{product.name}</strong>

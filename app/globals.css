@@ -5255,9 +5255,20 @@ html {
 }
 
 .home-example__media {
+  align-items: center;
   aspect-ratio: 16 / 9;
-  background: repeating-linear-gradient(45deg, var(--img-ph-a), var(--img-ph-a) 8px, var(--img-ph-b) 8px, var(--img-ph-b) 16px);
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.home-example__media img {
   display: block;
+  height: 100%;
+  object-fit: contain;
+  padding: 14px;
+  width: 100%;
 }
 
 .home-example__body {
