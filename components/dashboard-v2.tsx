@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { getItemStatus, statusBadgeClass, statusLabel } from "@/lib/item-status";
+import { getItemBadges, getItemStatus, statusBadgeClass, statusLabel } from "@/lib/item-status";
 import type { Category, ItemCardData } from "@/lib/types";
 
 type DashboardV2Props = {
@@ -164,6 +164,16 @@ export function DashboardV2({
                 <small>
                   {[item.store, item.brand].filter(Boolean).join(" · ") || "Compra guardada"}
                 </small>
+              </span>
+              <span className="dz-item__badges">
+                {getItemBadges(item).map((badge) => (
+                  <span
+                    className={`status-badge status-badge--${badge.kind}`}
+                    key={badge.label}
+                  >
+                    {badge.label}
+                  </span>
+                ))}
               </span>
             </Link>
           ))}

@@ -55,6 +55,51 @@ export function statusLabel(status: ItemStatus): string {
   }
 }
 
+export type ItemBadge = {
+  kind: "return" | "warranty" | "expired";
+  label: string;
+};
+
+/**
+ * Badges de garantía y devolución de una compra. Puede devolver ninguno,
+ * uno o los dos. La devolución vencida se marca como "expired" (rojo apagado).
+ */
+export function getItemBadges(item: {
+  return_until?: string | null;
+  warranty_until?: string | null;
+  warranty_until_manual?: string | null;
+}): ItemBadge[] {
+  const today = startOfDay(new Date());
+  const returnUntil = parseDate(item.return_until);
+  const warrantyUntil = parseDate(item.warranty_until_manual ?? item.warranty_until);
+  const badges: ItemBadge[] = [];
+
+  if (returnUntil) {
+    if (returnUntil >= today) {
+      const daysLeft = Math.round((returnUntil.getTime() - today.getTime()) / DAY_MS);
+      badges.push({
+        kind: "return",
+        label:
+          daysLeft === 0
+            ? "Devolución: hoy"
+            : `Devolución: ${daysLeft} día${daysLeft === 1 ? "" : "s"}`,
+      });
+    } else {
+      badges.push({ kind: "expired", label: "Devolución vencida" });
+    }
+  }
+
+  if (warrantyUntil) {
+    if (warrantyUntil >= today) {
+      badges.push({ kind: "warranty", label: `Garantía hasta ${warrantyUntil.getFullYear()}` });
+    } else {
+      badges.push({ kind: "expired", label: "Garantía vencida" });
+    }
+  }
+
+  return badges;
+}
+
 function parseDate(value?: string | null): Date | null {
   if (!value) return null;
   const d = new Date(value);

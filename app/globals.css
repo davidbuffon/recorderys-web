@@ -5551,35 +5551,64 @@ html {
   flex-shrink: 0;
 }
 
+/* Los dos badges (garantía + devolución) solo se muestran en móvil */
+.dz-item__badges {
+  display: none;
+}
+
 @media (max-width: 640px) {
+  /* Layout móvil: imagen media a la izquierda, nombre + tienda a su
+     derecha, y los badges debajo de la imagen. */
   .dz-item {
-    align-items: stretch;
-    flex-direction: column;
-    gap: 12px;
+    align-items: start;
+    column-gap: 14px;
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    grid-template-rows: auto auto;
     padding: 12px;
+    row-gap: 10px;
   }
 
   .dz-item__thumb {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 1 / 1;
+    grid-column: 1;
+    grid-row: 1;
     height: auto;
-    width: 100%;
+    width: 150px;
   }
 
+  .dz-item__copy {
+    align-self: center;
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  /* En móvil el badge único de escritorio se oculta; el nombre ocupa la línea */
   .dz-item__head {
-    align-items: center;
-    gap: 12px;
+    display: block;
+  }
+
+  .dz-item__badge {
+    display: none;
   }
 
   .dz-item__copy strong {
-    font-size: 18px;
+    font-size: 17px;
     white-space: normal;
   }
 
   .dz-item__copy small {
+    display: block;
+    margin-top: 4px;
     white-space: normal;
   }
 
-  .dz-item__badge {
-    font-size: 12px;
+  .dz-item__badges {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    grid-column: 1;
+    grid-row: 2;
   }
 }
