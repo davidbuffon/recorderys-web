@@ -3971,17 +3971,22 @@ textarea {
 
 .pd-image {
   align-items: center;
-  aspect-ratio: 4 / 3;
-  background: repeating-linear-gradient(45deg, var(--img-ph-a), var(--img-ph-a) 8px, var(--img-ph-b) 8px, var(--img-ph-b) 16px);
+  aspect-ratio: 1 / 1;
+  background: #fff;
+  border: 1px solid var(--border);
   display: flex;
   justify-content: center;
   overflow: hidden;
 }
 
+.pd-image:not(:has(img)) {
+  background: repeating-linear-gradient(45deg, var(--img-ph-a), var(--img-ph-a) 8px, var(--img-ph-b) 8px, var(--img-ph-b) 16px);
+}
+
 .pd-image img {
   display: block;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   width: 100%;
 }
 
@@ -5457,5 +5462,93 @@ html {
     margin-right: -16px;
     padding-left: 16px;
     padding-right: 16px;
+  }
+}
+
+/* ===================== v2: dashboard como lista (estilo biblioteca) ===================== */
+
+.dz-list {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+}
+
+.dz-item {
+  align-items: center;
+  background: var(--surface-2);
+  border-radius: 14px;
+  display: flex;
+  gap: 14px;
+  padding: 12px 16px;
+  transition: background 140ms ease, box-shadow 140ms ease;
+}
+
+.dz-item:hover {
+  background: var(--surface-card);
+  box-shadow: 0 6px 16px rgba(16, 40, 63, 0.08);
+}
+
+.dz-item__thumb {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  flex-shrink: 0;
+  height: 56px;
+  justify-content: center;
+  overflow: hidden;
+  width: 56px;
+}
+
+.dz-item__thumb img {
+  display: block;
+  height: 100%;
+  object-fit: contain;
+  padding: 5px;
+  width: 100%;
+}
+
+.dz-item__thumb .item-card-v2__placeholder {
+  font-size: 9px;
+  padding: 4px;
+  text-align: center;
+}
+
+.dz-item__copy {
+  display: grid;
+  flex: 1;
+  gap: 2px;
+  min-width: 0;
+}
+
+.dz-item__copy strong {
+  color: var(--text-1);
+  font-family: var(--font-heading);
+  font-size: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dz-item__copy small {
+  color: var(--text-2);
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dz-item__badge {
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .dz-item {
+    flex-wrap: wrap;
+  }
+
+  .dz-item__badge {
+    margin-left: 70px;
   }
 }

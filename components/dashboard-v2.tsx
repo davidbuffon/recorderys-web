@@ -148,18 +148,20 @@ export function DashboardV2({
       )}
 
       {withStatus.length > 0 ? (
-        <div className="items-grid-v2">
+        <div className="dz-list card-v2">
           {withStatus.map(({ item, status }) => (
-            <Link className="item-card-v2 card-v2" href={`/items/${item.id}`} key={item.id}>
-              <span className="item-card-v2__image">
+            <Link className="dz-item" href={`/items/${item.id}`} key={item.id}>
+              <span className="dz-item__thumb">
                 <ItemImage item={item} />
               </span>
-              <span className="item-card-v2__body">
-                <span className={statusBadgeClass(status)}>{statusLabel(status)}</span>
-                <strong className="item-card-v2__name">{item.name}</strong>
-                <small className="item-card-v2__meta">
+              <span className="dz-item__copy">
+                <strong>{item.name}</strong>
+                <small>
                   {[item.store, item.brand].filter(Boolean).join(" · ") || "Compra guardada"}
                 </small>
+              </span>
+              <span className={`${statusBadgeClass(status)} dz-item__badge`}>
+                {statusLabel(status)}
               </span>
             </Link>
           ))}
