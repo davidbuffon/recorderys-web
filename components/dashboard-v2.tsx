@@ -148,36 +148,52 @@ export function DashboardV2({
       )}
 
       {withStatus.length > 0 ? (
-        <div className="dz-list card-v2">
-          {withStatus.map(({ item, status }) => (
-            <Link className="dz-item" href={`/items/${item.id}`} key={item.id}>
-              <span className="dz-item__thumb">
-                <ItemImage item={item} />
-              </span>
-              <span className="dz-item__copy">
-                <span className="dz-item__head">
-                  <strong>{item.name}</strong>
-                  <span className={`${statusBadgeClass(status)} dz-item__badge`}>
-                    {statusLabel(status)}
-                  </span>
+        <>
+          {/* Escritorio: tarjetas en cuadrícula (3 por fila) */}
+          <div className="items-grid-v2 dz-desktop-only">
+            {withStatus.map(({ item, status }) => (
+              <Link className="item-card-v2 card-v2" href={`/items/${item.id}`} key={item.id}>
+                <span className="item-card-v2__image">
+                  <ItemImage item={item} />
                 </span>
-                <small>
-                  {[item.store, item.brand].filter(Boolean).join(" · ") || "Compra guardada"}
-                </small>
-              </span>
-              <span className="dz-item__badges">
-                {getItemBadges(item).map((badge) => (
-                  <span
-                    className={`status-badge status-badge--${badge.kind}`}
-                    key={badge.label}
-                  >
-                    {badge.label}
-                  </span>
-                ))}
-              </span>
-            </Link>
-          ))}
-        </div>
+                <span className="item-card-v2__body">
+                  <span className={statusBadgeClass(status)}>{statusLabel(status)}</span>
+                  <strong className="item-card-v2__name">{item.name}</strong>
+                  <small className="item-card-v2__meta">
+                    {[item.store, item.brand].filter(Boolean).join(" · ") || "Compra guardada"}
+                  </small>
+                </span>
+              </Link>
+            ))}
+          </div>
+
+          {/* Móvil: lista con imagen a media y badges bajo la foto */}
+          <div className="dz-list card-v2 dz-mobile-only">
+            {withStatus.map(({ item }) => (
+              <Link className="dz-item" href={`/items/${item.id}`} key={item.id}>
+                <span className="dz-item__thumb">
+                  <ItemImage item={item} />
+                </span>
+                <span className="dz-item__copy">
+                  <strong>{item.name}</strong>
+                  <small>
+                    {[item.store, item.brand].filter(Boolean).join(" · ") || "Compra guardada"}
+                  </small>
+                </span>
+                <span className="dz-item__badges">
+                  {getItemBadges(item).map((badge) => (
+                    <span
+                      className={`status-badge status-badge--${badge.kind}`}
+                      key={badge.label}
+                    >
+                      {badge.label}
+                    </span>
+                  ))}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </>
       ) : (
         <section className="card-v2 dz-empty">
           <h2>

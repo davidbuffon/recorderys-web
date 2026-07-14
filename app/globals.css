@@ -5551,12 +5551,20 @@ html {
   flex-shrink: 0;
 }
 
-/* Los dos badges (garantía + devolución) solo se muestran en móvil */
-.dz-item__badges {
-  display: none;
+/* Toggle escritorio (tarjetas) / móvil (lista) */
+.dz-mobile-only {
+  display: none !important;
 }
 
 @media (max-width: 640px) {
+  .dz-desktop-only {
+    display: none !important;
+  }
+
+  .dz-mobile-only {
+    display: grid !important;
+  }
+
   /* Layout móvil: imagen media a la izquierda, nombre + tienda a su
      derecha, y los badges debajo de la imagen. */
   .dz-item {
@@ -5581,15 +5589,6 @@ html {
     align-self: center;
     grid-column: 2;
     grid-row: 1;
-  }
-
-  /* En móvil el badge único de escritorio se oculta; el nombre ocupa la línea */
-  .dz-item__head {
-    display: block;
-  }
-
-  .dz-item__badge {
-    display: none;
   }
 
   .dz-item__copy strong {
