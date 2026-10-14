@@ -19,8 +19,8 @@ type FieldSource = "ai" | "manual";
 const WARRANTY_OPTIONS = [
   { label: "Sin garantía", years: 0 },
   { label: "1 año", years: 1 },
-  { label: "2 años (ley)", years: 2 },
-  { label: "3 años", years: 3 },
+  { label: "2 años", years: 2 },
+  { label: "3 años (ley)", years: 3 },
 ] as const;
 
 const RETURN_OPTIONS = [
@@ -72,7 +72,7 @@ export function NewItemWizard({ action, categories }: NewItemWizardProps) {
   const [categoryId, setCategoryId] = useState("");
   const [aiFields, setAiFields] = useState<Record<string, boolean>>({});
 
-  const [warrantyYears, setWarrantyYears] = useState<number>(2);
+  const [warrantyYears, setWarrantyYears] = useState<number>(3);
   const [returnDays, setReturnDays] = useState<number>(14);
   const [aiReturnUntil, setAiReturnUntil] = useState<string | null>(null);
 
@@ -83,10 +83,14 @@ export function NewItemWizard({ action, categories }: NewItemWizardProps) {
     : purchaseDate && returnDays > 0
       ? addDays(purchaseDate, returnDays)
       : "";
+  // Fecha explícita solo para 1 y 2 años. "3 años (ley)" se deja sin fecha
+  // manual porque es la estimación legal que calcula la BD, y "Sin garantía"
+  // (0) no guarda fecha y marca has_warranty = false.
   const warrantyManual =
-    purchaseDate && warrantyYears > 0 && warrantyYears !== 2
+    purchaseDate && (warrantyYears === 1 || warrantyYears === 2)
       ? addYears(purchaseDate, warrantyYears)
       : "";
+  const hasWarranty = warrantyYears > 0;
 
   const canContinueStep2 = itemName.trim() !== "" && purchaseDate !== "";
   const progress = step === 1 ? 33 : step === 2 ? 66 : 100;
@@ -151,6 +155,7 @@ export function NewItemWizard({ action, categories }: NewItemWizardProps) {
         type="hidden"
         value={aiReturnUntil ? "estimated" : returnDays > 0 ? "estimated" : "manual"}
       />
+      <input name="has_warranty" type="hidden" value={hasWarranty ? "true" : "false"} />
       <input name="warranty_until_manual" type="hidden" value={warrantyManual} />
       <input
         name="warranty_until_source"
@@ -418,7 +423,7 @@ export function NewItemWizard({ action, categories }: NewItemWizardProps) {
                   ? "Sin garantía"
                   : warrantyManual
                     ? `Hasta ${warrantyManual}`
-                    : "2 años (estimación legal)"}
+                    : "3 años (estimación legal)"}
               </dd>
             </div>
             <div>
