@@ -38,6 +38,7 @@ async function updateItem(id: string, formData: FormData) {
   const purchaseDate = String(formData.get("purchase_date") || "");
   const returnUntil = String(formData.get("return_until") || "");
   const warrantyManual = String(formData.get("warranty_until_manual") || "");
+  const noWarranty = formData.get("no_warranty") === "true";
   const photoFile = formData.get("customer_photo") as File | null;
   const receiptFile = formData.get("receipt") as File | null;
   const paymentReceiptFile = formData.get("payment_receipt") as File | null;
@@ -79,6 +80,7 @@ async function updateItem(id: string, formData: FormData) {
     purchase_date: string;
     return_until: string | null;
     warranty_until_manual: string | null;
+    has_warranty: boolean;
     return_source: "manual" | "undefined";
     warranty_source: "manual" | "legal_estimate";
     photo_path?: string;
@@ -93,6 +95,7 @@ async function updateItem(id: string, formData: FormData) {
     purchase_date: purchaseDate,
     return_until: returnUntil || null,
     warranty_until_manual: warrantyManual || null,
+    has_warranty: !noWarranty,
     return_source: returnUntil ? "manual" : "undefined",
     warranty_source: warrantyManual ? "manual" : "legal_estimate",
   };
@@ -195,6 +198,7 @@ export default async function EditItemPage({ params }: { params: Params }) {
     purchase_date: string;
     return_until: string | null;
     warranty_until_manual: string | null;
+    has_warranty: boolean;
   } | null = null;
   let isAdmin = false;
 
@@ -221,7 +225,7 @@ export default async function EditItemPage({ params }: { params: Params }) {
     const { data } = await supabase
       .from("items")
       .select(
-        "id,category_id,name,description,brand,store,purchase_date,return_until,warranty_until_manual",
+        "id,category_id,name,description,brand,store,purchase_date,return_until,warranty_until_manual,has_warranty",
       )
       .eq("id", id)
       .eq("user_id", user.id)
@@ -310,6 +314,17 @@ export default async function EditItemPage({ params }: { params: Params }) {
               type="date"
               defaultValue={item.warranty_until_manual ?? ""}
             />
+          </label>
+
+          <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <input
+              name="no_warranty"
+              type="checkbox"
+              value="true"
+              defaultChecked={item.has_warranty === false}
+              style={{ width: "auto" }}
+            />
+            <span>Sin garantía (no hacer seguimiento). Deja la fecha vacía si marcas esta casilla.</span>
           </label>
 
           <label>

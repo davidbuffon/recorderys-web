@@ -1,9 +1,38 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
+import { hasSupabaseEnv } from "@/lib/demo";
+import { createClient } from "@/lib/supabase-server";
 
 export const maxDuration = 30;
 
 const client = new Anthropic();
+
+// Tamaño máximo del archivo aceptado (imagen o PDF).
+const MAX_FILE_BYTES = 8 * 1024 * 1024; // 8 MB
+
+// Rate limit best-effort en memoria, por usuario. En serverless cada instancia
+// tiene su propio mapa, así que no es un límite estricto entre instancias; para
+// eso habría que respaldarlo en Upstash/Supabase. Aun así frena el abuso básico
+// de una misma sesión.
+const RATE_LIMIT_MAX = 15; // lecturas
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // por hora y usuario
+const rateBuckets = new Map<string, number[]>();
+
+function isRateLimited(userId: string): boolean {
+  const now = Date.now();
+  const recent = (rateBuckets.get(userId) ?? []).filter(
+    (ts) => now - ts < RATE_LIMIT_WINDOW_MS,
+  );
+
+  if (recent.length >= RATE_LIMIT_MAX) {
+    rateBuckets.set(userId, recent);
+    return true;
+  }
+
+  recent.push(now);
+  rateBuckets.set(userId, recent);
+  return false;
+}
 
 export type ExtractionResult = {
   name: string | null;
@@ -58,12 +87,44 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "ANTHROPIC_API_KEY not configured" }, { status: 500 });
   }
 
+  // En modo demo (sin Supabase) no hay sesión que validar ni coste que exponer.
+  if (!hasSupabaseEnv()) {
+    return NextResponse.json(
+      { error: "La lectura de tickets no está disponible en modo demo" },
+      { status: 503 },
+    );
+  }
+
+  // Solo usuarios autenticados: este endpoint consume la cuota de Anthropic.
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  }
+
+  if (isRateLimited(user.id)) {
+    return NextResponse.json(
+      { error: "Has hecho demasiadas lecturas seguidas. Prueba de nuevo en un rato." },
+      { status: 429 },
+    );
+  }
+
   try {
     const formData = await req.formData();
     const file = formData.get("receipt") as File | null;
 
     if (!file || file.size === 0) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
+    }
+
+    if (file.size > MAX_FILE_BYTES) {
+      return NextResponse.json(
+        { error: "El archivo supera el límite de 8 MB" },
+        { status: 413 },
+      );
     }
 
     const bytes = await file.arrayBuffer();

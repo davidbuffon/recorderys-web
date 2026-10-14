@@ -45,6 +45,7 @@ async function createItem(formData: FormData) {
   const warrantyUntilSource = String(
     formData.get("warranty_until_source") || "legal_estimate",
   );
+  const hasWarranty = formData.get("has_warranty") !== "false";
   const customerPhotos = formData
     .getAll("customer_photos")
     .filter((entry): entry is File => entry instanceof File && entry.size > 0);
@@ -101,6 +102,7 @@ async function createItem(formData: FormData) {
     purchase_date: string;
     return_until: string | null;
     warranty_until_manual: string | null;
+    has_warranty: boolean;
     return_source: "estimated" | "manual" | "undefined";
     warranty_source: "manual" | "legal_estimate";
     photo_path: string | null;
@@ -116,6 +118,7 @@ async function createItem(formData: FormData) {
     purchase_date: purchaseDate,
     return_until: returnUntil || null,
     warranty_until_manual: warrantyManual || null,
+    has_warranty: hasWarranty,
     return_source: returnUntil
       ? returnUntilSource === "estimated"
         ? "estimated"
