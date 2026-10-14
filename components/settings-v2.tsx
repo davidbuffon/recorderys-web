@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 type SettingsV2Props = {
@@ -10,12 +10,16 @@ type SettingsV2Props = {
   name: string;
   phone: string;
   address: string;
+  notifyReturn: boolean;
+  notifyWarranty: boolean;
   pwError: boolean;
   pwOk: boolean;
+  updateNotificationPrefsAction: (
+    notifyReturn: boolean,
+    notifyWarranty: boolean,
+  ) => Promise<void> | void;
   updateProfileAction: (formData: FormData) => void;
 };
-
-const NOTIF_KEY = "recorderys_notifications";
 
 function Toggle({
   checked,
@@ -43,37 +47,24 @@ export function SettingsV2({
   name,
   phone,
   address,
+  notifyReturn,
+  notifyWarranty,
   pwError,
   pwOk,
+  updateNotificationPrefsAction,
   updateProfileAction,
 }: SettingsV2Props) {
   const [editing, setEditing] = useState(false);
   const [showPassword, setShowPassword] = useState(pwOk || pwError);
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const [notifReturn, setNotifReturn] = useState(true);
-  const [notifWarranty, setNotifWarranty] = useState(true);
-
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(NOTIF_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        setNotifReturn(parsed.return !== false);
-        setNotifWarranty(parsed.warranty !== false);
-      }
-    } catch {
-      // valores por defecto
-    }
-  }, []);
+  const [notifReturn, setNotifReturn] = useState(notifyReturn);
+  const [notifWarranty, setNotifWarranty] = useState(notifyWarranty);
 
   function saveNotif(returnOn: boolean, warrantyOn: boolean) {
+    // Optimista: refleja el cambio al instante y persiste en la BD.
     setNotifReturn(returnOn);
     setNotifWarranty(warrantyOn);
-    try {
-      localStorage.setItem(NOTIF_KEY, JSON.stringify({ return: returnOn, warranty: warrantyOn }));
-    } catch {
-      // sin persistencia
-    }
+    void updateNotificationPrefsAction(returnOn, warrantyOn);
   }
 
   const initials =

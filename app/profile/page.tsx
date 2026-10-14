@@ -53,6 +53,24 @@ async function deleteAccount() {
   }
 
   const adminClient = createAdminClient();
+
+  // Borra los ficheros del usuario en Storage antes de eliminar la cuenta:
+  // deleteUser hace cascade en la base de datos, pero no toca los buckets, así
+  // que sin esto quedarían fotos y tickets huérfanos pese a prometer un borrado
+  // permanente e irreversible.
+  const buckets = ["item-photos", "receipts", "message-attachments"] as const;
+  for (const bucket of buckets) {
+    const { data: files } = await adminClient.storage
+      .from(bucket)
+      .list(user.id, { limit: 1000 });
+
+    if (files && files.length > 0) {
+      await adminClient.storage
+        .from(bucket)
+        .remove(files.map((file) => `${user.id}/${file.name}`));
+    }
+  }
+
   const { error } = await adminClient.auth.admin.deleteUser(user.id);
 
   if (error) {
@@ -63,6 +81,31 @@ async function deleteAccount() {
   cookieStore.getAll().forEach((cookie) => cookieStore.delete(cookie.name));
 
   redirect("/");
+}
+
+async function updateNotificationPrefs(
+  notifyReturn: boolean,
+  notifyWarranty: boolean,
+) {
+  "use server";
+
+  if (!hasSupabaseEnv()) {
+    return;
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return;
+  }
+
+  await supabase
+    .from("profiles")
+    .update({ notify_return: notifyReturn, notify_warranty: notifyWarranty })
+    .eq("id", user.id);
 }
 
 async function updateProfile(formData: FormData) {
@@ -81,17 +124,18 @@ async function updateProfile(formData: FormData) {
     redirect("/login");
   }
 
+  // El perfil ya existe (lo crea el trigger handle_new_user al registrarse), así
+  // que usamos UPDATE en vez de UPSERT: profiles no tiene política de INSERT y un
+  // upsert (INSERT ... ON CONFLICT) lo bloquearía la RLS. No tocamos email,
+  // auth_provider ni last_login: los gestiona la capa de auth.
   const { error } = await supabase
     .from("profiles")
-    .upsert({
-      id: user.id,
+    .update({
       name: String(formData.get("name") || ""),
-      email: user.email ?? "",
       phone: String(formData.get("phone") || ""),
       address: String(formData.get("address") || ""),
-      auth_provider: "email",
-      last_login: new Date().toISOString(),
-    });
+    })
+    .eq("id", user.id);
 
   if (error) {
     throw new Error(error.message);
@@ -143,9 +187,12 @@ export default async function ProfilePage({
         deleteAccountAction={deleteAccount}
         email={profile?.email || email}
         name={profile?.name ?? ""}
+        notifyReturn={profile?.notify_return ?? true}
+        notifyWarranty={profile?.notify_warranty ?? true}
         phone={profile?.phone ?? ""}
         pwError={pwError}
         pwOk={pwOk}
+        updateNotificationPrefsAction={updateNotificationPrefs}
         updateProfileAction={updateProfile}
       />
     </AppShell>
