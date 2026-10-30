@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
 import { hasSupabaseEnv } from "@/lib/demo";
 import { createClient } from "@/lib/supabase-server";
+import { rateLimit, clientIp } from "@/lib/ratelimit";
 
 export const maxDuration = 30;
 
@@ -83,6 +84,14 @@ Reglas:
 - Devuelve SOLO el JSON, sin markdown, sin explicaciones`;
 
 export async function POST(req: NextRequest) {
+  // Límite por IP respaldado por Supabase (robusto entre instancias de serverless),
+  // además del límite por usuario de más abajo. Fail-open si el limitador falla.
+  if (!(await rateLimit(`receipt:${clientIp(req)}`, 20, 3600))) {
+    return NextResponse.json(
+      { error: "Demasiadas peticiones. Prueba de nuevo en un rato." },
+      { status: 429 },
+    );
+  }
   if (!process.env.ANTHROPIC_API_KEY) {
     return NextResponse.json({ error: "ANTHROPIC_API_KEY not configured" }, { status: 500 });
   }
