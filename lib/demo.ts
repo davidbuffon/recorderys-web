@@ -23,8 +23,8 @@ export const demoItems: ItemCardData[] = [
     purchase_date: "2026-04-10",
     return_until: "2026-04-24",
     warranty_until: "2029-04-10",
-    photo_path: "/demo/product-cafetera.svg",
-    cover_image_path: "/demo/product-cafetera.svg",
+    photo_path: "/demo/real/cafetera-delonghi.jpg",
+    cover_image_path: "/demo/real/cafetera-delonghi.jpg",
     user_photos: [
       "/demo/user/cafetera-1.svg",
       "/demo/user/cafetera-2.svg",
@@ -52,8 +52,8 @@ export const demoItems: ItemCardData[] = [
     purchase_date: "2026-04-15",
     return_until: "2026-04-29",
     warranty_until: "2029-04-15",
-    photo_path: "/demo/product-zapatillas.svg",
-    cover_image_path: "/demo/product-zapatillas.svg",
+    photo_path: "/demo/real/zapatillas-nordikas.jpg",
+    cover_image_path: "/demo/real/zapatillas-nordikas.jpg",
     user_photos: [
       "/demo/user/zapatillas-1.svg",
       "/demo/user/zapatillas-2.svg",
@@ -81,8 +81,8 @@ export const demoItems: ItemCardData[] = [
     purchase_date: "2026-03-28",
     return_until: "2026-04-11",
     warranty_until: "2029-03-28",
-    photo_path: "/demo/product-auriculares.svg",
-    cover_image_path: "/demo/product-auriculares.svg",
+    photo_path: "/demo/real/auriculares-sony.webp",
+    cover_image_path: "/demo/real/auriculares-sony.webp",
     user_photos: [
       "/demo/user/auriculares-1.svg",
       "/demo/user/auriculares-2.svg",
@@ -110,8 +110,8 @@ export const demoItems: ItemCardData[] = [
     purchase_date: "2026-03-01",
     return_until: null,
     warranty_until: "2029-03-01",
-    photo_path: "/demo/product-aspiradora.svg",
-    cover_image_path: "/demo/product-aspiradora.svg",
+    photo_path: "/demo/real/aspiradora-dyson.jpeg",
+    cover_image_path: "/demo/real/aspiradora-dyson.jpeg",
     user_photos: [
       "/demo/user/aspiradora-1.svg",
       "/demo/user/aspiradora-2.svg",

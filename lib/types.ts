@@ -12,7 +12,8 @@ export type ItemCardData = {
   store: string | null;
   purchase_date: string;
   return_until: string | null;
-  warranty_until: string;
+  warranty_until: string | null;
+  warranty_until_manual?: string | null;
   photo_path: string | null;
   cover_image_path?: string | null;
   user_photos?: string[] | null;
