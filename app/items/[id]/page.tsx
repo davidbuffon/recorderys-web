@@ -150,7 +150,7 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
 
       <div className="pd-grid">
         <div className="pd-media">
-          <div className="pd-image card-v2">
+          <div id="fotos" className="pd-image card-v2">
             {coverImageHref ? (
               <img alt={item.name} src={coverImageHref} />
             ) : (
@@ -159,7 +159,7 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
           </div>
 
           {receiptHref ? (
-            <a className="pd-ticket card-v2" href={receiptHref} rel="noreferrer" target="_blank">
+            <a id="ticket" className="pd-ticket card-v2" href={receiptHref} rel="noreferrer" target="_blank">
               <span className="pd-ticket__icon" aria-hidden="true">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M4 3h13l3 3v15l-2-1.5L16 21l-2-1.5L12 21l-2-1.5L8 21l-2-1.5L4 21Z" />
@@ -169,7 +169,7 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
               <span className="pd-ticket__copy">
                 <strong>Ticket original</strong>
                 <small>
-                  {purchaseDate ? `Guardado el ${formatShortDate(purchaseDate)}` : "Disponible"}
+                  {purchaseDate ? `Compra del ${formatShortDate(purchaseDate)}` : "Disponible"}
                 </small>
               </span>
               <svg aria-hidden="true" className="pd-ticket__download" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -199,6 +199,7 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
               </svg>
             </a>
           ) : null}
+          {item.user_photos?.length > 0 && <div className="purchase-gallery">{item.user_photos.map((photo: string, index: number) => <img key={photo} src={photo} alt={`${item.name}, foto ${index + 1}`} />)}</div>}
         </div>
 
         <div className="pd-info">
@@ -209,7 +210,7 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
           </p>
 
           {timeline.length > 0 && (
-            <section className="pd-timeline card-v2" aria-label="Cronología">
+            <section id="plazos" className="pd-timeline card-v2" aria-label="Cronología">
               <h2>Cronología</h2>
               <ol>
                 {timeline.map((step) => (
@@ -237,13 +238,16 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
             </p>
           ) : null}
 
+          <section id="datos" className="purchase-details"><h2>Datos de la compra</h2><dl><dt>Marca</dt><dd>{item.brand || "No registrada"}</dd><dt>Tienda</dt><dd>{item.store || "No registrada"}</dd><dt>Categoría</dt><dd>{item.categories?.name || "Sin categoría"}</dd><dt>Modelo</dt><dd>{item.model || "No registrado"}</dd><dt>Número de serie</dt><dd>{item.serial_number || "No registrado"}</dd></dl></section>
+          {timeline.length === 0 && <section id="plazos"><h2>Plazos</h2><p>No hay fechas registradas.</p></section>}
+          {!receiptHref && <section id="ticket"><h2>Ticket original</h2><p>No hay ticket adjunto.</p></section>}
           <div className="pd-actions">
             <Link className="pd-button pd-button--primary" href={`/items/${item.id}/edit`}>
               Editar artículo
             </Link>
             {receiptHref ? (
               <a className="pd-button pd-button--secondary" href={receiptHref} rel="noreferrer" target="_blank">
-                Descargar ticket
+                Abrir ticket original
               </a>
             ) : null}
           </div>

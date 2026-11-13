@@ -74,7 +74,7 @@ export default async function DashboardPage({
     let query = supabase
       .from("items")
       .select(
-        "id,name,brand,store,purchase_date,return_until,warranty_until,photo_path,categories(id,name,slug,color),receipts(duplicate_status,trust_score)",
+        "id,name,brand,store,purchase_date,return_until,warranty_until,warranty_until_manual,photo_path,categories(id,name,slug,color),receipts(duplicate_status,trust_score)",
       )
       .eq("user_id", user.id)
       .order("created_at", { ascending: false });

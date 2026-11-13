@@ -1,8 +1,9 @@
 "use client";
 
+import { PurchaseCard } from "@/components/purchase-card";
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { getItemBadges, getItemStatus, statusBadgeClass, statusLabel } from "@/lib/item-status";
+import { getItemStatus, statusLabel } from "@/lib/item-status";
 import type { Category, ItemCardData } from "@/lib/types";
 
 type DashboardV2Props = {
@@ -79,6 +80,7 @@ export function DashboardV2({
               <circle cx="11" cy="11" r="7" />
               <line x1="21" y1="21" x2="16.5" y2="16.5" />
             </svg>
+            {selectedCategory && <input type="hidden" name="category" value={selectedCategory} />}
             <input
               aria-label="Buscar una compra"
               defaultValue={search}
@@ -102,6 +104,7 @@ export function DashboardV2({
           <button
             className={`wizard-chip ${!selectedCategory ? "wizard-chip--active" : ""}`}
             onClick={() => selectCategory("")}
+            aria-pressed={!selectedCategory}
             type="button"
           >
             Todos
@@ -112,6 +115,7 @@ export function DashboardV2({
                 selectedCategory === category.slug ? "wizard-chip--active" : ""
               }`}
               key={category.id}
+              aria-pressed={selectedCategory === category.slug}
               onClick={() => selectCategory(category.slug)}
               type="button"
             >
@@ -149,50 +153,7 @@ export function DashboardV2({
 
       {withStatus.length > 0 ? (
         <>
-          {/* Escritorio: tarjetas en cuadrícula (3 por fila) */}
-          <div className="items-grid-v2 dz-desktop-only">
-            {withStatus.map(({ item, status }) => (
-              <Link className="item-card-v2 card-v2" href={`/items/${item.id}`} key={item.id}>
-                <span className="item-card-v2__image">
-                  <ItemImage item={item} />
-                </span>
-                <span className="item-card-v2__body">
-                  <span className={statusBadgeClass(status)}>{statusLabel(status)}</span>
-                  <strong className="item-card-v2__name">{item.name}</strong>
-                  <small className="item-card-v2__meta">
-                    {[item.store, item.brand].filter(Boolean).join(" · ") || "Compra guardada"}
-                  </small>
-                </span>
-              </Link>
-            ))}
-          </div>
-
-          {/* Móvil: lista con imagen a media y badges bajo la foto */}
-          <div className="dz-list card-v2 dz-mobile-only">
-            {withStatus.map(({ item }) => (
-              <Link className="dz-item" href={`/items/${item.id}`} key={item.id}>
-                <span className="dz-item__thumb">
-                  <ItemImage item={item} />
-                </span>
-                <span className="dz-item__copy">
-                  <strong>{item.name}</strong>
-                  <small>
-                    {[item.store, item.brand].filter(Boolean).join(" · ") || "Compra guardada"}
-                  </small>
-                </span>
-                <span className="dz-item__badges">
-                  {getItemBadges(item).map((badge) => (
-                    <span
-                      className={`status-badge status-badge--${badge.kind}`}
-                      key={badge.label}
-                    >
-                      {badge.label}
-                    </span>
-                  ))}
-                </span>
-              </Link>
-            ))}
-          </div>
+          <div className="purchase-grid">{withStatus.map(({item}) => <PurchaseCard item={item} key={item.id} />)}</div>
         </>
       ) : (
         <section className="card-v2 dz-empty">
