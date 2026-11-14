@@ -1,3 +1,4 @@
+import "./detail.css";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -141,120 +142,29 @@ export default async function ItemDetailPage({ params }: { params: Params }) {
 
   return (
     <AppShell isAdmin={isAdmin}>
-      <Link className="pd-back" href="/dashboard">
-        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="15 18 9 12 15 6" />
-        </svg>
-        Volver a tus compras
-      </Link>
-
-      <div className="pd-grid">
-        <div className="pd-media">
-          <div id="fotos" className="pd-image card-v2">
-            {coverImageHref ? (
-              <img alt={item.name} src={coverImageHref} />
-            ) : (
-              <span className="item-card-v2__placeholder">sin-foto</span>
-            )}
+      <div className="product-detail">
+        <Link className="pd-back" href="/dashboard">← Volver a Biblioteca</Link>
+        <header className="product-heading">
+          <div><p className="product-category">{item.categories?.name || "Tu biblioteca"}</p><h1>{item.name}</h1><p>{[item.brand, item.store].filter(Boolean).join(" · ")}</p></div>
+          <Link className="pd-button pd-button--primary" href={`/items/${item.id}/edit`}>Editar compra</Link>
+        </header>
+        <div className="product-overview">
+          <div className="product-cover">{coverImageHref ? <img src={coverImageHref} alt={item.name} /> : <p>Sin foto del producto</p>}</div>
+          <div className="product-summary"><span className={statusBadgeClass(status)}>{statusLabel(status)}</span><h2>Tu compra, de un vistazo.</h2><dl><div><dt>Comprado en</dt><dd>{item.store || "No registrado"}</dd></div><div><dt>Fecha de compra</dt><dd>{formatShortDate(purchaseDate)}</dd></div><div><dt>Fin de devolución</dt><dd>{returnUntil ? formatShortDate(returnUntil) : "No registrado"}</dd></div><div><dt>Fin de garantía</dt><dd>{warrantyUntil ? formatShortDate(warrantyUntil) : "No registrado"}</dd></div></dl>
+          {receiptMeta && receiptMeta.duplicate_status !== "clear" && <p className="product-review">{receiptMeta.review_notes || "Este ticket está siendo revisado."}</p>}
           </div>
-
-          {receiptHref ? (
-            <a id="ticket" className="pd-ticket card-v2" href={receiptHref} rel="noreferrer" target="_blank">
-              <span className="pd-ticket__icon" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 3h13l3 3v15l-2-1.5L16 21l-2-1.5L12 21l-2-1.5L8 21l-2-1.5L4 21Z" />
-                  <path d="M8 8h8M8 12h8M8 16h5" />
-                </svg>
-              </span>
-              <span className="pd-ticket__copy">
-                <strong>Ticket original</strong>
-                <small>
-                  {purchaseDate ? `Compra del ${formatShortDate(purchaseDate)}` : "Disponible"}
-                </small>
-              </span>
-              <svg aria-hidden="true" className="pd-ticket__download" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-            </a>
-          ) : null}
-
-          {paymentReceiptHref ? (
-            <a className="pd-ticket card-v2" href={paymentReceiptHref} rel="noreferrer" target="_blank">
-              <span className="pd-ticket__icon" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="5" width="20" height="14" rx="2" />
-                  <line x1="2" y1="10" x2="22" y2="10" />
-                </svg>
-              </span>
-              <span className="pd-ticket__copy">
-                <strong>Recibo datáfono</strong>
-                <small>Justificante de pago</small>
-              </span>
-              <svg aria-hidden="true" className="pd-ticket__download" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-            </a>
-          ) : null}
-          {item.user_photos?.length > 0 && <div className="purchase-gallery">{item.user_photos.map((photo: string, index: number) => <img key={photo} src={photo} alt={`${item.name}, foto ${index + 1}`} />)}</div>}
         </div>
-
-        <div className="pd-info">
-          <span className={statusBadgeClass(status)}>{statusLabel(status)}</span>
-          <h1>{item.name}</h1>
-          <p className="pd-info__meta">
-            {[item.store, item.brand].filter(Boolean).join(" · ") || "Compra guardada"}
-          </p>
-
-          {timeline.length > 0 && (
-            <section id="plazos" className="pd-timeline card-v2" aria-label="Cronología">
-              <h2>Cronología</h2>
-              <ol>
-                {timeline.map((step) => (
-                  <li className={step.done ? "pd-timeline__step pd-timeline__step--done" : "pd-timeline__step"} key={step.label}>
-                    <span className="pd-timeline__dot" aria-hidden="true">
-                      {step.done ? (
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                      ) : null}
-                    </span>
-                    <span className="pd-timeline__copy">
-                      <strong>{step.label}</strong>
-                      <small>{formatShortDate(step.date)}</small>
-                    </span>
-                  </li>
-                ))}
-              </ol>
-            </section>
-          )}
-
-          {receiptMeta && receiptMeta.duplicate_status !== "clear" ? (
-            <p className="pd-review-note">
-              {receiptMeta.review_notes || "Este ticket está siendo revisado."}
-            </p>
-          ) : null}
-
-          <section id="datos" className="purchase-details"><h2>Datos de la compra</h2><dl><dt>Marca</dt><dd>{item.brand || "No registrada"}</dd><dt>Tienda</dt><dd>{item.store || "No registrada"}</dd><dt>Categoría</dt><dd>{item.categories?.name || "Sin categoría"}</dd><dt>Modelo</dt><dd>{item.model || "No registrado"}</dd><dt>Número de serie</dt><dd>{item.serial_number || "No registrado"}</dd></dl></section>
-          {timeline.length === 0 && <section id="plazos"><h2>Plazos</h2><p>No hay fechas registradas.</p></section>}
-          {!receiptHref && <section id="ticket"><h2>Ticket original</h2><p>No hay ticket adjunto.</p></section>}
-          <div className="pd-actions">
-            <Link className="pd-button pd-button--primary" href={`/items/${item.id}/edit`}>
-              Editar artículo
-            </Link>
-            {receiptHref ? (
-              <a className="pd-button pd-button--secondary" href={receiptHref} rel="noreferrer" target="_blank">
-                Abrir ticket original
-              </a>
-            ) : null}
-          </div>
-
-          {item.description ? (
-            <p className="pd-notes">{item.description}</p>
-          ) : null}
+        <nav className="product-sections" aria-label="Información de la compra">
+          <a href="#ticket"><span aria-hidden="true">▤</span> Ticket</a><a href="#plazos"><span aria-hidden="true">◷</span> Plazos</a><a href="#fotos"><span aria-hidden="true">▧</span> Fotos</a><a href="#datos"><span aria-hidden="true">ⓘ</span> Datos</a>
+        </nav>
+        <div className="product-information">
+          <section id="ticket" className="product-section"><p className="product-kicker">01 / DOCUMENTOS</p><h2>Todo lo que acredita tu compra.</h2><p className="product-help">Abre tus documentos originales en una nueva pestaña.</p><div className="product-documents">
+            {receiptHref ? <a href={receiptHref} target="_blank" rel="noreferrer"><span className="product-document-icon" aria-hidden="true">▤</span><span><strong>Ticket original</strong><small>Justificante de compra</small></span><span aria-hidden="true">↗</span></a> : <div className="product-empty"><strong>Ticket no adjunto</strong><p>Puedes añadirlo al editar la compra.</p></div>}
+            {paymentReceiptHref ? <a href={paymentReceiptHref} target="_blank" rel="noreferrer"><span className="product-document-icon" aria-hidden="true">▤</span><span><strong>Justificante de pago</strong><small>Recibo del datáfono</small></span><span aria-hidden="true">↗</span></a> : <div className="product-empty"><strong>Sin justificante de pago adicional</strong><p>Es un documento opcional.</p></div>}
+          </div></section>
+          <section id="plazos" className="product-section"><p className="product-kicker">02 / PLAZOS</p><h2>Las fechas importantes.</h2><p className="product-help">Cronología de los plazos registrados para esta compra.</p>{timeline.length ? <ol className="product-timeline">{timeline.map(step => <li key={step.label}><span className={step.done ? "product-milestone completed" : "product-milestone"} aria-hidden="true">{step.done ? "✓" : "○"}</span><div><strong>{step.label}</strong><time dateTime={step.date}>{formatShortDate(step.date)}</time><small>{step.label === "Compra realizada" ? "Compra registrada" : step.done ? "Fecha pasada" : "Próxima fecha"}</small></div></li>)}</ol> : <p className="product-empty">No hay fechas registradas. Puedes completarlas al editar la compra.</p>}</section>
+          <section id="fotos" className="product-section"><p className="product-kicker">03 / FOTOS</p><h2>Reconoce tu producto.</h2><div className="product-photo-gallery">{[coverImageHref, ...(!hasSupabaseEnv() ? item.user_photos || [] : [])].filter(Boolean).map((photo: string, index: number) => <a key={`${photo}-${index}`} href={photo} target="_blank" rel="noreferrer" aria-label={`Abrir foto ${index + 1} de ${item.name}`}><img loading="lazy" src={photo} alt={`${item.name}, foto ${index + 1}`} /><span>{index === 0 ? "Foto principal" : `Foto ${index + 1}`} ↗</span></a>)}</div>{!coverImageHref && <p className="product-empty">Todavía no hay una foto principal. Añádela al editar la compra.</p>}</section>
+          <section id="datos" className="product-section"><p className="product-kicker">04 / DATOS</p><h2>Los detalles que conviene guardar.</h2><dl className="product-data">{[["Producto",item.name],["Marca",item.brand],["Tienda",item.store],["Categoría",item.categories?.name],["Modelo",item.model],["Número de serie",item.serial_number]].map(([label,value]) => <div key={label}><dt>{label}</dt><dd>{value || "No registrado"}</dd></div>)}</dl><div className="product-notes"><h3>Tus notas</h3><p>{item.description || "No has añadido notas a esta compra."}</p></div><Link className="pd-button pd-button--secondary" href={`/items/${item.id}/edit`}>Editar los datos de esta compra</Link></section>
         </div>
       </div>
     </AppShell>
