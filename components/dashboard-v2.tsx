@@ -64,6 +64,11 @@ export function DashboardV2({
 
   return (
     <>
+      <div className="library-brand-banner">
+        <Link href="/" aria-label="RECORDERYS — Inicio">
+          <img src="/brand/recorderys-color-logo-horizontal-bg.svg" alt="RECORDERYS, tu app de garantía" width="240" height="43" />
+        </Link>
+      </div>
       <header className="dz-header">
         <div className="dz-header__title">
           <h1>Tus compras</h1>

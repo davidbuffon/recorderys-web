@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useRef, useState } from "react";
 import type { ItemCardData } from "@/lib/types";
-import { getItemStatus, statusBadgeClass, statusLabel } from "@/lib/item-status";
 import { formatShortDate } from "@/lib/format-date";
 
 const sections = [
@@ -17,7 +16,6 @@ type Section = typeof sections[number]["id"];
 export function PurchaseCard({ item, demo = false }: { item: ItemCardData; demo?: boolean }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const [section, setSection] = useState<Section>("ticket");
-  const status = getItemStatus(item);
   const image = item.cover_image_path || item.photo_path;
   const receipt = item.receipts?.[0];
   const review = receipt?.duplicate_status === "possible_duplicate" ? "Ticket pendiente de revisión" : receipt?.duplicate_status === "under_review" ? "Ticket en revisión" : receipt?.duplicate_status === "confirmed_duplicate" ? "Ticket duplicado" : null;
@@ -26,9 +24,8 @@ export function PurchaseCard({ item, demo = false }: { item: ItemCardData; demo?
   const dates = <dl className="purchase-dates"><div><dt>Compra</dt><dd>{formatShortDate(item.purchase_date)}</dd></div><div><dt>Garantía hasta</dt><dd>{warranty ? formatShortDate(warranty) : "No registrada"}</dd></div></dl>;
   return <article className="purchase-card">
     <div className="purchase-visual">{image ? <img src={image} alt={item.name} loading="lazy" /> : <span>Sin foto del producto</span>}</div>
-    <div className="purchase-copy"><div className="purchase-meta"><span>{item.categories?.name || "Sin categoría"}</span><span className={statusBadgeClass(status)}>{statusLabel(status)}</span></div>
-      <h2>{demo ? item.name : <Link href={`/items/${item.id}`}>{item.name}</Link>}</h2><p>{[item.store,item.brand].filter(Boolean).join(" · ") || "Compra guardada"}</p>{dates}
-      {item.return_until && <p className="purchase-return">Fin de devolución: {formatShortDate(item.return_until)}</p>}
+    <div className="purchase-copy"><div className="purchase-meta"><span>{item.categories?.name || "Sin categoría"}</span></div>
+      <h2>{demo ? item.name : <Link href={`/items/${item.id}`}>{item.name}</Link>}</h2><p>{item.store || "Tienda no registrada"}</p>
       {review && <p className="purchase-notice">{review}</p>}
     </div>
     <div className="purchase-actions">{sections.map(s => {
